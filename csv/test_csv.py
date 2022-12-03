@@ -157,6 +157,15 @@ with open('d:/py_learning/py_programs/csv/name_log.csv', encoding = 'utf-8') as 
 """
 
 # Сортировка по столбцу
+"""
+with open('d:/py_learning/py_programs/csv/deniro.csv', encoding = 'utf-8') as file:
+    data_list = [el.strip('\n').split(',') for el in file.readlines()]
+    choice = int(input())
 
+    data_list.sort(key = lambda x: int(x[choice - 1]) if x[choice - 1].isdigit() else x[choice - 1])
 
+    for el in data_list:
+        print(f'{el[0]},{el[1]},{el[2]}')
+"""
 
+# Проще, чем кажется
