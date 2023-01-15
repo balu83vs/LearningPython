@@ -146,3 +146,115 @@ with open('D:/py_learning/py_programs/JSON/playgrounds.csv', encoding = 'utf-8')
 
     json.dump(res_dict, output_json, ensure_ascii = False)#, indent = 3)
 """
+
+# Студенты курса
+"""
+import csv
+import json
+
+with open('D:/py_learning/py_programs/JSON/students.json', encoding = 'utf-8') as input_json, open('D:/py_learning/py_programs/JSON/data.csv', 'w', encoding = 'utf-8', newline = '') as output_csv:
+    data_json = json.load(input_json)
+    columns = ['name', 'phone']
+    
+    out_to_csv = csv.DictWriter(output_csv, delimiter=',', fieldnames = columns)
+    out_to_csv.writeheader()
+
+    res_list = filter(lambda x: map(x['name'], x) if (int(x['age']) >= 18 and int(x['progress']) >= 75) else None, data_json)
+    res_list = list(sorted(res_list, key = lambda x: x['name']))
+ 
+
+    for el in res_list:
+        out_to_csv.writerow({'name': el['name'], 'phone': el['phone']})
+"""
+
+# Бассейны
+"""
+import json
+from datetime import time, datetime
+
+with open('D:/py_learning/py_programs/JSON/pools.json', encoding = 'utf-8') as input_file:
+    time1 = time(10, 00, 00)
+    time2 = time(12, 00, 00)
+    pools = json.load(input_file)
+
+    res_list = list(filter(lambda x: x if datetime.strptime(x['WorkingHoursSummer']['Понедельник'].split('-')[0], '%H:%M').time() <= time1 \
+        and datetime.strptime(x['WorkingHoursSummer']['Понедельник'].split('-')[1], '%H:%M').time() >= time2 else None, pools))
+
+    res_list = sorted(res_list, key = lambda x: x['DimensionsSummer']['Length'], reverse = True)  
+
+    max_lenght = res_list[0]['DimensionsSummer']['Length']  
+    
+    res_list = list(filter(lambda x: x if x['DimensionsSummer']['Length'] == max_lenght else None, res_list))
+    
+    max_wight = max([el['DimensionsSummer']['Width'] for el in res_list])
+    
+    res_list = list(filter(lambda x: x if x['DimensionsSummer']['Width'] == max_wight else None, res_list))
+
+    print(f"{res_list[0]['DimensionsSummer']['Length']}x{res_list[0]['DimensionsSummer']['Width']}")
+    print(res_list[0]['Address'])        
+"""
+
+# Результаты экзамена
+"""
+import csv
+import json
+from datetime import datetime
+
+with open('D:/py_learning/py_programs/JSON/exam_results.csv', encoding = 'utf-8') as csv_input, open('D:/py_learning/py_programs/JSON/best_scores.json', 'w', encoding = 'utf-8') as json_output:
+    csv_data = sorted(csv.DictReader(csv_input, delimiter = ','), key = lambda x: x['email'])
+    res_dict = dict()
+
+    for el in csv_data:
+        res_dict.setdefault(el['email'], list(filter(lambda x: x if x['email'] == el['email'] else None, csv_data)))
+
+    for el in res_dict:
+        best_score = max([int(x['score']) for x in res_dict[el]])
+        res_dict[el] = list(filter(lambda x: x if int(x['score']) == best_score else None, res_dict[el]))
+        if len(res_dict[el]) > 1:
+            res_dict[el] = sorted(res_dict[el], key = lambda x: datetime.strptime(x['date_and_time'], '%Y-%m-%d %H:%M:%S'), reverse = True)[0]     
+            res_dict[el]['score'] = int(res_dict[el]['score'])  
+        else:
+            res_dict[el] = res_dict[el][0]
+            res_dict[el]['score'] = int(res_dict[el]['score'])
+
+    res_list = [dict(zip(['name', 'surname', 'best_score', 'date_and_time', 'email'], el.values())) for el in res_dict.values()]
+
+    json.dump(res_list, json_output, indent = 3)      
+"""    
+
+# Общественное питание
+"""
+import json
+
+with open('D:/py_learning/py_programs/JSON/food_services.json', encoding = 'utf-8') as input_json:
+    input_data = json.load(input_json)
+    temp_list = list()
+    temp_list2 = list()
+    res_list = list()
+
+    temp_list = [el['District'] for el in input_data]
+    for el in set(temp_list):
+        res_list.append((el, temp_list.count(el)))
+    print(f'{sorted(res_list, key = lambda x: x[1], reverse = True)[0][0]}: {sorted(res_list, key = lambda x: x[1], reverse = True)[0][1]}')
+
+    res_list = []
+        
+    temp_list = [el['OperatingCompany'] for el in list(filter(lambda x: x if x['IsNetObject'] == 'да' else None, input_data))]
+    for el in set(temp_list):
+        res_list.append((el, temp_list.count(el)))
+    print(f'{sorted(res_list, key = lambda x: x[1], reverse = True)[0][0]}: {sorted(res_list, key = lambda x: x[1], reverse = True)[0][1]}')
+"""
+
+# Общественное питание 2
+# """
+import json
+
+temp_list = list()
+
+with open('D:/py_learning/py_programs/JSON/food_services2.json', encoding = 'utf-8') as input_json:
+   input_data = json.load(input_json)
+
+   for obj in sorted(list(set([el['TypeObject'] for el in input_data]))):
+        temp_list = [(el['Name'], el['SeatsCount'])  for el in list(filter(lambda x: x if x['TypeObject'] == obj else None, input_data))]  
+        temp_list = list(sorted(temp_list, key = lambda x: x[1])[-1])
+        print(f'{obj}: {temp_list[0]}, {temp_list[1]}')        
