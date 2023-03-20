@@ -147,6 +147,42 @@ for res_name in sorted(list(filter(lambda x: x if x['team'] == 'Arsenal' else No
 """
 
 # Структура архива
-#"""
+"""
+from zipfile import ZipFile
 
-#"""
+
+def size(filesize):
+    res = 0
+    res2 = ''
+
+    if filesize // (1024**3) >= 1:
+        res = round(filesize / (1024**3))
+        res2 = 'GB'
+    elif filesize // (1024**2) >= 1:
+        res = round(filesize / (1024**2))
+        res2 = 'MB' 
+    elif filesize // 1024 >= 1:
+        res = round(filesize / 1024)
+        res2 = 'KB'        
+    else:
+        res = filesize
+        res2 = 'B'
+    return res, res2
+
+res_dict = dict()
+det = ''
+short_name = ''
+temp_list = []
+
+with ZipFile('D:/py_learning/py_programs/zip/desktop.zip') as zipfile:
+    info = zipfile.infolist()
+    for el in info:
+        short_name = el.filename.split('/')
+        if el.is_dir() == True:
+            det = '  ' * (len(short_name) - 2)
+            print(f'{det}{short_name[-2]}')
+        else:
+            det = '  ' * (len(short_name) - 1)
+            temp_list = size(el.file_size)
+            print(f'{det}{short_name[-1]} {temp_list[0]} {temp_list[1]}')      
+"""

@@ -1,5 +1,7 @@
 telegram_bot
+telegram_time_bot
 start
 *.csv
 .vscode/
 *.json
+__pycache__/
