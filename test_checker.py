@@ -1,5 +1,5 @@
 ################### Импорт файла с программой ###################
-from имя_файла import имя_функции
+from iterators import CardDeck
 
 ################### Основное тело программы ####################
 from zipfile import ZipFile
@@ -21,8 +21,11 @@ def checker(zip_file_name):
 ################### Код проверки #####################
 
 codes = checker(input())
-
+count = 1
 for code in codes:
+    print('Ответ из программы:')
     exec(code[0])
+    print(f'Ответ из условия № {count}:') 
     print(code[1])
     print()
+    count += 1

@@ -71,3 +71,43 @@ cyclic_shift(numbers, -2)
 
 print(numbers) 
 """
+####################################### задача на мемоизацию ##################################################
+
+# алгоритм на базе рандомной выборки (на значениях больше 10, требуется очень много времени) 
+import random
+"""
+def res(limit):
+    res = [1]
+    var = [1,3,4]
+    while res[-1] < limit: 
+        temp = random.choice(var)
+        if res[-1] + temp <= limit:
+            res.append(res[-1] + temp)    
+    res = map(str, res)
+    return ' '.join(res)
+
+def ways(limit):
+    res_set = set()
+    for _ in range(1000):
+        res_set.add(res(limit))    
+    return len(res_set)  
+
+print(ways(20))
+"""
+
+# алгоритм на базе рекурсивного вызова
+"""
+from functools import lru_cache
+
+@ lru_cache()
+def ways(limit):
+    if limit <= 3:
+        return 1
+    elif limit == 4:
+        return 2
+    else:
+        return ways(limit - 4) + ways(limit - 3) + ways(limit - 1)
+    
+print(ways(100)) 
+print(ways.cache_info())   
+"""
