@@ -1,5 +1,5 @@
 ################### Импорт файла с программой ###################
-from iterators import CardDeck
+from itertools_test import test
 
 ################### Основное тело программы ####################
 from zipfile import ZipFile
