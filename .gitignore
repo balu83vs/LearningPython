@@ -5,3 +5,5 @@ start
 .vscode/
 *.json
 __pycache__/
+*.clue
+test_comments.txt
