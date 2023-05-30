@@ -441,3 +441,576 @@ for hc in hexcodes:
     print()
     count += 1
 """    
+
+# различные варианты внесения данных в класс
+"""
+class QuadraticPolynomial:
+    def __init__(self, *args):
+        self.a, self.b, self.c = args
+    
+    @classmethod
+    def from_iterable(cls, args):
+        return cls(*args)
+    
+    @classmethod
+    def from_str(cls, args):
+        return cls(*map(float, args.split(' ')))
+    
+polynom = QuadraticPolynomial(1, -5, 6)
+print(polynom.a)
+print(polynom.b)
+print(polynom.c)
+
+polynom = QuadraticPolynomial.from_iterable([2, 13, -1])
+print(polynom.a)
+print(polynom.b)
+print(polynom.c)
+
+polynom = QuadraticPolynomial.from_str('-1.5 4 14.8')
+print(polynom.a)
+print(polynom.b)
+print(polynom.c)
+print(polynom.a + polynom.b + polynom.c)
+"""
+
+#
+"""
+class Pet:
+    pets_list = []
+
+    def __init__(self, name):
+        self.name = name
+        self.pets_list.append(self)    
+
+    @classmethod
+    def first_pet(cls):  
+        if cls.pets_list:
+            return cls.pets_list[0]
+        
+    @classmethod
+    def last_pet(cls):
+        if cls.pets_list:
+            return cls.pets_list[-1]
+        
+    @classmethod
+    def num_of_pets(cls):
+        return len(cls.pets_list)
+        
+
+print(Pet.first_pet())
+print(Pet.last_pet())
+print(Pet.num_of_pets())
+
+       
+pet1 = Pet('Ratchet')
+pet2 = Pet('Clank')
+pet3 = Pet('Rivet')
+
+print(Pet.first_pet().name)
+print(Pet.last_pet().name)
+print(Pet.num_of_pets())
+
+
+pet1 = Pet('Ratchet')
+pet2 = Pet('Clank')
+pet3 = Pet('Rivet')
+pet4 = Pet('Ratchet')
+pet5 = Pet('Ratchet')
+
+print(Pet.first_pet().name)
+print(Pet.last_pet().name)
+print(Pet.num_of_pets())
+"""
+
+#
+"""
+from re import sub, IGNORECASE
+
+class StrExtension:
+    
+    def __init__(self):
+        pass
+    
+    @staticmethod
+    def remove_vowels(string):
+        string = sub(r'[aeiouy]', '', string, flags= IGNORECASE)
+        return string
+    
+    @staticmethod
+    def leave_alpha(string):
+        string = sub(r'[^a-z]', '', string, flags= IGNORECASE)
+        return string
+    
+    @staticmethod
+    def replace_all(string,chars,char):
+        string = sub(fr'[{chars}]', char, string)
+        return string
+
+print(StrExtension.remove_vowels('Python'))
+print(StrExtension.remove_vowels('Stepik'))    
+
+print(StrExtension.leave_alpha('Python111'))
+print(StrExtension.leave_alpha('__Stepik__()'))
+
+print(StrExtension.replace_all('Python', 'Ptn', '-'))
+print(StrExtension.replace_all('Stepik', 'stk', '#'))
+"""
+
+#
+"""
+from re import findall
+
+class CaseHelper:
+    @staticmethod
+    def is_snake(string):
+        if ' ' not in string and string[0].isalpha() and string[-1].isalpha() and string == string.lower():
+            return True
+        else:
+            return False
+    
+    @staticmethod
+    def is_upper_camel(string):
+        if string.isalpha() and string[0] == string[0].upper() and string[-1] == string[-1].lower():
+            return True
+        else:
+            return False
+    
+    @staticmethod
+    def to_snake(string):
+        if __class__.is_snake(string) == False:
+            return '_'.join(findall(r'[A-Z][a-z]*', string)).lower()
+        return string
+    
+    @staticmethod
+    def to_upper_camel(string):
+        if __class__.is_upper_camel(string) == False:
+            return ''.join(list(map(lambda x: x.capitalize(), string.split('_'))))        
+        return string    
+
+    
+print(CaseHelper.is_snake('beegeek'))
+print(CaseHelper.is_snake('bee_geek'))
+print(CaseHelper.is_snake('Beegeek'))
+print(CaseHelper.is_snake('BeeGeek'))
+
+print(CaseHelper.is_upper_camel('beegeek'))
+print(CaseHelper.is_upper_camel('bee_geek'))
+print(CaseHelper.is_upper_camel('Beegeek'))
+print(CaseHelper.is_upper_camel('BeeGeek'))
+
+print(CaseHelper.to_snake('Beegeek'))
+print(CaseHelper.to_snake('BeeGeek'))
+#beegeek
+#bee_geek
+
+print(CaseHelper.to_upper_camel('beegeek'))
+print(CaseHelper.to_upper_camel('bee_geek'))
+#Beegeek
+#BeeGeek
+
+cases = ['assert_equal', 'tear_down', '__init__', 'assertEqual', 'setUp', 'tearDown', 'run', 'exit', 'setup']
+for case in cases:
+    print(CaseHelper.is_snake(case))
+# TrueTrueFalseFalseFalseFalseTrueTrueTrue
+    
+cases = ['assert_equal', 'tear_down', '__init__', 'assertEqual', 'setUp', 'tearDown', 'run', 'exit', 'setup', 'AssertEqual', 'SetUp']
+for case in cases:
+    print(CaseHelper.is_upper_camel(case))  
+#      
+
+cases = ['AssertEqual', 'SetUp', 'TearDown', 'AddModuleCleanup', 'AssertRaisesRegex', 'AssertAlmostEqual', 'AssertNotAlmostEqual']
+for case in cases:
+    print(CaseHelper.to_snake(case)) 
+# assert_equal set_up tear_down add_module_cleanup assert_raises_regex assert_almost_equal assert_not_almost_equal       
+
+cases = ['assert_equal', 'tear_down', 'assert_raises_regex', 'assert_almost_equal', 'assert_not_almost_equal', 'beegeek']
+for case in cases:
+    print(CaseHelper.to_upper_camel(case))
+# AssertEqual TearDown AssertRaisesRegex AssertAlmostEqual AssertNotAlmostEqual Beegeek   
+    """    
+
+#
+"""
+from functools import singledispatchmethod
+
+class Formatter:
+
+    @singledispatchmethod
+    @staticmethod
+    def format(data):
+        raise TypeError('Аргумент переданного типа не поддерживается')
+    
+    @format.register(int)
+    def f_is_int(data):
+        print(f'Целое число: {data}')
+    
+    @format.register(float)
+    def f_is_float(data):
+        print(f'Вещественное число: {data}')
+    
+    @format.register(list)
+    @format.register(tuple)
+    def f_is_list(data):
+        if isinstance(data, list):
+            print('Элементы списка:', end = ' ')
+        else:
+            print('Элементы кортежа:', end = ' ')
+        print(*data, sep = ', ')
+    
+    @format.register(dict)
+    def f_is_dict(data):
+        print('Пары словаря:', end = ' ')
+        print(*data.items(), sep = ', ')
+
+Formatter.format(1337)
+Formatter.format(20.77)
+#Целое число: 1337
+#Вещественное число: 20.77
+
+Formatter.format([10, 20, 30, 40, 50])
+Formatter.format(([1, 3], [2, 4, 6]))
+#Элементы списка: 10, 20, 30, 40, 50
+#Элементы кортежа: [1, 3], [2, 4, 6]
+
+Formatter.format({'Cuphead': 1, 'Mugman': 3})
+Formatter.format({1: 'one', 2: 'two'})
+Formatter.format({1: True, 0: False})
+#Пары словаря: ('Cuphead', 1), ('Mugman', 3)
+#Пары словаря: (1, 'one'), (2, 'two')
+#Пары словаря: (1, True), (0, False)
+
+try:
+    Formatter.format('All them years, Dutch, for this snake?')
+except TypeError as e:
+    print(e)
+#Аргумент переданного типа не поддерживается
+
+not_supported = [str, type, bool, dict, tuple, list]
+for item in not_supported:
+    try:
+        Formatter.format(item)
+    except TypeError as e:
+        print(e)
+#Аргумент переданного типа не поддерживается
+#Аргумент переданного типа не поддерживается
+#Аргумент переданного типа не поддерживается
+#Аргумент переданного типа не поддерживается
+#Аргумент переданного типа не поддерживается
+#Аргумент переданного типа не поддерживается        
+"""
+
+#
+"""
+from datetime import date, timedelta
+from functools import singledispatchmethod
+
+class BirthInfo:
+
+    @singledispatchmethod
+    def __init__(self, birth_date):
+        raise TypeError('Аргумент переданного типа не поддерживается')
+
+    @__init__.register(str)
+    def is_str(self, birth_date):
+        birth_date = list(map(int, birth_date.split('-')))
+        self.birth_date = date(*birth_date)
+        
+    @__init__.register(date)
+    def is_iso(self, birth_date):
+        self.birth_date = birth_date
+
+    @__init__.register(list)
+    @__init__.register(tuple)
+    def is_list_tuple(self, birth_date):
+        self.birth_date = date(*birth_date) 
+   
+    
+    @property
+    def age(self):
+        count = 0
+        today = date.today()
+        delta_year = timedelta(days = 365)
+        for year in range(self.birth_date.year+1, today.year):
+            if year%4 == 0:
+                count+=1      
+        add_days = timedelta(days = count)
+        res = (today - self.birth_date - add_days) // delta_year
+        return res
+
+birthinfo1 = BirthInfo('2020-09-18')
+birthinfo2 = BirthInfo(date(2010, 10, 10))
+birthinfo3 = BirthInfo([2016, 1, 1])
+print(birthinfo1.birth_date)
+print(birthinfo2.birth_date)
+print(birthinfo3.birth_date)
+# 2020-09-18
+# 2010-10-10
+# 2016-01-01
+
+birthday = date(2020, 9, 18)
+birthinfo = BirthInfo(birthday)
+print(birthinfo.age)
+# 2
+
+birthinfo1 = BirthInfo('2020-09-18')
+birthinfo2 = BirthInfo(date(2010, 10, 10))
+birthinfo3 = BirthInfo([2016, 1, 1])
+
+print(type(birthinfo1.birth_date))
+print(type(birthinfo2.birth_date))
+print(type(birthinfo3.birth_date))    
+#<class 'datetime.date'>
+#<class 'datetime.date'>
+#<class 'datetime.date'>   
+    
+
+errors = [20200918, True, {1: 'one'}, {1, 2, 3}, 100.9]
+
+for obj in errors:
+    try:
+        BirthInfo(obj)
+    except TypeError as e:
+        print(e)    
+#Аргумент переданного типа не поддерживается
+#Аргумент переданного типа не поддерживается
+#Аргумент переданного типа не поддерживается
+#Аргумент переданного типа не поддерживается
+#Аргумент переданного типа не поддерживается        
+"""     
+
+
+############### Строковое представление объектов (методы __str__, __repr__)
+#
+"""
+from functools import singledispatchmethod
+
+class IPAddress:
+
+    @singledispatchmethod
+    def __init__(self, ip):
+        self.ip = ip
+    
+    @__init__.register(list)
+    @__init__.register(tuple)
+    def from_list_or_tuple(self, ip):
+        self.ip = '.'.join(list(map(str, ip)))
+    
+    def __repr__(self):
+        return f"IPAddress('{self.ip}')"
+    
+    def __str__(self):
+        return self.ip
+
+ip = IPAddress('8.8.1.1')
+print(str(ip))
+print(repr(ip))        
+"""
+
+#
+"""
+class AnyClass:
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            #self.__dict__[key] = self.__dict__.get(key, value)
+            #setattr(self, key, value)
+            self.__dict__.update(kwargs)
+        res = []
+        for key, value in self.__dict__.items():
+            if type(value) is str:
+                res.append(f"{key}: '{value}'")  
+            else:
+                res.append(f"{key}: {value}")      
+        self.res = ', '.join(res)      
+
+    def __str__(self):      
+        return f"{__class__.__name__}: {self.res}"
+    
+    def __repr__(self):
+        return f"{__class__.__name__}({self.res})"        
+
+any = AnyClass()
+print(str(any))
+print(repr(any))
+
+obj = AnyClass(attr1=10, attr2='beegeek', attr3=True, attr4=[1, 2, 3], attr5=('one', 'two'), attr6=None)
+print(str(obj))
+print(repr(obj))
+
+attrs = {
+    'name': 'Guido van Rossum',
+    'birth_date': '31.01.1956',
+    'age': 67,
+    'career': 'python guru'
+}
+obj = AnyClass(**attrs)
+print(obj.name)
+print(obj.birth_date)
+print(obj.age)
+print(obj.career)
+"""
+
+############################## Сравнение объектов (методы __eq__, __ne__)
+#
+"""
+class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        
+    def __repr__(self):
+        return f"{__class__.__name__}({self.x}, {self.y})"
+    
+    def __eq__(self, other):
+        if isinstance(other, tuple):
+            if self.x == other[0] and self.y == other[1] and len(other) == 2:
+                return True
+        else:
+            try:
+                if self.x == other.x and self.y == other.y:
+                    return True
+            except:
+                return NotImplemented        
+        return NotImplemented
+    
+a = Vector(1, 2)
+b = Vector(1, 2)
+print(a == b)
+print(a != b)   
+
+a = Vector(1, 2)
+b = Vector(3, 4)
+c = Vector(5, 6)
+vectors = [a, b, c]
+print(vectors)
+
+a = Vector(0, 1)
+not_supported = [[1, 2], True, (1, 2, 3, 4), 'beegeek', {'name': 'Grace Hopper'}, {18, 22}]
+for item in not_supported:
+    print(a == item)
+"""
+
+######################### методы __lt__, __gt__, __le__, __ge__, @total_ordering
+#
+"""
+from functools import total_ordering
+
+@total_ordering
+class Word:
+    def __init__(self, word):
+        self.word = word
+        
+    def __str__(self):
+        return self.word.lower().capitalize()
+    
+    def __repr__(self):
+        return f"{__class__.__name__}('{self.word}')"
+    
+    def __eq__(self, other):
+        if isinstance(other, Word):
+            return len(self.word) == len(other.word)
+        return NotImplemented
+    
+    def __lt__(self, other):
+        if isinstance(other, Word):
+            return len(self.word) < len(other.word)
+        return NotImplemented
+
+print(Word('bee') == Word('hey'))
+print(Word('bee') < Word('geek'))
+print(Word('bee') > Word('geek'))
+print(Word('bee') <= Word('geek'))
+print(Word('bee') >= Word('gee'))
+"""    
+
+#
+"""
+from functools import total_ordering
+
+@total_ordering
+class Month:
+    def __init__(self, year, month):
+        self.year = year
+        self.month = month
+        
+    def __str__(self):
+        return f"{self.year}-{self.month}"
+    
+    def __repr__(self):
+        return f"{__class__.__name__}({self.year}, {self.month})"
+    
+    def __eq__(self, other):
+        if isinstance(other, Month):
+            return self.year == other.year and self.month == other.month
+        if isinstance(other, tuple) and len(other) == 2:
+            return self.year == other[0] and self.month == other[1]      
+        return NotImplemented
+    
+    def __lt__(self, other):
+        if isinstance(other, Month):
+            return (self.year == other.year and self.month < other.month) or (self.year < other.year)
+        if isinstance(other, tuple) and len(other) == 2:
+            return (self.year == other[0] and self.month < other[1]) or (self.year < other[0])  
+        return NotImplemented
+
+print(Month(1999, 12) == Month(1999, 12))
+print(Month(1999, 12) < Month(2000, 1))
+print(Month(1999, 12) > Month(2000, 1))
+print(Month(1999, 12) <= Month(1999, 12))
+print(Month(1999, 12) >= Month(2000, 1))
+
+months = [Month(1998, 12), Month(2000, 1), Month(1999, 12)]
+print(sorted(months))
+print(min(months))
+print(max(months))
+"""
+#
+"""
+from functools import total_ordering
+
+@total_ordering
+class Version:
+    def __init__(self, version):      
+        self.version = __class__._transform(version)
+    
+    def __str__(self):
+        return '.'.join(self.version)  
+    
+    def __repr__(self):
+        return f"{__class__.__name__}('{'.'.join(self.version)}')"
+    
+    def __eq__(self, other):
+        if isinstance(other, Version):
+            return list(map(int, self.version)) == list(map(int, other.version))
+        return NotImplemented
+    
+    def __lt__(self, other):
+        if isinstance(other, Version):
+            return list(map(int, self.version)) < list(map(int, other.version))
+        return NotImplemented
+    
+    @staticmethod
+    def _transform(version):
+        version_list = version.split('.')
+        for _ in range(3-len(version_list)):
+            version_list.append('0')
+        return version_list 
+
+print(Version('3.0.3') == Version('1.11.28'))
+print(Version('3.0.3') < Version('1.11.28'))
+print(Version('3.0.3') > Version('1.11.28'))
+print(Version('3.0.3') <= Version('1.11.28'))
+print(Version('3.0.3') >= Version('1.11.28'))
+
+print(Version('3') == Version('3.0'))
+print(Version('3') == Version('3.0.0'))
+print(Version('3.0') == Version('3.0.0'))
+
+versions = [Version('162.5'), Version('68.3'), Version('173.8'), Version('108.9'), Version('159.6'), Version('145.7'),
+            Version('187.6'), Version('137.7'), Version('33.7'), Version('22.4'), Version('199.4'), Version('122.1'),
+            Version('47.4'), Version('10.2'), Version('164.9'), Version('191.6'), Version('139.9'), Version('184.4'),
+            Version('94.9'), Version('188.6'), Version('56.8'), Version('138.7'), Version('83.2'), Version('59.4'),
+            Version('189.7'), Version('128.5')]
+print(sorted(versions))
+print(min(versions))
+print(max(versions))
+"""
