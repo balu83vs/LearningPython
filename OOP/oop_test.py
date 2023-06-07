@@ -24,6 +24,71 @@ def fact(n):
 fact(5)
 """
 
+# Декоратор @recviz
+# процедурное решение
+"""
+def recviz(func): 
+    if recviz.__dict__.get('count') is None:
+            recviz.__dict__.setdefault('count', -1)    
+    def wraper(*args, **kwargs):
+        text = []
+        if args:
+            text.append(''.join(list(map(str,repr(*args)))))
+        if kwargs:
+            for key, value in kwargs.items():
+                text.append("{0}={1}".format(key, repr(value)))
+        text = ', '.join(text)
+        recviz.__dict__['count'] += 1
+        count = recviz.__dict__.get('count')
+        print(f"{'    '*count}-> {func.__name__}({text})")
+        res = func(*args, **kwargs)
+        recviz.__dict__['count'] -= 1
+        print(f"{'    '*count}<- {repr(res)}") 
+        return res
+    return wraper
+"""
+# ООП решение
+"""
+class recviz:
+    def __init__(self, func):
+        self.func = func
+        if self.__dict__.get('count') is None:
+            self.__dict__.setdefault('count', -1)
+    
+    def __call__(self, *args, **kwargs):
+        text = []
+        if args:
+            text.append(''.join(list(map(str,repr(*args)))))
+        if kwargs:
+            for key, value in kwargs.items():
+                text.append("{0}={1}".format(key, repr(value)))
+        text = ', '.join(text)    
+        self.__dict__['count'] += 1
+        step = self.__dict__.get('count')
+        print(f"{'    '*step}-> {self.func.__name__}({text})")
+        res = self.func(*args, **kwargs)
+        self.__dict__['count'] -= 1
+        print(f"{'    '*step}<- {repr(res)}")  
+        return res
+
+@recviz
+def fib(n):
+    if n <= 2:
+        return 1
+    else:
+        return fib(n - 1) + fib(n - 2)
+fib(7)        
+        
+@recviz
+def fib(n):
+    if n <= 2:
+        return 1
+    else:
+        return fib(n - 1) + fib(n - 2)
+        
+fib(4)
+"""  
+
 # Scales
 """
 class Scales:
@@ -1013,4 +1078,673 @@ versions = [Version('162.5'), Version('68.3'), Version('173.8'), Version('108.9'
 print(sorted(versions))
 print(min(versions))
 print(max(versions))
+"""
+
+
+################# Унарные операции (__pos__, __neg__, __invert__)
+#
+"""
+class ColoredPoint:
+    def __init__(self, x, y, color = (0,0,0)):
+        self.x, self.y, self.color = x, y, color
+        self.new_color = [0,0,0]
+        
+    def __str__(self):
+        return f"({self.x}, {self.y})"
+    def __repr__(self):
+        return f"{__class__.__name__}({self.x}, {self.y}, {self.color})"
+    
+    def __pos__(self):
+        return ColoredPoint(self.x, self.y, self.color)
+    def __neg__(self):
+        return ColoredPoint(-self.x, -self.y, self.color)
+    def __invert__(self):
+        self.new_color[0], self.new_color[1], self.new_color[2] = 255 - self.color[0], 255 - self.color[1], 255 - self.color[2]
+        return ColoredPoint(self.y, self.x, tuple(self.new_color))
+
+point = ColoredPoint(2, -3)
+print(+point)
+print(-point)
+print(~point)
+
+point1 = ColoredPoint(1, 2, (100, 150, 200))
+point2 = ~point1
+print(repr(point1))
+print(repr(point2))
+"""
+
+#
+"""
+class Matrix:
+    def __init__(self, rows, cols, value = 0):
+        self.rows = rows
+        self.cols = cols
+        self.value = value
+        self.matrix = __class__.create_matrix(self.rows, self.cols, self.value)
+        
+    def __str__(self):
+        str_matrix = [' '.join(list(map(str, el))) for el in self.matrix]
+        return '\n'.join(str_matrix)
+    def __repr__(self):
+        return f"{__class__.__name__}({self.rows}, {self.cols})"
+    
+    def __pos__(self):
+        other = Matrix(self.rows, self.cols, self.value)
+        other.matrix = self.matrix
+        return other
+    
+    def __neg__(self):
+        other = Matrix(self.rows, self.cols, self.value)
+        for i in range(self.rows):
+            for j in range(self.cols):
+                other.matrix[i][j] = -self.matrix[i][j]
+        return other
+    
+    def __invert__(self):
+        other = Matrix(self.cols, self.rows, self.value)
+        for i in range(self.cols):
+            for j in range(self.rows):
+                other.matrix[i][j] = self.matrix[j][i]
+        return other
+    def __round__(self, n = 0):
+        other = Matrix(self.rows, self.cols, self.value)
+        for i in range(self.rows):
+            for j in range(self.cols):
+                if n != 0:
+                    other.matrix[i][j] = round(self.matrix[i][j], n)
+                else:
+                    other.matrix[i][j] = round(self.matrix[i][j])        
+        return other
+    
+    def get_value(self, row, col):
+        return self.matrix[row][col]
+    def set_value(self, row, col, value):
+        self.matrix[row][col] = value
+ 
+    @staticmethod
+    def create_matrix(rows, cols, value):
+        matrix = []
+        temp_list = []
+        for _ in range(rows):
+            for _ in range(cols):
+                temp_list.append(value)
+            matrix.append(temp_list) 
+            temp_list = []
+        return matrix 
+    
+print(Matrix(2, 3))
+
+matrix = Matrix(2, 3, 1)
+print(+matrix)
+print()
+print(-matrix)
+
+matrix = Matrix(2, 3, 1)
+print(matrix)
+print()
+print(~matrix)
+
+matrix = Matrix(2, 3)
+print(matrix.get_value(0, 0))
+print(matrix.get_value(1, 1))
+matrix.set_value(0, 0, 100)
+matrix.set_value(1, 1, 200)
+print(matrix.get_value(0, 0))
+print(matrix.get_value(1, 1))
+
+matrix = Matrix(4, 2)
+counter = 1
+for row in range(4):
+    for col in range(2):
+        matrix.set_value(row, col, counter)
+        counter += 1
+print(matrix)
+print()
+print(~matrix)
+"""
+
+## ###################### Арифметические операции __add__, __mul__, __truediv__, __floordiv__
+"""
+#
+class FoodInfo:
+    def __init__(self, proteins, fats, carbohydrates):
+        self.proteins, self.fats, self.carbohydrates = proteins, fats, carbohydrates
+        
+    def __repr__(self):
+        return f"{__class__.__name__}({self.proteins}, {self.fats}, {self.carbohydrates})"
+    
+    def __add__(self, other):
+        if isinstance(other, FoodInfo):
+            return FoodInfo(
+                self.proteins+other.proteins, 
+                self.fats+other.fats, 
+                self.carbohydrates+other.carbohydrates
+            )
+        return NotImplemented
+    
+    def __mul__(self, other):
+        if isinstance(other, (int, float)):
+            return FoodInfo(self.proteins * other, self.fats * other, self.carbohydrates * other)
+        return NotImplemented
+    
+    def __truediv__(self, other):
+        if isinstance(other, (int, float)):
+            return FoodInfo(self.proteins / other, self.fats / other, self.carbohydrates / other)
+        return NotImplemented
+    
+    def __floordiv__(self, other):
+        if isinstance(other, (int, float)):
+            return FoodInfo(self.proteins // other, self.fats // other, self.carbohydrates // other)
+        return NotImplemented
+    
+food1 = FoodInfo(10, 20, 30)
+food2 = FoodInfo(10, 10, 20)
+print(food1 + food2)
+print(food1 * 2)
+print(food1 / 2)
+print(food1 // 2)    
+
+food1 = FoodInfo(10, 20, 30)
+try:
+    food2 = (5, 10, 15) + food1
+except TypeError:
+    print('Некорректный тип данных')
+"""
+
+#
+"""
+class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        
+    def __repr__(self):
+        return f"{__class__.__name__}({self.x}, {self.y})"
+    
+    def __add__(self, other):
+        if isinstance(other, Vector):
+            return Vector(self.x + other.x, self.y + other.y)
+        return NotImplemented
+    
+    def __sub__(self, other):
+        if isinstance(other, Vector):
+            return Vector(self.x - other.x, self.y - other.y)
+        return NotImplemented
+    
+    def __mul__(self, other):
+        if isinstance(other, (int, float)):
+            return Vector(self.x * other, self.y * other)
+        return NotImplemented
+    
+    def __rmul__(self, other): # отражение операции *
+        return self.__mul__(other)
+    
+    def __truediv__(self, other):
+        if isinstance(other, (int, float)):
+            return Vector(self.x / other, self.y / other)
+        return NotImplemented
+    
+    def __rtruediv__(self, other): # отражение операции /
+        return self.__truediv__(other)
+    
+a = Vector(1, 2)
+b = Vector(3, 4)
+print(a + b)
+print(a - b)
+print(b + a)
+print(b - a)    
+
+a = Vector(3, 4)
+print(a * 2)
+print(2 * a)
+print(a / 2)
+"""
+
+#
+"""
+class SuperString:
+    def __init__(self, string):
+        self.string = string
+        
+    def __str__(self):
+        return self.string
+    
+    def __add__(self, other):
+        if isinstance(other, SuperString):
+            return SuperString(self.string + other.string)
+        return NotImplemented
+        
+    def __mul__(self, other):
+        if isinstance(other, int):
+            return SuperString(self.string * other)
+        return NotImplemented
+    
+    def __rmul__(self, other):
+        return self.__mul__(other)
+    
+    def __truediv__(self, other):
+        if isinstance(other, int):
+            return SuperString(self.string[:int(len(self.string)/other)])
+        return NotImplemented
+    
+    def __lshift__(self, other):
+        if isinstance(other, int):
+            if len(self.string) > other:
+                return SuperString(self.string[:len(self.string) - other])
+            return SuperString('')           
+        return NotImplemented    
+    
+    def __rshift__(self, other):
+        if isinstance(other, int):
+            if len(self.string) > other:
+                return SuperString(self.string[other:])
+            return SuperString('')            
+        return NotImplemented
+    
+s1 = SuperString('bee')
+s2 = SuperString('geek')
+print(s1 + s2)
+print(s2 + s1)    
+
+s = SuperString('beegeek')
+print(s * 2)
+print(3 * s)
+print(s / 3)
+
+s = SuperString('beegeek')
+print(s << 4)
+print(s >> 3)
+"""
+
+#
+"""
+from datetime import time
+class Time:
+    def __init__(self, hours, minutes):
+        self.hours, self.minutes = __class__.time_format(hours, minutes)
+        
+    def __str__(self):
+        return time.strftime(time(hour=self.hours, minute=self.minutes), "%H:%M")
+    
+    def __add__(self, other):
+        if isinstance(other, Time):
+            return Time(*__class__.time_format(self.hours + other.hours, self.minutes + other.minutes))
+        return NotImplemented
+        
+    def __iadd__(self, other):
+        if isinstance(other, Time):
+            self.hours += other.hours
+            self.minutes += other.minutes
+            self.hours, self.minutes = __class__.time_format(self.hours, self.minutes)
+            return self
+        else:
+            return NotImplemented      
+        
+    @staticmethod
+    def time_format(hours, minutes):
+        if minutes >= 60:
+            add_hours = minutes // 60
+            minutes = minutes % 60
+            hours = hours + add_hours
+        if hours >= 24:    
+            hours = hours % 24
+        return hours, minutes
+    
+time1 = Time(2, 30)
+time2 = Time(3, 10)
+print(time1 + time2)
+print(time2 + time1)
+
+time1 = Time(2, 30)
+time2 = Time(3, 10)
+time1 += time2
+print(time1)
+print(time2)
+
+time1 = Time(25, 20)
+time2 = Time(10, 130)
+print(time1)
+print(time2)
+"""
+
+#
+"""
+class Queue:
+    def __init__(self, *args):
+        self.args = list(args)
+        
+    def __str__(self):
+        return ' -> '.join(list(map(str, self.args)))
+    
+    def __eq__(self, other):
+        if isinstance(other, Queue):
+            if len(self.args) != len(other.args):
+                return False
+            else:
+                for i in range(len(self.args)):
+                    if self.args[i] != other.args[i]:
+                        return False
+                return True    
+        return NotImplemented    
+    
+    def __add__(self, other):
+        if isinstance(other, Queue):
+            self.args.extend(other.args)
+            return Queue(*self.args)
+        return NotImplemented
+    
+    def __iadd__(self, other):
+        if isinstance(other, Queue):
+            if isinstance(other, Queue):
+                self.args.extend(other.args)
+            return self
+        if isinstance(other, tuple):
+            for el in other:
+                self.args.append(el)
+            return self
+        return NotImplemented
+    
+    def __rshift__(self, other):
+        if isinstance(other, int):
+            if len(self.args) > other:
+                return Queue(*self.args[other:])
+            return Queue('')            
+        return NotImplemented
+    
+    def add(self, *args):
+        return __class__.__iadd__(self, args)
+    
+    def pop(self):
+        if len(self.args) == 0:
+            return None
+        return self.args.pop(0)
+    
+queue1 = Queue(1, 2, 3)
+queue2 = Queue(4, 5)
+queue1 += queue2
+print(queue1)
+
+queue = Queue(1, 2)
+queue.add(3)
+queue.add(4, 5)
+print(queue)
+print(queue.pop())
+print(queue)
+
+queue = Queue(*'beegeek')
+for i in range(9):
+    print(f'Queue >> {i} =', queue >> i)    
+"""    
+
+#######################  Вызываемые объекты метод __call__
+
+# Фибоначи
+"""
+class CachedFunction:
+    def __init__(self, func):
+        self.func = func
+        if self.__dict__.get('cache_dict') is None:
+            self.cache_dict = dict()
+    
+    def __call__(self, *args):
+        if self.cache_dict.get(args) is None:
+            self.cache_dict.setdefault(args, self.func(*args))
+        return self.cache_dict.get(args)
+    
+    @property
+    def cache(self):
+        return self.cache_dict
+    
+@CachedFunction
+def slow_fibonacci(n):
+    if n == 1:
+        return 0
+    elif n in (2, 3):
+        return 1
+    return slow_fibonacci(n - 1) + slow_fibonacci(n - 2)
+    
+print(slow_fibonacci(100))
+print(slow_fibonacci.cache)    
+"""
+
+# сортировка по любому количеству атрибутов экземпляра класса
+"""
+class SortKey:
+    def __init__(self, *args):
+        self.args = args
+        
+    def __call__(self, *args):
+        return [getattr(*args, el, None) for el in self.args]  
+    
+class User:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def __repr__(self):
+        return f'User({self.name}, {self.age})'
+
+users = [User('Gvido', 67), User('Timur', 30), User('Arthur', 20), User('Timur', 45), User('Gvido', 60)]
+print(sorted(users, key=SortKey('name')))
+print(sorted(users, key=SortKey('name', 'age')))
+print(sorted(users, key=SortKey('age')))
+print(sorted(users, key=SortKey('age', 'name')))
+"""
+
+## Преобразования типов __bool__, __int__, __float__, __complex__, __oct__, __hex__
+# градусник
+"""
+class Temperature:
+    def __init__(self, temperature):
+        self.temperature = temperature
+        
+    @classmethod
+    def from_fahrenheit(cls, fahrenheit):
+        return cls((fahrenheit-32)*5/9)
+    
+    def to_fahrenheit(self):
+        return (self.temperature * (9/5)) + 32
+    
+    def __str__(self):
+        return f"{round(self.temperature, 2)}°C"
+    
+    def __bool__(self):
+        if self.temperature > 0:
+            return True
+        else:
+            return False
+    
+    def __int__(self):
+        return int(self.temperature)
+    
+    def __float__(self):
+        return float(self.temperature)
+
+t = Temperature(5.5)
+print(t)
+print(int(t))
+print(float(t))
+print(t.to_fahrenheit())      
+
+t1 = Temperature(1)
+t2 = Temperature(0)
+t3 = Temperature(-1)
+print(bool(t1))
+print(bool(t2))
+print(bool(t3))
+
+t = Temperature.from_fahrenheit(41)
+print(t)
+print(int(t))
+print(float(t))
+print(t.to_fahrenheit())
+"""
+
+# Сравнение римских чисел RomanNumeral
+"""
+from functools import total_ordering
+
+@total_ordering
+class RomanNumeral:
+    def __init__(self, roman_number: str) -> None:
+        self.roman_number = roman_number
+        
+    def __str__(self):
+        return self.roman_number
+    
+    def __int__(self):
+        arab_number = 0
+        figure_dict = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+        if len(self.roman_number) == 1:
+            arab_number = figure_dict.get(self.roman_number)
+        else:
+            temp_count = 0
+            for el in [figure_dict.get(self.roman_number[i]) for i in range(len(self.roman_number))]:
+                if el <= temp_count:
+                    arab_number += el
+                else: 
+                    arab_number += (el - temp_count) - temp_count
+                temp_count = el 
+        return arab_number
+    
+    def __eq__(self, other):
+        if isinstance(other, RomanNumeral):
+            return self.__int__() == other.__int__()        
+        return NotImplemented
+    
+    def __lt__(self, other):
+        if isinstance(other, RomanNumeral):
+            return self.__int__() < other.__int__()
+        return NotImplemented
+    
+    def __add__(self, other):
+        if isinstance(other, RomanNumeral):
+            arab_number = self.__int__() + other.__int__()  
+            return RomanNumeral(self.over_int(arab_number))
+        return NotImplemented
+    
+    def __sub__(self, other):
+        if isinstance(other, RomanNumeral):
+            arab_number = self.__int__() - other.__int__()  
+            return RomanNumeral(self.over_int(arab_number))
+        return NotImplemented
+    
+    @staticmethod
+    def over_int(arab_number):
+        string_number = str(arab_number)
+        figure_dict = {
+            1: 'I', 4: 'IV', 5: 'V', 9: 'IX', 10: 'X', 40: 'XL', 50: 'L', 
+            90: 'XC', 100: 'C', 400: 'CD', 500: 'D', 900: 'CM', 1000: 'M'
+        }
+        res_list = []
+        for figure in [int(string_number[i])*10**(len(string_number)-1-i) for i in range(len(string_number)) if int(string_number[i]) > 0]:
+            res_string = figure_dict.get(figure)
+            if res_string is None:
+                res_string = ''
+                for el in sorted(figure_dict, reverse = True):
+                    if figure/el >= 1:
+                        res_string += figure_dict[el]*(figure//el)
+                        figure -= el*(figure//el)
+            res_list.append(res_string)     
+        return ''.join(res_list)
+
+a = RomanNumeral('X')
+b = RomanNumeral('X')
+print(a == b)
+print(a > b)
+print(a < b)
+print(a >= b)
+print(a <= b)
+
+number = RomanNumeral('MXL') + RomanNumeral('MCDVIII') - RomanNumeral('I')
+print(number)
+print(int(number))
+
+roman = RomanNumeral('L')
+print(roman.__eq__(1))
+print(roman.__ne__(1.1))
+print(roman.__gt__(range(5)))
+print(roman.__lt__([1, 2, 3]))
+print(roman.__ge__({4, 5, 6}))
+print(roman.__le__({1: 'one'}))
+"""
+
+## Работа с атрибутами __getatribute__, __getattr__, __setattr__, __delattr__
+
+# Защита от изменения и удаления атрибутов
+"""
+class Const:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+    
+    def __setattr__(self, key, value):
+        if self.__dict__.get(key) == None:
+            self.__dict__[key] = value
+        else:    
+            raise AttributeError ('Изменение значения атрибута невозможно')
+        
+    def __delattr__(self, attr):    
+        raise AttributeError ('Удаление атрибута невозможно')
+    
+videogame = Const(name='Cuphead')
+videogame.developer = 'Studio MDHR'
+print(videogame.name)
+print(videogame.developer)
+
+videogame = Const(name='Dicso Elysium')
+try:
+    videogame.name = 'Half-Life: Alyx'
+except AttributeError as e:
+    print(e)  
+
+videogame = Const(name='The Last of Us')
+try:
+    del videogame.name
+except AttributeError as e:
+    print(e)    
+"""    
+
+# Защита от удаления атрибутов _ и __
+"""
+class ProtectedObject:
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            object.__setattr__(self, key, value)
+        
+    def __getattribute__(self, attr):
+        return object.__getattr__(self, attr)
+        
+    def __getattr__(self, attr):
+        if attr[0]!='_':
+            return object.__getattribute__(self, attr)
+        else:
+            raise AttributeError ('Доступ к защищенному атрибуту невозможен')
+            
+    def __setattr__(self, key, value):
+        if key[0] == '_':
+            raise AttributeError ('Доступ к защищенному атрибуту невозможен')
+        object.__setattr__(self, key, value)
+        
+    def __delattr__(self, attr):
+        if attr[0] == '_':
+            raise AttributeError ('Доступ к защищенному атрибуту невозможен')
+        object.__delattr__(self, attr) 
+
+user = ProtectedObject(login='PG_kamiya', _password='alreadybanned')
+try:
+    print(user.login)
+    print(user._password)
+except AttributeError as e:
+    print(e)
+
+user = ProtectedObject(login='PG_kamiya', _password='alreadybanned')
+del user.login
+print('Успешное удаление атрибута')    
+
+user = ProtectedObject(login='PG_kamiya', _password='alreadybanned')
+del user.login
+try:
+    print(user.login)
+except AttributeError:
+    print('Атрибут отсутствует')
 """
