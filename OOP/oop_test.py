@@ -1748,3 +1748,1722 @@ try:
 except AttributeError:
     print('Атрибут отсутствует')
 """
+
+## Hash функции
+
+#
+"""
+def limited_hash(left, right, hash_function = hash):
+    def new_hash(arg):
+        hash_value = hash_function(arg)
+        while hash_value not in [el for el in range(left,right+1)]:
+            if hash_value > right:
+                hash_value = left + ((hash_value - right)-1)
+            elif hash_value < left:
+                hash_value = right - ((left - hash_value)-1)
+        return hash_value         
+    return new_hash
+
+hash_function = limited_hash(10, 15)
+print(hash_function(16))
+print(hash_function(17))
+print(hash_function(21))
+print(hash_function(22))
+print(hash_function(23))
+
+hash_function = limited_hash(10, 15)
+print(hash_function(9))
+print(hash_function(8))
+print(hash_function(4))
+print(hash_function(3))
+print(hash_function(2))
+
+hash_function = limited_hash(2, 3, hash_function=lambda obj: len(str(obj)))
+print(hash_function('a'))
+print(hash_function('ab'))
+print(hash_function('abc'))
+print(hash_function('abcd'))
+print(hash_function('abcde'))
+print(hash_function('abcdef'))
+print(hash_function('abcdefg'))
+
+def hash_function(obj):
+    return sum(index * ord(character) for index, character in enumerate(str(obj), start=1))
+hash_function = limited_hash(10, 15, hash_function)
+array = [1366, -5502567186.7395, 'zZQyrjYzdgcabTZPATPl', False, {'монета': -671699723096.267, 'лететь': 5151},
+         (False, True, 897, -844416.51017117, 1101),
+         [True, 171664.794743347, True, False, 'UypAaBSjBWYWBYbmRTdN', 4044844490314.56]]
+for item in array:
+    print(hash_function(item))
+"""
+
+#
+"""
+class Row:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+        
+    def __repr__(self):
+        res_list = [
+            f"{key}='{value}'" if isinstance(value, str) 
+            else f"{key}={value}" 
+            for key, value in self.__dict__.items()
+                   ] 
+        return f"{__class__.__name__}({', '.join(res_list)})"
+    
+    def __getattribute__(self, attr):
+        return object.__getattr__(self, attr)
+    
+    def __getattr__(self, attr):
+        return object.__getattribute__(self, attr)
+    
+    def __setattr__(self, key, value):
+        if self.__dict__.get(key) is None:
+            raise AttributeError ('Установка нового атрибута невозможна')
+        else:
+            raise AttributeError ('Изменение значения атрибута невозможно')
+    
+    def __delattr__(self, attr):
+        raise AttributeError ('Удаление атрибута невозможно')
+        
+    def __eq__(self, other):
+        if isinstance(other, Row):
+            return list(self.__dict__.items()) == list(other.__dict__.items())
+        return NotImplemented
+    
+    def __hash__(self):
+        keys = [ord(key) if isinstance(key, str) else key for key in self.__dict__.keys()]
+        values = [ord(value) if isinstance(value, str) else value for value in self.__dict__.values()]
+        return sum([(i+1)*keys[i]*values[-i+1] for i in range(len(keys))]) % 1200 
+    
+row = Row(a='A', b='B', c='C')
+print(row)
+print(row.a, row.b, row.c)    
+
+row1 = Row(a=1, b=2, c=3)
+row2 = Row(a=1, b=2, c=3)
+row3 = Row(b=2, c=3, a=1)
+print(row1 == row2)
+print(hash(row1) == hash(row2))
+print(row1 == row3)
+print(hash(row1) == hash(row3))
+
+row = Row(a=1, b=2, c=3)
+try:
+    row.d = 4
+except AttributeError as e:
+    print(e)
+"""    
+
+#
+"""
+class SkipIterator:
+    def __init__(self, iterable, n):
+        self.iterable, self.n = iterable, n
+        self.index = -1
+        
+    def __iter__(self):
+        if not isinstance(self.iterable, (list,str,tuple,dict,set)):
+            res_list = []
+            while True:
+                try:
+                    if self.index == -1 or self.n == 0:
+                        self.index += 1
+                        res_list.append(next(self.iterable))
+                    else:
+                        self.index += self.n + 1 
+                        for _ in range(self.n):
+                            next(self.iterable)   
+                        res_list.append(next(self.iterable))                        
+                except StopIteration:
+                    return iter(res_list)
+        else:
+            return self
+    
+    def __next__(self):   
+            if self.index == -1 or self.n == 0:
+                self.index += 1
+            else:
+                self.index += self.n + 1  
+            try:
+                return self.iterable[self.index]
+            except:
+                raise StopIteration
+
+skipiterator = SkipIterator([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 2)   # пропускаем по два элемента
+print(*skipiterator)
+
+data = ['к', 'б', 'ш', 'к', 'к', 'о', 'т', 'г', 'о', 'д', 'р', 'в', 'с', 'с', 'и', 'о', 'в', 'п', 'у', 'с', 'л', 'т',
+        'г', 'т', 'з', 'ь', 'о', 'п', 'н', 'в', 'и', 'н', 'с', 'п', 'р', 'ш', 'е', 'к', 'н', 'с', 'у', 'в', 'п', 'т',
+        'х', 'т', 'с', 'с', 'л', 'с']
+skipiterator = SkipIterator(iter(data), 4)
+print(*skipiterator)
+"""
+
+#
+"""
+class LoopTracker:
+    def __init__(self, iterable):
+        self.iterable = list(iterable)
+        self.index = 0
+        self.empty_index = 0
+        if self.iterable:
+            self.first_el = self.iterable[0]
+        else:
+            self.first_el = None  
+        self.last_el = 0
+        
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        while self.iterable:
+            self.index += 1
+            self.last_el = self.iterable.pop(0)
+            return self.last_el
+        self.empty_index += 1
+        raise StopIteration
+        
+    @property
+    def accesses(self):
+        return self.index
+    
+    @property
+    def empty_accesses(self):
+        return self.empty_index
+    
+    @property
+    def first(self):
+        if self.first_el != None:
+            return self.first_el
+        raise AttributeError ('Исходный итерируемый объект пуст')
+    
+    @property
+    def last(self):
+        if self.last_el:
+            return self.last_el
+        raise AttributeError ('Последнего элемента нет')
+    
+    def is_empty(self):
+        if self.iterable:
+            return False
+        return True
+    
+loop_tracker = LoopTracker(dict.fromkeys(range(100)))
+
+print(next(loop_tracker))
+print(next(loop_tracker))
+print(next(loop_tracker))
+print(loop_tracker.accesses)
+print(loop_tracker.first)
+print(loop_tracker.last)
+print(loop_tracker.is_empty())
+"""    
+
+#
+"""
+from copy import deepcopy
+import itertools
+
+class SequenceZip:
+    def __init__(self, *args):
+        self.args = deepcopy(args)
+        if self.args:
+            if isinstance(self.args[0], dict):
+                temp_list = []
+                for el in self.args:
+                    temp_list.append(list(el.keys()))
+                self.args = temp_list    
+            self.min_len = min([len(list(el)) for el in self.args])
+            self.args = self.transform(self.args)
+              
+    def __len__(self):
+        return len(list(self.args))
+       
+    def __getitem__(self, key): 
+        for _ in range(key):
+            next(self.args)
+        return next(self.args)    
+        #return self.args[key]
+    
+    def transform(self, data):
+        temp_gen = (el[i] for i in range(self.min_len) for el in data)
+        res = (tuple(itertools.islice(temp_gen, 0, len(data))) for _ in range(self.min_len))
+        return res
+    
+sequencezip = SequenceZip('ABC', ['bee', 'geek', 'python'], [1, 2, 3])
+print(list(sequencezip))
+print(tuple(sequencezip))
+
+sequencezip = SequenceZip('ABC', ['bee', 'geek', 'python'], [1, 2, 3])
+print(len(sequencezip))
+print(sequencezip[1])
+print(sequencezip[2])
+
+many_large_sequences = [range(100000) for _ in range(100)]
+sequencezip = SequenceZip(*many_large_sequences)
+print(sequencezip[99999])  
+
+data = {'bee': 'bee', 'geek': 'geek'}
+sequencezip = SequenceZip(data)
+data['python'] = 'python'
+print(data)
+print(len(sequencezip))
+print(list(sequencezip))
+
+data = {'bee': 'bee', 'geek': 'geek'}
+sequencezip = SequenceZip(data)
+print(sequencezip[0])
+print(list(sequencezip))
+"""
+
+#
+"""
+class OrderedSet:
+    def __init__(self, iterable = []):
+        self.iterable = iterable.copy()   
+        self.iterable = list({el: self.iterable.count(el) for el in self.iterable}.keys())
+        
+    def __getitem__(self, key):
+        self.iterable = list({el: self.iterable.count(el) for el in self.iterable}.keys())
+        return self.iterable[key]
+    
+    def __len__(self):
+        return len(self.iterable)
+    
+    def __contains__(self, item):
+        return item in self.iterable
+    
+    def __eq__(self, other):
+        if isinstance(other, OrderedSet):
+            return (
+                {el: self.iterable.index(el) for el in self.iterable} 
+                == 
+                {el: other.iterable.index(el) for el in other.iterable}
+            )
+        if isinstance(other, set):
+            return sorted(self.iterable) == sorted(other)
+        return NotImplemented
+    
+    def add(self, element):
+        self.iterable.append(element)
+        
+    def discard(self, element):
+        try:
+            self.iterable.remove(element)
+        except ValueError:
+            pass
+
+
+orderedset = OrderedSet(['bee', 'python', 'stepik', 'bee', 'geek', 'python', 'bee'])
+print(*orderedset)
+print(len(orderedset))
+
+orderedset = OrderedSet(['bee', 'python', 'stepik', 'bee', 'geek', 'python', 'bee'])
+print('python' in orderedset)
+print('C++' in orderedset)
+
+orderedset = OrderedSet()
+orderedset.add('green')
+orderedset.add('green')
+orderedset.add('blue')
+orderedset.add('red')
+print(*orderedset)
+orderedset.discard('blue')
+orderedset.discard('white')
+print(*orderedset)    
+
+data = ['Ada Lovelace'] * 1000
+orderedset = OrderedSet(data)
+print(len(orderedset))
+
+orderedset = OrderedSet([1, 2, 3, 4])
+not_supported = [120, {1: 'one'}, True, 'pi = 3', 17.9]
+for item in not_supported:
+    print(item != orderedset)
+"""
+
+#
+"""
+import copy
+
+class AttrDict:
+    def __init__(self, data = {}):
+        self.data = copy.deepcopy(data) 
+        
+    def __len__(self):
+        return len(self.data)
+        
+    def __iter__(self):
+        yield from self.data.keys()
+    
+    def __getitem__(self, key):
+        return self.data[key]
+    
+    def __setitem__(self, key, value):
+        self.data[key] = value
+    
+    def __getattribute__(self, attr):
+        return object.__getattribute__(self, attr)
+    
+    def __getattr__(self, attr):
+        return self.data[attr]
+
+    def __setattr__(self, attr, value):
+        if self.__dict__.get(attr) != None:
+            raise AttributeError ('Изменение атрибута запрещено')
+        object.__setattr__(self, attr, value)   
+        
+    def __delattr__(self, attr):
+        raise AttributeError ('Удаление атрибута запрещено') 
+    
+attrdict = AttrDict({'name': 'X Æ A-12', 'father': 'Elon Musk'})
+print(attrdict['name'])
+print(attrdict.father)
+print(len(attrdict))    
+
+attrdict = AttrDict({'name': 'Timur', 'city': 'Moscow'})
+attrdict['city'] = 'Dubai'
+attrdict['age'] = 31
+print(attrdict.city)
+print(attrdict.age)
+
+attrdict = AttrDict()
+attrdict['school_name'] = 'BEEGEEK'
+print(attrdict['school_name'])
+print(attrdict.school_name)
+"""
+
+#
+"""
+import copy
+
+class PermaDict:
+    def __init__(self, data = {}):
+        self.data = copy.deepcopy(data)
+        
+    def keys(self):
+        return self.data.keys()
+    
+    def values(self):
+        return self.data.values()
+    
+    def items(self):
+        return self.data.items()
+    
+    def __len__(self):
+        return len(self.data)
+    
+    def __iter__(self):
+        yield from self.keys()
+        
+    def __getitem__(self, key):
+        return self.data[key]
+    
+    def __setitem__(self, key, value):
+        if self.data.get(key) == None:
+            self.data[key] = value
+        else:
+            raise KeyError ('Изменение значения по ключу невозможно')
+    
+    def __delitem__(self, key):
+        del self.data[key]
+
+permadict = PermaDict({'name': 'Timur', 'city': 'Moscow'})
+print(permadict['name'])
+print(len(permadict))
+
+permadict = PermaDict({'name': 'Timur', 'city': 'Moscow', 'age': 30})
+print(*permadict)
+print(*permadict.keys())
+print(*permadict.values())
+print(*permadict.items())
+
+permadict = PermaDict()
+permadict['name'] = 'Timur'
+permadict['age'] = 30
+del permadict['name']
+print(permadict['age'])
+print(len(permadict))
+
+permadict = PermaDict({'name': 'Timur', 'city': 'Moscow'})
+try:
+    permadict['name'] = 'Arthur'
+except KeyError as e:
+    print(e)
+"""
+
+#
+"""
+import copy
+
+class HistoryDict:
+    def __init__(self, data = {}):
+        self.data = copy.deepcopy(data)
+        self.memo_dict = {}
+        for key, value in self.data.items():
+            self.__setitem__(key, value)
+            
+    def __len__(self):
+        return len(self.data)
+    
+    def __iter__(self):
+        yield from self.data
+        
+    def __getitem__(self, key):
+        return self.data[key]
+    
+    def __setitem__(self, key, value):
+        if self.memo_dict.get(key) == None:
+            self.memo_dict[key] = []
+        self.memo_dict[key].append(value)  
+        self.data[key] = value
+        
+    def __delitem__(self, key):
+        del self.data[key]
+        del self.memo_dict[key]
+        
+    def keys(self):
+        return self.data.keys()
+    
+    def values(self):
+        return self.data.values()
+    
+    def items(self):
+        return self.data.items()
+    
+    def history(self, key):
+        if self.memo_dict.get(key) == None:
+            return []
+        return self.memo_dict[key]   
+    
+    def all_history(self):
+        return self.memo_dict
+    
+historydict = HistoryDict({'ducks': 99, 'cats': 1})
+print(historydict['ducks'])
+print(historydict['cats'])
+print(len(historydict))    
+
+historydict = HistoryDict({'ducks': 99, 'cats': 1})
+print(*historydict)
+print(*historydict.keys())
+print(*historydict.values())
+print(*historydict.items())
+
+historydict = HistoryDict({'ducks': 99, 'cats': 1})
+historydict['ducks'] = 100
+print(historydict.history('ducks'))
+print(historydict.history('cats'))
+print(historydict.history('dogs'))
+
+historydict = HistoryDict({'ducks': 99, 'cats': 1})
+print(historydict.all_history())
+historydict['ducks'] = 100
+historydict['ducks'] = 101
+historydict['cats'] = 2
+print(historydict.all_history())
+
+historydict = HistoryDict({'ducks': 99, 'cats': 1})
+historydict['dogs'] = 1
+print(len(historydict))
+del historydict['ducks']
+del historydict['cats']
+print(len(historydict))
+"""
+
+#
+"""
+class MutableString:
+    def __init__(self, string = ''):
+        self.string = string
+        
+    def __repr__(self):
+        return f"{__class__.__name__}('{self.string}')"
+    
+    def __str__(self):
+        return self.string
+    
+    def __len__(self):
+        return len(self.string)
+    
+    def lower(self):
+        self.string = self.string.lower()
+        return self.string
+    
+    def upper(self):
+        self.string = self.string.upper()
+        return self.string
+    
+    def __iter__(self):
+        return iter(self.string)
+    
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            return MutableString(self.string[index])
+        return self.string[index]
+    
+    def __setitem__(self, index, value):
+        self.string = [el for el in self.string]
+        self.string[index] = value
+        self.string = ''.join(self.string)
+    
+    def __delitem__(self, index):
+        self.string = [el for el in self.string]
+        del self.string[index]
+        self.string = ''.join(self.string)
+        
+    def __add__(self, other):
+        if isinstance(other, MutableString):
+            return self.string + other.string
+
+            
+mutablestring = MutableString('beegeek')
+print(*mutablestring)
+print(str(mutablestring))
+print(repr(mutablestring))            
+
+mutablestring = MutableString('Beegeek')
+mutablestring.lower()
+print(mutablestring)
+mutablestring.upper()
+print(mutablestring)
+            
+mutablestring1 = MutableString('bee')
+mutablestring2 = MutableString('geek')
+print(mutablestring1 + mutablestring2)
+print(mutablestring2 + mutablestring1)
+
+mutablestring = MutableString('beegeek')
+print(mutablestring)
+mutablestring[0] = 'B'
+mutablestring[-4] = 'G'
+print(mutablestring)
+"""
+
+#
+"""
+class Grouper:
+    def __init__(self, iterable, key):
+        self.key = key
+        self.iterable = iterable.copy()
+        self.res_dict = dict()
+        for el in self.iterable:
+            self.add(el)    
+            
+    def __iter__(self):
+        yield from self.res_dict.items()
+    
+    def __getitem__(self, index):
+        return self.res_dict.get(index)
+    
+    def __contains__(self, item):
+        return item in self.res_dict.keys()
+    
+    def group_for(self, iterable):
+        return self.key(iterable)
+    
+    def add(self, iterable):
+        group = self.group_for(iterable)
+        value = self.res_dict.get(group)
+        if value: 
+            self.res_dict.setdefault(group, value.append(iterable))
+        else:
+            self.res_dict.setdefault(group, [iterable])
+
+grouper = Grouper(['bee', 'geek', 'one', 'two', 'five', 'hi'], key=len)
+print(grouper[2])
+print(grouper[3])
+print(grouper[4])          
+
+grouper = Grouper(['hi'], key=lambda s: s[0])
+grouper.add('hello')
+grouper.add('bee')
+grouper.add('big')
+grouper.add('geek')
+print(grouper['h'])
+print(grouper['b'])
+print(grouper['g'])
+
+grouper = Grouper(['bee', 'geek', 'one', 'two', 'five', 'hi'], key=len)
+print(3 in grouper)
+print('bee' in grouper)
+
+from collections import namedtuple
+Person = namedtuple('Person', ['name', 'age', 'height'])
+persons = [Person('Tim', 63, 193), Person('Eva', 47, 158),
+           Person('Mark', 71, 172), Person('Alex', 45, 193),
+           Person('Jeff', 63, 193), Person('Ryan', 41, 184),
+           Person('Ariana', 28, 158), Person('Liam', 69, 193)]
+
+grouper = Grouper(persons, key=lambda x: x.height)
+print(sorted(grouper))
+"""
+
+#
+"""
+import sys
+
+class UpperPrint:
+    def __enter__(self):
+        self.standart_stdout = sys.stdout.write
+        sys.stdout.write = self.temp_func
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        sys.stdout.write = self.standart_stdout
+        
+    def temp_func(self, data):
+        self.standart_stdout(data.upper()) 
+
+        
+print('Если жизнь одаривает вас лимонами — не делайте лимонад')
+print('Заставьте жизнь забрать их обратно!')
+with UpperPrint():
+    print('Мне не нужны твои проклятые лимоны!')
+    print('Что мне с ними делать?')
+print('Требуйте встречи с менеджером, отвечающим за жизнь!')        
+"""
+        
+#
+"""
+class WriteSpy:
+    def __init__(self, file1, file2, to_close = False):
+        self.file1 = file1
+        self.file2 = file2
+        self.to_close = to_close      
+    
+    def __enter__(self):
+        return self 
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        if self.to_close:
+            self.file1.close()
+            self.file2.close()    
+            
+    def write(self, text):
+        if self.writable():
+            self.file1.write(text)
+            self.file2.write(text)
+        else:
+            raise ValueError ('Файл закрыт или недоступен для записи')         
+                 
+    def close(self):
+        self.file1.close()
+        self.file2.close()
+        
+    def writable(self):
+        if not self.file1.closed and not self.file2.closed:
+            if self.file1.writable() and self.file2.writable():
+                return True
+        return False
+    
+    def closed(self):
+        if self.file1.closed and self.file2.closed:
+            return True
+        return False        
+    
+f1 = open('file1.txt', mode='w')
+f2 = open('file2.txt', mode='w')
+with WriteSpy(f1, f2, to_close=True) as combined:
+    combined.write('You shall seal the blinding light that plagues their dreams\n')
+    combined.write('You are the Vessel\n')
+    combined.write('You are the Hollow Knight')
+print(f1.closed, f2.closed)
+with open('file1.txt') as file1, open('file2.txt') as file2:
+    print(file1.read())
+    print(file2.read())    
+
+f1 = open('file1.txt', mode='w')
+f2 = open('file2.txt', mode='w')
+with WriteSpy(f1, f2, to_close=True) as combined:
+    print(combined.closed())
+    f1.close()
+    print(combined.closed())
+    f2.close()
+    print(combined.closed())    
+"""
+
+#
+"""
+from copy import deepcopy
+
+class Atomic:
+    def __init__(self, data, deep = False):
+        self.data = data 
+        if deep:    
+            self.backup = deepcopy(data)  
+        else:
+            self.backup = data.copy()
+        
+    def __enter__(self):
+        return self.data
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        if exc_type:
+            self.data.clear()
+            if isinstance(self.data, list):
+                self.data.extend(self.backup) 
+            if isinstance(self.data, (set, dict)):
+                self.data.update(self.backup)
+        return True
+
+matrix = [[1, 2], [3, 4]]
+with Atomic(matrix) as atomic:
+    atomic[1].append(0)       # изменение вложенной структуры
+    atomic.append([5, 6])
+    del atomic[100]           # обращение по несуществующему индексу
+print(matrix)        
+
+matrix = [[1, 2], [3, 4]]
+with Atomic(matrix, True) as atomic:
+    atomic[1].append(0)       # изменение вложенной структуры
+    atomic.append([5, 6])
+    del atomic[100]           # обращение по несуществующему индексу
+print(matrix)
+
+data = {'firstname': 'Alyson', 'lastname': 'Hannigan', 'birthday': {'day': 24, 'month': 'March', 'year': 1974}}
+with Atomic(data, True) as atomic:          # deep = True
+    atomic['birthday']['month'] = 'April'   # изменение вложенной структуры
+    print(atomic['name'])                   # обращение по несуществующему ключу
+print(data)
+with Atomic(data) as atomic:                # deep = False
+    atomic['birthday']['month'] = 'April'   # изменение вложенной структуры
+    print(atomic['name'])                   # обращение по несуществующему ключу
+print(data)
+"""
+
+# Timer
+"""
+import time
+
+class AdvancedTimer:
+    def __init__(self):
+        self.last_run = None
+        self.runs = []
+        self.min = None
+        self.max = None
+        
+    def __enter__(self):
+        self.last_run = time.perf_counter()
+        return self
+    
+    def __exit__(self, *args, **kwargs):
+        stop = time.perf_counter()
+        self.last_run = stop - self.last_run
+        self.runs.append(self.last_run)
+        self.min = min(self.runs)
+        self.max = max(self.runs)
+
+from time import sleep
+timer = AdvancedTimer()
+with timer:
+    sleep(1.5)
+with timer:
+    sleep(0.7)
+with timer:
+    sleep(1)
+print([round(runtime, 1) for runtime in timer.runs])
+print(round(timer.min, 1))
+print(round(timer.max, 1))        
+"""
+
+# HTMLTags
+"""
+class HtmlTag:
+    step = 0
+    temp = False
+    def __init__(self, tag, inline = False):
+        self.tag = tag
+        self.inline = inline
+                         
+    def __enter__(self):
+        if HtmlTag.temp: 
+            HtmlTag.step += 1   
+        HtmlTag.temp = True    
+        if not self.inline:
+            print(f"{'  ' * (HtmlTag.step)}<{self.tag}>")
+        return self
+        
+    def __exit__(self, exc_type, ec_value, traceback):
+        HtmlTag.step -= 1
+        HtmlTag.temp = False
+        if not self.inline:
+            print(f"{'  ' * (HtmlTag.step)}</{self.tag}>")       
+        
+    def print(self, text):
+        if HtmlTag.temp: 
+            HtmlTag.step += 1
+        if self.inline:
+            print(f'{"  " * (HtmlTag.step-1)}<{self.tag}>{text}</{self.tag}>')
+        else:    
+            print('  ' * (HtmlTag.step) + text)
+
+with HtmlTag('body') as _:
+    with HtmlTag('h1') as header:
+        header.print('Поколение Python')
+    with HtmlTag('p') as section:
+        section.print('Cерия курсов по языку программирования Python от команды BEEGEEK')
+
+with HtmlTag('body') as _:
+    with HtmlTag('h1', True) as header:
+        header.print('Поколение Python')
+    with HtmlTag('p', True) as section:
+        section.print('Cерия курсов по языку программирования Python от команды BEEGEEK')
+"""  
+
+############################### contextmanager ###########################
+
+# защита файлов от внесения информации с ошибками
+"""
+from contextlib import contextmanager
+
+@contextmanager
+def safe_write(file):
+    backup = open('backup.txt', 'w', encoding = 'utf-8')
+    try:
+        yield backup
+    except Exception as error:
+        print('Во время записи в файл было возбуждено исключение', type(error).__name__)
+    else:
+        backup.close()
+        backup = open('backup.txt', 'r', encoding = 'utf-8')
+        file_input = open(file, 'w', encoding = 'utf-8')
+        file_input.write(backup.read().strip())
+        file_input.close()
+    finally:
+        backup.close()
+
+with safe_write('undertale.txt') as file:
+    file.write('Тень от руин нависает над вами, наполняя вас решительностью\n')   
+with safe_write('undertale.txt') as file:
+    print('Под весёлый шорох листвы вы наполняетесь решительностью', file=file)
+    raise ValueError
+with open('undertale.txt') as file:
+    print(file.read())        
+    
+with safe_write('poem.txt') as file:
+    print('''Я кашлянул в звенящей тишине,
+И от шального эха стало жутко…, 
+Расскажет ли утятам обо мне,
+под утро мной испуганная утка?''', file=file)
+with safe_write('poem.txt') as file:
+    file.insert('Стихотворение про утку')       # неверный метод для записи в файл
+with open('poem.txt') as file:
+    print(file.read())    
+"""   
+
+# контроль открываемого файла
+"""
+from contextlib import contextmanager
+
+@contextmanager
+def safe_open(filename, mode = 'r'):
+    try:
+        file = open(filename, mode)
+        
+    except Exception as err:
+        yield (None, err)
+    else:
+        yield (file, None)
+        file.close()
+
+with open('Ellies_jokes.txt', 'w') as file:
+    file.write('Знаешь, кто не прав? Лев\n')
+    file.write('Что треугольник сказал кругу? Катись отсюда')   
+with safe_open('Ellies_jokes.txt') as file:
+    file, error = file
+    print(error)
+    print(file.read())
+
+with safe_open('Ellies_jokes_2.txt') as file:
+    file, error = file
+    print(file)
+    print(error)
+"""    
+
+## Дискрипторы
+
+#
+"""
+class NonNegativeInteger:
+    def __init__(self, name, default = None):
+        self.name = name
+        self.default = default
+        
+    def __get__(self, obj, cls):
+        if self.name in obj.__dict__:
+            return obj.__dict__[self.name]
+        else:
+            if self.default != None:
+                return self.default
+            raise AttributeError('Атрибут не найден')    
+     
+    def __set__(self, obj, value):
+        if isinstance(value, int):
+            if value >= 0: 
+                obj.__dict__[self.name] = value
+            else: 
+                raise ValueError('Некорректное значение')    
+        else:
+            raise ValueError('Некорректное значение')
+        
+class Student:
+    score = NonNegativeInteger('score')
+student = Student()
+student.score = 90
+print(student.score) 
+
+class Student:
+    score = NonNegativeInteger('score', 0)
+student = Student()
+print(student.score)
+student.score = 0
+print(student.score)
+"""
+
+#
+"""
+class MaxCallsException(Exception):
+    pass
+
+class LimitedTakes:
+    def __set_name__(self, cls, attr): # закрепляем дескриптор за атрибутом, имеющим то же имя, что и переменная, которой присваивается дескриптор
+        self._attr = attr
+        
+    def __init__(self, times):
+        self.times = times
+        
+    def __get__(self, obj, cls):
+        if self.times > 0:
+            if self._attr in obj.__dict__:
+                self.times -= 1
+                return obj.__dict__[self._attr]
+            else:
+                raise AttributeError('Атрибут не найден')      
+        else:
+            raise MaxCallsException('Превышено количество доступных обращений')
+    
+    def __set__(self, obj, value):
+        obj.__dict__[self._attr] = value
+
+class Student:
+    name = LimitedTakes(3)
+student = Student()
+student.name = 'Gwen'
+print(student.name)
+print(student.name)
+print(student.name)
+try:
+    print(student.name)
+except MaxCallsException as e:
+    print(e)    
+"""
+
+#
+"""
+import random
+
+class RandomNumber:
+    
+    def __set_name__(self, cls, attr):
+        self._attr = attr
+    
+    def __init__(self, start, end, cache = False):
+        self.start = start
+        self.end = end
+        self.cache = cache
+        self.memo = None
+        
+    def __get__(self, obj, cls):
+        if not self.cache:
+            return random.randrange(self.start, self.end)
+        else:
+            if self.memo == None:
+                self.memo = random.randrange(self.start, self.end)
+            return self.memo    
+        
+    def __set__(self, obj, value):
+        raise AttributeError('Изменение невозможно')
+    
+class MagicPoint:
+    x = RandomNumber(1, 5)
+    y = RandomNumber(1, 5)
+    z = RandomNumber(1, 5)
+magicpoint = MagicPoint()
+print(magicpoint.x in [1, 2, 3, 4, 5])
+print(magicpoint.y in [1, 2, 3, 4, 5])
+print(magicpoint.z in [1, 2, 3, 4, 5])  
+
+class MagicPoint:
+    x = RandomNumber(1, 5)
+    y = RandomNumber(1, 5)
+    z = RandomNumber(1, 5)
+magicpoint = MagicPoint()
+print(magicpoint.x in [6, 7, 8, 9, 10])
+print(magicpoint.y in [6, 7, 8, 9, 10])
+print(magicpoint.z in [6, 7, 8, 9, 10])
+
+class MagicPoint:
+    x = RandomNumber(0, 5)
+    y = RandomNumber(0, 5)
+    z = RandomNumber(0, 5)
+magicpoint = MagicPoint()
+try:
+    magicpoint.x = 10
+except AttributeError as e:
+    print(e)
+"""    
+
+#
+"""
+class Versioned:
+    def __set_name__(self, obj, attr):
+        self._attr = attr
+        
+    def __get__(self, obj, cls):
+        if obj is None:
+            return self
+        if self._attr in obj.__dict__:
+            return Versioned.get_version(self, obj)
+        raise AttributeError('Атрибут не найден')
+    
+    def __set__(self, obj, value):
+        try:
+            getattr(obj, self._attr)
+        except:
+            obj.__dict__[self._attr] = [value]
+        else:
+            obj.__dict__[self._attr].append(value)
+
+    def get_version(self, obj, n=0):
+        return obj.__dict__[self._attr][n-1]
+    
+    def set_version(self, obj, n):
+        obj.__dict__[self._attr][-1] = Versioned.get_version(self, obj, n)
+
+class Student:
+    age = Versioned()
+student = Student()
+student.age = 18
+student.age = 19
+student.age = 20
+print(student.age)
+print(Student.age.get_version(student, 1))
+print(Student.age.get_version(student, 2))
+print(Student.age.get_version(student, 3))        
+
+class Student:
+    name = Versioned()
+student = Student()
+try:
+    print(student.name)
+except AttributeError as e:
+    print(e)
+"""
+
+
+## Наследование
+#
+"""
+class FieldTracker:
+    changed_dict = {}
+    
+    def __getattribute__(self, attr):
+        res = object.__getattribute__(self, attr)
+        if type(res) == list:
+            return res[-1]
+        return res
+    
+    def __setattr__(self, attr, value):
+        if attr in self.__dict__.keys():
+            if self.__dict__[attr][-1] != value:
+                self.__dict__[attr].append(value)
+                if len(self.__dict__[attr]) == 2:
+                    FieldTracker.changed_dict.setdefault(attr, self.__dict__[attr][0])
+        else:
+            self.__dict__[attr] = [value]      
+    
+    def base(self, attr):
+        return self.__dict__[attr][0]
+    
+    def has_changed(self, attr):
+        return len(self.__dict__[attr])>1
+    
+    def changed(self):
+        return FieldTracker.changed_dict
+    
+    def save(self):
+        for key in FieldTracker.changed_dict.keys():
+            self.__dict__[key] = [self.__dict__[key][-1]]  
+        FieldTracker.changed_dict = {}
+
+class Point(FieldTracker):
+    fields = ('x', 'y', 'z')
+    def __init__(self, x, y, z):
+        self.x, self.y, self.z = x, y, z
+        super().__init__()
+point = Point(1, 2, 3)
+point.x = 0
+point.z = 4
+point.save()
+print(point.base('x'))
+print(point.base('z'))
+print(point.has_changed('x'))
+print(point.has_changed('z'))
+print(point.changed())
+"""
+
+# переопределение __new__ и наследование базовых классов типов данных
+"""
+class LowerString(str):
+    def __new__(cls, obj = ''):
+        if isinstance(obj, str):
+            obj = obj.lower()
+        if isinstance(obj, list):
+            obj = list(map(lambda x: x.lower(),obj))
+        if isinstance(obj, dict):
+            obj = {key.lower(): obj.get(key) for key in obj.keys()}    
+            
+        instance = super().__new__(cls, obj)
+        return instance
+
+s1 = LowerString('BEEGEEK')
+s2 = LowerString('BeeGeek')
+print(s1)
+print(s2)
+print(s1 == s2)
+print(issubclass(LowerString, str))    
+
+print(LowerString(['Bee', 'Geek']))
+print(LowerString({'A': 1, 'B': 2, 'C': 3}))
+"""
+
+# сравнение без учета регистра
+"""
+class FuzzyString(str):
+    def __new__(cls, obj):
+        obj = obj.lower()
+        return super().__new__(cls, obj)
+           
+    def __eq__(self, other):
+        if isinstance(other, FuzzyString):
+            return self.__str__() == other.__str__()
+        if isinstance(other, str):
+            return self.__str__() == other.lower()
+        return NotImplemented
+        
+    def __ne__(self, other):
+        if isinstance(other, FuzzyString):
+            return self.__str__() != other.__str__()
+        if isinstance(other, str):
+            return self.__str__() != other.lower()
+        return NotImplemented
+  
+    def __lt__(self, other):
+        if isinstance(other, FuzzyString):
+            return self.__str__() < other.__str__()
+        if isinstance(other, str):
+            return self.__str__() < other.lower()
+        return NotImplemented
+    
+    def __gt__(self, other):
+        if isinstance(other, FuzzyString):
+            return self.__str__() > other.__str__()
+        if isinstance(other, str):
+            return self.__str__() > other.lower()
+        return NotImplemented
+    
+    def __le__(self, other):
+        if isinstance(other, FuzzyString):
+            return self.__str__() <= other.__str__()
+        if isinstance(other, str):
+            return self.__str__() <= other.lower()
+        return NotImplemented
+    
+    def __ge__(self, other):
+        if isinstance(other, FuzzyString):
+            return self.__str__() >= other.__str__()
+        if isinstance(other, str):
+            return self.__str__() >= other.lower()
+        return NotImplemented
+    
+    def __contains(self, other):
+        if isinstance(other, FuzzyString):
+            return other.__str__() in self.__str__()
+        if isinstance(other, str):
+            return other.lower() in self.__str__()  
+        return NotImplemented
+    
+s1 = FuzzyString('BeeGeek')
+s2 = FuzzyString('beegeek')
+print(s1 == s2)
+print(s1 in s2)
+print(s2 in s1)
+print(s2 not in s1)
+print(s2 not in s1)    
+
+s = FuzzyString('BeeGeek')
+print(s != 'BEEGEEK')
+print(s == 'BEEGEEK')
+print(s != 'beegeek')
+print(s == 'beegeek')
+print(s >= 'BEEGEEK')
+print(s <= 'BEEGEEK')
+print(s > 'BEEGEEK')
+print(s < 'BEEGEEK')
+"""
+
+#
+"""
+class SuperInt(int):
+    def __init__(self, digit):
+        self.digit = digit  
+        self.index = -1    
+
+    def repeat(self, n=2):
+        int_digit = super().__int__()
+        if int_digit < 0:
+            self.__init__(int(f'-{str(abs(int_digit))*n}'))
+        else:
+            self.__init__(int(str(int_digit)*n))
+        return SuperInt(self.digit)
+    
+    def to_bin(self):
+        return format(super().__int__(), 'b')
+
+    def next(self):
+        return SuperInt(super().__int__()+1)
+
+    def prev(self):
+        return SuperInt(super().__int__()-1)
+    
+    def __next__(self):
+        temp_list = [int(el) for el in str(super().__int__()) if el.isdigit()]
+        self.index += 1
+        try:
+            return SuperInt(temp_list[self.index])
+        except:
+            raise StopIteration        
+         
+    def __iter__(self):
+        return self
+
+superint1 = SuperInt(17)
+superint2 = SuperInt(-17)
+print(superint1.repeat())
+print(superint2.repeat(3)) 
+
+superint1 = SuperInt(1337)
+superint2 = SuperInt(-2077)
+print(*superint1)
+print(*superint2)    
+
+superint1 = SuperInt(2023)
+for item in superint1:
+    print(item, type(item))
+
+digits = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+superint = SuperInt(30)
+for n in digits:
+    print(superint.repeat(n))    
+"""
+
+#
+"""
+class AdvancedTuple(tuple):
+    
+    def __init__(self, data):
+        self.data = data
+    
+    def __add__(self, other):
+        return AdvancedTuple(self.data + list(AdvancedTuple.check(self, other)))
+        
+    def __iadd__(self, other):    
+       self.data = list(AdvancedTuple.check(self, other))
+       self = AdvancedTuple(list(self)+self.data)
+       return self
+    
+    def __radd__(self, other):
+        return AdvancedTuple(list(AdvancedTuple.check(self, other)) + self.data)
+    
+    def check(self, other):
+        if not isinstance(other, (list, tuple)):
+            if '__iter__' in other.__dir__():
+                other = [el for el in other]
+            else:
+                other = [el for el in other.keys()]
+        return other  
+
+advancedtuple = AdvancedTuple([1, 2, 3])
+print(advancedtuple + (4, 5))
+print(advancedtuple + [4, 5])
+print({'a': 1, 'b': 2} + advancedtuple)
+
+advancedtuple = AdvancedTuple([1, 2, 3])
+advancedtuple += [4, 5]
+advancedtuple += iter([6, 7, 8])
+print(advancedtuple)
+print(type(advancedtuple))    
+"""
+
+
+## Абстрактные классы
+"""
+#
+from abc import ABC, abstractmethod
+
+class Middle(ABC):
+    def __init__(self, user_votes, expert_votes):
+        self.user_votes = user_votes                   # пользовательские оценки
+        self.expert_votes = expert_votes               # оценки критиков
+    
+    @abstractmethod
+    def get_correct_user_votes(self):
+        #Возвращает нормализованный список пользовательских оценок
+        #без слишком низких и слишком высоких значений
+        return [vote for vote in self.user_votes if 10 < vote < 90]
+
+    @abstractmethod
+    def get_correct_expert_votes(self):
+        #Возвращает нормализованный список оценок критиков
+        #без слишком низких и слишком высоких значений
+        return [vote for vote in self.expert_votes if 5 < vote < 95]
+
+    @abstractmethod
+    def get_average(self, users):
+        if users:
+            votes = self.get_correct_user_votes()
+        else:
+            votes = self.get_correct_expert_votes()
+        return votes    
+
+
+class Average(Middle):
+    def __init__(self, user_votes, expert_votes):
+        super().__init__(user_votes, expert_votes)
+
+    def get_correct_user_votes(self):
+        return super().get_correct_user_votes()
+
+    def get_correct_expert_votes(self):
+        return super().get_correct_expert_votes()
+
+    def get_average(self, users=True):
+        #Возвращает среднее арифметическое пользовательских оценок или
+        #оценок критиков в зависимости от значения параметра users
+        votes = super().get_average(users)
+        return sum(votes) / len(votes)
+
+class Median(Middle):
+    def __init__(self, user_votes, expert_votes):
+        super().__init__(user_votes, expert_votes)
+
+    def get_correct_user_votes(self):
+        return super().get_correct_user_votes()
+
+    def get_correct_expert_votes(self):
+        return super().get_correct_expert_votes()
+
+    def get_average(self, users=True):
+        #Возвращает медиану пользовательских оценок или
+        #оценок критиков в зависимости от значения параметра users
+        if users:
+            votes = sorted(self.get_correct_user_votes())
+        else:
+            votes = sorted(self.get_correct_expert_votes())
+        return votes[len(votes) // 2]
+
+class Harmonic(Middle):
+    def __init__(self, user_votes, expert_votes):
+        super().__init__(user_votes, expert_votes)
+
+    def get_correct_user_votes(self):
+        return super().get_correct_user_votes()
+
+    def get_correct_expert_votes(self):
+        return super().get_correct_expert_votes()
+
+    def get_average(self, users=True):
+        #Возвращает среднее гармоническое пользовательских оценок или
+        #оценок критиков в зависимости от значения параметра users
+        votes = super().get_average(users)
+        return len(votes) / sum(map(lambda vote: 1 / vote, votes))
+    
+
+user_votes = [99, 90, 71, 1, 1, 100, 56, 60, 80]
+expert_votes = [87, 90, 67, 70, 81, 85, 97, 79, 71]
+average = Average(user_votes, expert_votes)
+print(average.get_correct_user_votes())
+print(average.get_correct_expert_votes())
+print(average.get_average())
+print(average.get_average(False))   
+
+user_votes = [99, 90, 71, 1, 1, 100, 56, 60, 80]
+expert_votes = [87, 90, 67, 70, 81, 85, 97, 79, 71]
+median = Median(user_votes, expert_votes)
+print(median.get_correct_user_votes())
+print(median.get_correct_expert_votes())
+print(median.get_average())
+print(median.get_average(False))
+
+user_votes = [99, 90, 71, 1, 1, 100, 56, 60, 80]
+expert_votes = [87, 90, 67, 70, 81, 85, 97, 79, 71]
+harmonic = Harmonic(user_votes, expert_votes)
+print(harmonic.get_correct_user_votes())
+print(harmonic.get_correct_expert_votes())
+print(round(harmonic.get_average(), 2))
+print(round(harmonic.get_average(False), 2))
+"""
+
+## Полиморфизм
+
+#
+""""
+from abc import ABC, abstractmethod
+
+class StringCreator(ABC):
+    def __init__(self, length):
+        self.length = length
+        self.res_list = []
+        self.temp_str = ''
+
+    def add(self, words):
+        for el in words.split(' '):
+            if len(self.temp_str) + len(el) <= self.length:
+                self.temp_str += (el + ' ')
+            else:
+                self.res_list.append(self.temp_str.strip())
+                self.temp_str = ''   
+                self.temp_str += (el + ' ')
+
+    @abstractmethod
+    def end(self):
+        pass
+
+class LeftParagraph(StringCreator):
+    def end(self):
+        self.res_list.append(self.temp_str.strip())
+        for string in self.res_list:
+            print(string)
+        self.res_list = []  
+        self.temp_str = ''  
+
+class RightParagraph(StringCreator):
+    def end(self):
+        self.res_list.append(self.temp_str.strip())
+        for string in self.res_list:
+            print(string.rjust(self.length, " "))
+        self.res_list = []  
+        self.temp_str = ''  
+
+leftparagraph = LeftParagraph(10)
+leftparagraph.add('death')
+leftparagraph.add('can have me')
+leftparagraph.add('when it earns me')
+leftparagraph.end()            
+print()
+rightparagraph = RightParagraph(10)
+rightparagraph.add('death')
+rightparagraph.add('can have me')
+rightparagraph.add('when it earns me')
+rightparagraph.end()
+print()
+leftparagraph = LeftParagraph(23)
+leftparagraph.add('Multiply noise and joy')
+leftparagraph.add('Sing songs in a good hour')
+leftparagraph.add('Friendship grace and youth')
+leftparagraph.add('Our birthday girls')
+leftparagraph.end()
+leftparagraph.add('Meanwhile the winged child')
+leftparagraph.add('friends greeting you')
+leftparagraph.add('Secretly thinks sometime')
+leftparagraph.add('I will be the birthday boy')
+leftparagraph.end()
+print()
+rightparagraph = RightParagraph(28)
+rightparagraph.add('I will not regret the roses')
+rightparagraph.add('Withered with a light spring')
+rightparagraph.add('I love the grapes on the vines')
+rightparagraph.add('Ripened in the hands under the mountain')
+rightparagraph.end()
+rightparagraph.add('The beauty of my green valley')
+rightparagraph.add('Golden joy of autumn')
+rightparagraph.add('oblong and transparent')
+rightparagraph.add('Like the fingers of a young maiden')
+rightparagraph.end()
+"""
+
+## Композиция
+# Колода карт (через product)
+"""
+from itertools import product
+from random import shuffle
+
+class Card:
+    def __init__(self, suit, rank):
+        self.suit = suit
+        self.rank = rank
+        
+    def __str__(self):
+        return f'{self.suit}{self.rank}'
+
+class Deck:
+    suits = ['♣', '♢', '♡', '♠']
+    ranks = [str(rank) for rank in range(2, 11)] + ['J', 'Q', 'K', 'A']
+    def __init__(self):
+        self.deck = list(product(self.suits, self.ranks))
+        
+    def shuffle(self):
+        if len(self.deck) == 52:
+            shuffle(self.deck)
+            return self.deck
+        else:
+            raise ValueError('Перемешивать можно только полную колоду')
+    
+    def deal(self):
+        try:
+            card = self.deck.pop()
+            return f'{card[0]+card[1]}'
+        except IndexError:
+            raise ValueError('Все карты разыграны')
+
+    def __str__(self):
+        return f'Карт в колоде: {len(self.deck)}'
+
+"""        
+# Колода карт (через композицию)
+"""
+from random import shuffle
+
+class Card:
+    def __init__(self, suit, rank):
+        self.suit = suit
+        self.rank = rank
+        
+    def __str__(self):
+        return f'{self.suit}{self.rank}'
+
+class Deck:
+    
+    def __init__(self):
+        self.suits = ['♣', '♢', '♡', '♠']
+        self.ranks = [str(rank) for rank in range(2, 11)] + ['J', 'Q', 'K', 'A']
+        self.deck = [Card(suit, rank) for suit in self.suits for rank in self.ranks]
+
+    def shuffle(self):
+        if len(self.deck) == 52:
+            shuffle(self.deck)
+            return self.deck
+        else:
+            raise ValueError('Перемешивать можно только полную колоду')
+    
+    def deal(self):
+        try:
+            card = self.deck.pop()
+            return f'{card.suit + card.rank}'
+        except IndexError:
+            raise ValueError('Все карты разыграны')
+
+    def __str__(self):
+        return f'Карт в колоде: {len(self.deck)}'
+
+deck = Deck()
+print(deck)
+print(deck.deal())
+print(deck.deal())
+print(deck.deal())
+print(deck)
+"""
+
+# OrderedDict через композицию
+"""
+class View:
+    def __init__(self, element):
+        self.element = element  
+        self.key, self.value = self.element
+
+class Queue:
+    def __init__(self, pairs = []):
+        if isinstance(pairs, dict):
+            self.pairs = [View(item) for item in pairs.items()]
+        if isinstance(pairs, list):
+            self.pairs = [View(item) for item in pairs]
+        
+    def add(self, pair):
+        try:
+            index = [pair.key for pair in self.pairs].index(View(pair).key)
+            self.pairs.pop(index).element
+        except ValueError:
+            pass
+        finally:    
+            self.pairs.append(View(pair))    
+    
+    def pop(self):
+        try:
+            deleted_element = self.pairs.pop(0)
+            return (deleted_element.key, deleted_element.value)
+        except IndexError:
+            raise KeyError('Очередь пуста')
+            
+    def __repr__(self):
+        res_str = ''
+        for item in self.pairs:
+            res_str += f'{item.element}, '
+        res_str = res_str.strip(', ')        
+        return f'{type(self).__name__}([{res_str}])'
+    
+    def __len__(self):
+        return len(self.pairs)
+    
+queue = Queue([('one', 1)])
+queue.add(('two', 2))
+print(queue.pop())
+print(queue.pop())
+print(queue)
+"""
+
+#
+from datetime import datetime
+
+class Lecture:
+    def __init__(self, topic, start_time, duration):
+        self.topic = topic 
+        self.start_time = datetime.strptime(start_time, '%H:%M')
+        self.duration = datetime.strptime(duration, '%H:%M')
+        self.end_time = Conference.hours_to_minutes(self.start_time) + Conference.hours_to_minutes(self.duration)
+        
+class Conference:
+    def __init__(self, schedule = [], pause = []):
+        self.schedule = schedule
+        self.pause = pause
+        
+    def add(self, lecture):
+        self.schedule.append(lecture)
+        self.schedule = sorted(self.schedule, key = lambda x: x.start_time)
+    
+    def total(self):
+        total_lecture_time = sum([Conference.hours_to_minutes(lecture.duration) for lecture in self.schedule])
+        return Conference.minutes_to_hours(total_lecture_time)
+    
+    def longest_lecture(self):
+        longest_lecture_time = max([Conference.hours_to_minutes(lecture.duration) for lecture in self.schedule])
+        return Conference.minutes_to_hours(longest_lecture_time)
+    
+    def longest_break(self):
+        try:
+            self.pause = [(Conference.hours_to_minutes(self.schedule[i].start_time) 
+                           - self.schedule[i-1].end_time) for i in range(1, len(self.schedule))]
+            longest_break_time = max(self.pause)
+            return Conference.minutes_to_hours(longest_break_time)
+        except (IndexError, ValueError):
+            return '00:00'
+    
+    @staticmethod
+    def hours_to_minutes(hours):
+        return hours.hour * 60 + hours.minute
+
+    @staticmethod
+    def minutes_to_hours(minutes):
+        hours = minutes // 60
+        minutes = minutes - (hours*60)
+        return datetime(year = 1900, month = 1, day = 1, hour = hours, minute = minutes).strftime('%H:%M')
