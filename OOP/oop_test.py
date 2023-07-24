@@ -3430,7 +3430,7 @@ class Lecture:
         self.topic = topic 
         self.start_time = datetime.strptime(start_time, '%H:%M')
         self.duration = datetime.strptime(duration, '%H:%M')
-        self.end_time = Conference.hours_to_minutes(self.start_time) + Conference.hours_to_minutes(self.duration)
+        self.end_time = hours_to_minutes(self.start_time) + hours_to_minutes(self.duration)
         
 class Conference:
     def __init__(self, schedule = [], pause = []):
@@ -3442,28 +3442,36 @@ class Conference:
         self.schedule = sorted(self.schedule, key = lambda x: x.start_time)
     
     def total(self):
-        total_lecture_time = sum([Conference.hours_to_minutes(lecture.duration) for lecture in self.schedule])
-        return Conference.minutes_to_hours(total_lecture_time)
+        total_lecture_time = sum([hours_to_minutes(lecture.duration) for lecture in self.schedule])
+        return minutes_to_hours(total_lecture_time)
     
     def longest_lecture(self):
-        longest_lecture_time = max([Conference.hours_to_minutes(lecture.duration) for lecture in self.schedule])
-        return Conference.minutes_to_hours(longest_lecture_time)
+        longest_lecture_time = max([hours_to_minutes(lecture.duration) for lecture in self.schedule])
+        return minutes_to_hours(longest_lecture_time)
     
     def longest_break(self):
         try:
-            self.pause = [(Conference.hours_to_minutes(self.schedule[i].start_time) 
+            self.pause = [(hours_to_minutes(self.schedule[i].start_time) 
                            - self.schedule[i-1].end_time) for i in range(1, len(self.schedule))]
             longest_break_time = max(self.pause)
-            return Conference.minutes_to_hours(longest_break_time)
+            return minutes_to_hours(longest_break_time)
         except (IndexError, ValueError):
             return '00:00'
     
-    @staticmethod
-    def hours_to_minutes(hours):
-        return hours.hour * 60 + hours.minute
 
-    @staticmethod
-    def minutes_to_hours(minutes):
-        hours = minutes // 60
-        minutes = minutes - (hours*60)
-        return datetime(year = 1900, month = 1, day = 1, hour = hours, minute = minutes).strftime('%H:%M')
+def hours_to_minutes(hours):
+    return hours.hour * 60 + hours.minute
+
+def minutes_to_hours(minutes):
+    hours = minutes // 60
+    minutes = minutes - (hours*60)
+    return datetime(year = 1900, month = 1, day = 1, hour = hours, minute = minutes).strftime('%H:%M')
+
+conference = Conference()
+
+conference.add(Lecture('Простые числа', '08:00', '01:30'))
+conference.add(Lecture('Жизнь после ChatGPT', '10:00', '02:00'))
+conference.add(Lecture('Муравьиный алгоритм', '13:30', '01:50'))
+print(conference.total())
+print(conference.longest_lecture())
+print(conference.longest_break())
