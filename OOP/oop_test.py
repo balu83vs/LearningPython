@@ -3423,7 +3423,16 @@ print(queue)
 """
 
 #
+"""
 from datetime import datetime
+
+def hours_to_minutes(hours):
+    return hours.hour * 60 + hours.minute
+
+def minutes_to_hours(minutes):
+    hours = minutes // 60
+    minutes = minutes - (hours*60)
+    return datetime(year = 1900, month = 1, day = 1, hour = hours, minute = minutes).strftime('%H:%M')
 
 class Lecture:
     def __init__(self, topic, start_time, duration):
@@ -3438,6 +3447,14 @@ class Conference:
         self.pause = pause
         
     def add(self, lecture):
+        if self.schedule:
+            for el in self.schedule:
+                if (
+                    (hours_to_minutes(el.start_time) <= hours_to_minutes(lecture.start_time) < el.end_time or hours_to_minutes(el.start_time) < lecture.end_time <= el.end_time)
+                    or
+                    (hours_to_minutes(lecture.start_time) <= hours_to_minutes(el.start_time) < lecture.end_time or hours_to_minutes(lecture.start_time) < el.end_time <= lecture.end_time)
+                ):
+                    raise ValueError('Провести выступление в это время невозможно')
         self.schedule.append(lecture)
         self.schedule = sorted(self.schedule, key = lambda x: x.start_time)
     
@@ -3457,16 +3474,7 @@ class Conference:
             return minutes_to_hours(longest_break_time)
         except (IndexError, ValueError):
             return '00:00'
-    
-
-def hours_to_minutes(hours):
-    return hours.hour * 60 + hours.minute
-
-def minutes_to_hours(minutes):
-    hours = minutes // 60
-    minutes = minutes - (hours*60)
-    return datetime(year = 1900, month = 1, day = 1, hour = hours, minute = minutes).strftime('%H:%M')
-
+        
 conference = Conference()
 
 conference.add(Lecture('Простые числа', '08:00', '01:30'))
@@ -3474,4 +3482,576 @@ conference.add(Lecture('Жизнь после ChatGPT', '10:00', '02:00'))
 conference.add(Lecture('Муравьиный алгоритм', '13:30', '01:50'))
 print(conference.total())
 print(conference.longest_lecture())
-print(conference.longest_break())
+print(conference.longest_break())        
+"""
+
+
+## __slots__
+#
+"""
+from functools import total_ordering
+
+@total_ordering
+class Shape:
+    __slots__ = ('name', 'color', 'area')
+    
+    def __init__(self, name, color, area):
+        self.name, self.color, self.area = name, color, area
+        
+    def __repr__(self):
+        return f'{self.color} {self.name} ({self.area})'
+    
+    def __eq__(self, other):
+        if isinstance(other, Shape):
+            return self.area == other.area
+        return NotImplemented
+    
+    def __lt__(self, other):
+        if isinstance(other, Shape):
+            return self.area < other.area
+        return NotImplemented
+    
+shape = Shape('triangle', 'red', 12)
+
+print(shape.name)
+print(shape.color)
+print(shape.area)
+"""
+
+### Enum (не решена!!!)
+"""
+from datetime import timedelta, date
+from enum import Enum
+
+Weekday = Enum('Weekday', ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'], start = 0)
+    
+class NextDate:
+    def __init__(self, today, weekday, after_today = False):
+        self.today, self.weekday, self.after_today = today, weekday, after_today
+        self.weekday_today = self.today.weekday() + 1
+        
+    def date(self):
+        delta = timedelta(days = 1)
+        "метод, возвращающий дату следующего дня недели в виде экземпляра класса date"
+        self.today = self.today + delta * type(self).days_until(self)
+        return self.today 
+    
+    def days_until(self):
+        "метод, возвращающий количество дней до даты следующего дня недели"
+        if not self.after_today:
+            return (self.weekday.value + self.weekday_today)-7*((self.weekday.value + self.weekday_today)//8)
+        return (self.weekday.value + self.weekday_today)-7*((self.weekday.value + self.weekday_today)//7)
+
+from datetime import date
+today = date(2023, 4, 17)                              # понедельник
+next_friday = NextDate(today, Weekday.FRIDAY)          # следующая пятница
+print(next_friday.date())
+print(next_friday.days_until())   
+
+from datetime import date
+today = date(2023, 4, 17)                              # понедельник
+next_monday = NextDate(today, Weekday.MONDAY)          # следующий понедельник без учета текущего
+print(next_monday.date())
+print(next_monday.days_until())
+
+from datetime import date
+today = date(2023, 4, 17)                              # понедельник
+next_monday = NextDate(today, Weekday.MONDAY, True)    # следующий понедельник с учетом текущего
+print(next_monday.date())
+print(next_monday.days_until())
+
+from datetime import date
+for weekday in Weekday:
+    today = date(2023, 4, 27)                              # четверг
+    next_date = NextDate(today, weekday)
+    print(next_date.date())
+    print(next_date.days_until())
+"""
+
+### Декораторы в виде класса
+
+#
+"""
+import functools
+
+class reverse_args:
+    def __init__(self, func):
+        functools.update_wrapper(self, func)
+        self.func = func
+        
+    def __call__(self, *args, **kwargs):
+        args = reversed(args)
+        return self.func(*args, **kwargs)
+
+@reverse_args
+def concat(a, b, c):
+    return a + b + c
+    
+print(concat('apple', 'cherry', 'melon'))
+""" 
+
+#
+"""
+import functools
+
+class MaxCallsException(Exception):
+    pass
+
+class limited_calls:
+    def __init__(self, n):
+        self.n = n
+        self.i = 0
+        
+    def __call__(self, func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            if self.i < self.n:
+                res = func(*args, **kwargs)
+                self.i+=1
+                return res   
+            else:
+                raise MaxCallsException('Превышено допустимое количество вызовов')
+        return wrapper
+    
+@limited_calls(3)
+def add(a, b):
+    return a + b
+print(add(1, 2))
+print(add(3, 4))
+print(add(5, 6))
+try:
+    print(add())
+except MaxCallsException as e:
+    print(e)    
+"""
+
+#
+"""
+import functools
+
+class takes_numbers:
+    def __init__(self, func):
+        functools.update_wrapper(self, func)
+        self.func = func
+        
+    def __call__(self, *args, **kwargs):
+        if all([isinstance(arg, (int, float)) for arg in args]) and all([isinstance(arg, (int, float)) for arg in kwargs.values()]):
+            res = self.func(*args, **kwargs)
+            return res
+        raise TypeError('Аргументы должны принадлежать типам int или float')
+    
+@takes_numbers
+def mul(a, b):
+    return a * b
+    
+try:
+    print(mul(1, '2'))
+except TypeError as error:
+    print(error)
+"""    
+
+#
+"""
+import functools
+
+class returns:
+    def __init__(self, datatype):
+        self.datatype = datatype
+        
+    def __call__(self, func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            res = func(*args, **kwargs)
+            if not isinstance(res,self.datatype):
+                return TypeError
+            return res
+        return wrapper
+
+@returns(int)
+def add(a, b):
+    return a + b
+try:
+    print(add('1', '2'))
+except Exception as error:
+    print(type(error))
+"""
+
+#
+"""
+import functools
+
+class exception_decorator:
+    def __init__(self, func):
+        functools.update_wrapper(self, func)
+        self.func = func
+        
+    def __call__(self, *args, **kwargs):
+        try:
+            res = self.func(*args, **kwargs)
+        except Exception as err:
+            return (None, type(err))
+        else:
+            return (res, None)
+        
+@exception_decorator
+def func(x):
+    return 2*x + 1
+print(func(1))
+print(func('bee')) 
+"""
+
+#
+"""
+import functools
+
+class ignore_exception:
+    def __init__(self, *errors):
+        self.errors = errors
+        
+    def __call__(self, func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwrags):
+            try:
+                res = func(*args, **kwrags)
+            except Exception as error:
+                if type(error) in self.errors:
+                    print(f'Исключение {type(error).__name__} обработано')
+                    return True
+                raise error
+            else:
+                return res
+        return wrapper
+
+@ignore_exception(ZeroDivisionError, TypeError, ValueError)
+def func(x):
+    return 1 / x
+func(0)
+
+min = ignore_exception(ZeroDivisionError)(min)
+try:
+    print(min(1, '2', 3, [4, 5]))
+except Exception as error:
+    print(type(error))    
+"""    
+
+#
+"""
+import functools
+
+class type_check:
+    def __init__(self, types):
+        self.types = types
+        
+    def __call__(self, func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            if all([True if self.types[i] == type(args[i]) else False for i in range(min(len(self.types), len(args)))]):
+                res = func(*args, **kwargs)
+                return res
+            raise TypeError
+        return wrapper
+
+@type_check([int, int])
+def add(a, b):
+    return a + b
+print(add(1, 2))
+
+@type_check([int, int])
+def add(a, b):
+    return a + b
+try:
+    print(add(1, '2'))
+except Exception as error:
+    print(type(error))        
+"""    
+
+#
+"""
+import functools
+from re import fullmatch, split
+
+def snake_case(attrs = False):
+    def wrapper(cls):
+        old_init = cls.__init__
+        
+        for old_name in dir(cls):
+            if fullmatch(r'__\w+__', old_name) == None:
+                backup = cls.__dict__[old_name] 
+                if isinstance(backup, (int, float, str)):
+                    if attrs:
+                        new_name = transformation(old_name)     
+                        setattr(cls, new_name, backup)
+                        delattr(cls, old_name)
+     
+        @functools.wraps(old_init)
+        def new_init(self, *args, **kwargs):
+            old_init(self, *args, **kwargs)
+            for old_name in dir(cls):
+                if fullmatch(r'__\w+__', old_name) == None:
+                    backup = cls.__dict__[old_name]
+                    if isinstance(backup, (int, float, str)):
+                        if attrs:
+                            new_name = transformation(old_name)     
+                            setattr(cls, new_name, backup)
+                            delattr(cls, old_name)
+                    else:
+                        new_name = transformation(backup.__name__)
+                        setattr(cls, new_name, backup)
+                        delattr(cls, old_name)               
+        cls.__init__ = new_init
+        return cls
+    return wrapper
+
+def transformation(string):
+    if string[0] != '_':       
+        temp_list = list(filter(lambda x: len(x)>0, split(r'(^[a-z]{1}[a-z]*[^A-Z]|[A-Z]{1}[a-z]*[^A-Z])', string)))
+        res_string = '_'.join(temp_list).lower()
+    else:
+        string = string[1::]
+        temp_list = list(filter(lambda x: len(x)>0, split(r'(^[a-z]{1}[a-z]*[^A-Z]|[A-Z]{1}[a-z]*[^A-Z])', string)))
+        res_string = '_'.join(temp_list).lower()
+        res_string = '_'+res_string
+    return res_string
+
+@snake_case()
+class MyClass:
+    def FirstMethod(self):
+        return 1
+    
+    def superSecondMethod(self):
+        return 2
+obj = MyClass()
+print(obj.first_method())
+print(obj.super_second_method())
+
+@snake_case(attrs=True)
+class MyClass:
+    FirstAttr = 1
+    superSecondAttr = 2
+print(MyClass.first_attr)
+print(MyClass.super_second_attr)
+"""
+
+# декоратор для __repr__
+"""
+def auto_repr(args, kwargs):
+    def wrapper(cls):
+        def new_repr(self):
+            attr_list = []
+            for arg in args:
+                if arg in self.__dict__:
+                    attr_list.append(repr(self.__dict__[arg]))
+            for kwarg in kwargs:
+                if kwarg in self.__dict__:
+                    attr_list.append('='.join([kwarg, repr(self.__dict__[kwarg])]))               
+            return f'{type(self).__name__}({", ".join(attr_list)})'         
+        cls.__repr__ = new_repr
+        return cls
+    return wrapper
+
+@auto_repr(args=['x', 'y'], kwargs=['color'])
+class Point:
+    def __init__(self, x, y, color):
+        self.x = x
+        self.y = y
+        self.color = color
+
+point = Point(1, 2, color='green')
+print(point)
+point.x = 10
+point.y = 20
+print(point)
+
+@auto_repr(args=['name', 'surname'], kwargs=[])
+class Person:
+    def __init__(self, name, surname):
+        self.name = name
+        self.surname = surname
+person = Person('Gvido', 'van Rossum')
+print(person)
+"""
+
+# декоратор для ограничения количества новых экземпляров класса
+"""
+def limiter(limit, unique, lookup):
+    def decorator(cls):
+        cls.instance_list = []
+        cls._instance = None
+        cls.ID_list = []
+        def wraper(*args, **kwargs):
+            cls._instance = cls(*args, **kwargs)
+            if len(cls.instance_list)<limit:
+                cls.ID_list.append(getattr(cls._instance, unique))    
+                cls.instance_list.append(cls._instance)
+            else:
+                if getattr(cls._instance, unique) in cls.ID_list:
+                    cls._instance = cls.instance_list[cls.ID_list.index(getattr(cls._instance, unique))]
+                else:    
+                    if lookup == 'FIRST':
+                        cls._instance = cls.instance_list[0] 
+                    else:
+                        cls._instance = cls.instance_list[-1]
+            return cls._instance  
+        return wraper
+    return decorator
+
+@limiter(2, 'ID', 'FIRST')
+class MyClass:
+    def __init__(self, ID, value):
+        self.ID = ID
+        self.value = value
+
+obj1 = MyClass(1, 5)          # создается экземпляр класса с идентификатором 1
+obj2 = MyClass(2, 8)          # создается экземпляр класса с идентификатором 2
+obj3 = MyClass(1, 20)         # возвращается obj1, так как экземпляр с идентификатором 1 уже есть
+obj4 = MyClass(3, 0)          # превышено ограничение limit, возвращается первый созданный экземпляр
+
+print(obj3.value)
+print(obj4.value)
+"""
+
+## dataclasses
+"""
+from dataclasses import dataclass, field
+
+@dataclass
+class Point:
+    x: float = 0.0
+    y: float = 0.0
+    quadrant: int = field(init = False)    
+        
+    def __post_init__(self):
+        if self.x == 0 or self.y == 0:
+            self.quadrant = 0
+        elif self.x > 0 and self.y > 0:  
+            self.quadrant = 1
+        elif self.x < 0 and self.y > 0:  
+            self.quadrant = 2 
+        elif self.x < 0 and self.y < 0:  
+            self.quadrant = 3
+        else:
+            self.quadrant = 4
+            
+    def symmetric_x(self):
+        return type(self)(self.x, -self.y)
+    
+    def symmetric_y(self):
+        return type(self)(-self.x, self.y) 
+    
+point = Point()
+
+print(point)
+print(point.x)
+print(point.y)
+print(point.quadrant)
+
+point = Point(1.0, 2.0)
+
+print(point.symmetric_x())
+print(point.symmetric_y())
+"""
+
+#
+"""
+from dataclasses import dataclass, field
+
+@dataclass(order=True)
+class FootballPlayer:
+    name: str = field(compare = False)
+    surname: str = field(compare = False)
+    value: int = field(repr = False)    
+
+@dataclass
+class FootballTeam:
+    name: str
+    players: list = field(default_factory=list, repr = False, compare = False)  
+    
+    def add_players(self, *players):
+        for player in players:
+            self.players.append(player)
+
+player = FootballPlayer('Kylian', 'Mbappe', 180000000)
+print(player)
+print(player.name)
+print(player.surname)
+print(player.value)
+
+team = FootballTeam('PSG')
+print(team)
+print(team.name)
+print(team.players)
+team.add_players(FootballPlayer('Kylian', 'Mbappe', 180000000))
+print(team.players)
+"""
+
+## Final exersices
+
+#
+"""
+import math
+
+class Vector:
+    def __init__(self, *args):
+        self.args = args
+        
+    def __add__(self, other):
+        if len(self.args) == len(other.args):
+            return type(self)(*[self.args[i] + other.args[i] for i in range(len(self.args))])
+        raise ValueError('Векторы должны иметь равную длину')
+    
+    def __sub__(self, other):
+        if len(self.args) == len(other.args):
+            return type(self)(*[self.args[i] - other.args[i] for i in range(len(self.args))])
+        raise ValueError('Векторы должны иметь равную длину')
+    
+    def __mul__(self, other):
+        if len(self.args) == len(other.args):
+            return sum([self.args[i] * other.args[i] for i in range(len(self.args))])
+        raise ValueError('Векторы должны иметь равную длину')
+    
+    def norm(self):
+        return math.sqrt(sum([self.args[i] ** 2  for i in range(len(self.args))]))
+    
+    def __str__(self):
+        return f"{self.__dict__['args']}"
+    
+    def __eq__(self, other):
+        if isinstance(other, type(self)):
+            if len(self.args) == len(other.__dict__['args']):
+                return self.args == other.__dict__['args']
+            else:
+                raise ValueError('Векторы должны иметь равную длину')
+        return NotImplemented
+    
+a = Vector(1, 2, 3)
+b = Vector(3, 4, 5)
+c = Vector(5, 6, 7, 8)
+
+print(a)                       # (1, 2, 3)
+print(b)                       # (3, 4, 5)
+print(c)                       # (5, 6, 7, 8)
+
+print(a + b)                   # (4, 6, 8)
+print(a - b)                   # (-2, -2, -2)
+print(a * b)                   # 1*3 + 2*4 + 3*5 = 26
+print(c.norm())                # sqrt(5**2 + 6**2 + 7**2 + 8**2) = sqrt(174) = 13.19090595827292
+
+print(a == Vector(1, 2, 3))    # True
+print(a == Vector(4, 5, 6))    # False
+
+vector1 = Vector(1, 2, 3)
+vector2 = Vector(5, 6, 7, 8)
+try:
+    print(vector1 == vector2)
+except ValueError as e:
+    print(e)
+
+vector1 = Vector(1, 2)
+vector2 = Vector(3, 4)
+vector3 = vector1 + vector2
+vector4 = vector1 - vector2
+print(type(vector3))
+print(type(vector4)) 
+"""
+
+#
