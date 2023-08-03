@@ -3986,7 +3986,7 @@ print(team.players)
 
 ## Final exersices
 
-#
+# 2
 """
 import math
 
@@ -4054,8 +4054,8 @@ print(type(vector3))
 print(type(vector4)) 
 """
 
-# Не доделана!!!!!
-
+# 3 Не доделана!!!!!
+"""
 class CaesarCipher:
     
     def __init__(self, step):
@@ -4102,3 +4102,90 @@ cipher = CaesarCipher(10)
 
 print(cipher.encode('G'))
 print(cipher.decode('G'))
+"""
+
+# 4
+"""
+class ArithmeticProgression:
+    
+    def __init__(self, start, step, flag = False):
+        self.start = start
+        self.step = step
+        self.flag = flag
+        
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        if self.flag:
+            self.start = self.start+self.step
+        self.flag = True    
+        return self.start 
+
+class GeometricProgression(ArithmeticProgression):
+    
+    def __next__(self):
+        if self.flag:
+            self.start = self.start*self.step
+        self.flag = True    
+        return self.start
+
+progression = ArithmeticProgression(0, 1)
+
+for elem in progression:
+    if elem > 10:
+        break
+    print(elem, end=' ')    # 0 1 2 3 4 5 6 7 8 9 10
+
+progression = GeometricProgression(1, 2)
+
+for elem in progression:
+    if elem > 10:
+        break
+    print(elem, end=' ')    # 1 2 4 8
+"""
+
+# 5
+"""
+from re import fullmatch, sub, split
+
+class DomainException(Exception):
+    def __str__(self):
+        return 'Недопустимый домен, url или email'
+
+class Domain:
+    def __init__(self, domen):
+        self.domen = type(self).check_domen(domen)
+
+    def __str__(self):
+        return f'{self.domen}'    
+
+    @classmethod
+    def from_url(cls, domen):
+        domen = sub(r'https://', '', domen)
+        domen = sub(r'http://', '', domen)
+        return cls(cls.check_domen(domen))
+    
+    @classmethod
+    def from_email(cls, domen):
+        domen = split(r'@', domen, maxsplit=1)
+        if fullmatch(r'[a-zA-Z]+', domen[0]):
+            return cls(cls.check_domen(domen[-1]))
+        else:
+            raise DomainException
+
+    @staticmethod
+    def check_domen(domen):
+        if fullmatch(r'[a-zA-Z]+\.[a-zA-Z]+', domen):
+            return domen
+        else:
+            raise DomainException
+
+domain1 = Domain('pygen.ru')                       # непосредственно на основе домена
+domain2 = Domain.from_url('https://pygen.ru')      # на основе url-адреса
+domain3 = Domain.from_email('support@pygen.ru')    # на основе адреса электронной почты
+
+print(str(domain1))                                # pygen.ru
+print(str(domain2))                                # pygen.ru
+print(str(domain3))                                # pygen.ru
+"""
