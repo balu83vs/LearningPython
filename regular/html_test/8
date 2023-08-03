@@ -1,0 +1,7 @@
+<fieldset title="Search Python.org">
+    <span aria-hidden="true" class="icon-search"></span>
+    <label class="screen-reader-text" for="id-search-field">Search This Site</label>
+    <button type="submit" name="submit" id="submit" class="search-button" title="Submit this Search" tabindex="3">
+        GO
+    </button>
+</fieldset>

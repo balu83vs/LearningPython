@@ -534,6 +534,7 @@ print(*interleave(numbers, squares, qubes))
 ########################## Конвейеры генераторов ########################
 
 # 
+"""
 from collections import namedtuple
 
 Person = namedtuple('Person', ['name', 'nationality', 'sex', 'birth', 'death'])
@@ -550,7 +551,7 @@ persons = [Person('E. M. Ashe', 'American', 'male', 1867, 1941),
            Person('Monika Andersson', 'Swedish', 'female', 1957, 0),
            Person('Shura_Stone', 'Russian', 'male', 2000, 0),
            Person('Jon Bale', 'Swedish', 'male', 2000, 0)]
-
+"""
 # через генераторные функции
 """
 def country(persons):

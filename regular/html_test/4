@@ -1,0 +1,1 @@
+<a class="button prompt" id="start-shell" data-shell-container="#dive-into-python" href="/shell/"><span class="message">Launch Interactive Shell</span></a>

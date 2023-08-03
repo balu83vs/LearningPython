@@ -75,6 +75,7 @@ print(numbers)
 
 # алгоритм на базе рандомной выборки (на значениях больше 10, требуется очень много времени) 
 import random
+from typing import Any
 """
 def res(limit):
     res = [1]
@@ -111,3 +112,30 @@ def ways(limit):
 print(ways(100)) 
 print(ways.cache_info())   
 """
+
+# решенеи уравнения с 4-я неизвестными с помощью itertools.product
+"""
+import itertools
+
+print(*itertools.product([i for i in range(1, 13)], repeat=4))
+
+for x,y,z,w in itertools.product([i for i in range(1, 13)], repeat=4):
+    if x**2+2*y**3 == z**4+5*w**3:
+        print(x,y,z,w)
+"""
+
+
+
+
+
+
+
+
+
+    
+
+
+    
+
+
+

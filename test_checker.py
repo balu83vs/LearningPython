@@ -1,5 +1,5 @@
 ################### Импорт файла с программой ###################
-from itertools_test import test
+from oop_test import pluck
 
 ################### Основное тело программы ####################
 from zipfile import ZipFile
