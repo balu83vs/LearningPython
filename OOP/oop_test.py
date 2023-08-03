@@ -4189,3 +4189,5 @@ print(str(domain1))                                # pygen.ru
 print(str(domain2))                                # pygen.ru
 print(str(domain3))                                # pygen.ru
 """
+
+внесения измененений в main
