@@ -2,8 +2,10 @@ telegram_bot
 telegram_time_bot
 start
 *.csv
+*.xlsx
 .vscode/
 *.json
 __pycache__/
 *.clue
 test_comments.txt
+Tests
