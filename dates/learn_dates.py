@@ -1,10 +1,14 @@
-# Раздел Date и Time
+####################################################################### 
+                            #Раздел datetime
+#######################################################################
+
+from datetime import datetime
+
+FILE_DIR = 'd:/py_learning/py_programs/dates/'
 
 # Дневник космонавта
 """
-from datetime import datetime
-
-with open('diary.txt', encoding = 'utf-8') as diary_file:
+with open(f'{FILE_DIR}diary.txt', encoding = 'utf-8') as diary_file:
     temp = ' '
     temp_value = []
     res_key = []
@@ -33,10 +37,9 @@ with open('diary.txt', encoding = 'utf-8') as diary_file:
             print()
 """
 
+
 # Функция is_available_date()
 """
-from datetime import datetime
-
 def is_available_date(dates, some_date):
     stop_num = []
     in_date = []
@@ -68,16 +71,17 @@ def is_available_date(dates, some_date):
     return True
 """
 
-## Раздел TimeDelta
+
+#######################################################################
+                            #Раздел TimeDelta
+#######################################################################
+
+from datetime import timedelta
 
 # Таймер 
 """
-from datetime import datetime, timedelta
-
 date = datetime.strptime(input(), '%H:%M:%S')
-
 delta = timedelta(seconds = int(input()))
-
 time = date + delta
 
 if len(str(time.hour)) < 2:
@@ -86,16 +90,16 @@ else:
     print(timedelta(hours = time.hour, minutes = time.minute, seconds = time.second))
 """
 
+
 # Функция num_of_sundays()
 """
-from datetime import datetime, timedelta
-
 def num_of_sundays(year):
-    time = datetime(year = year, month = 1, day = 1)
-
-    delta = timedelta(days = 1)
     count = 0
+    
+    time = datetime(year = year, month = 1, day = 1)
+    delta = timedelta(days = 1)
     temp = time.year
+
     while time.year != int(temp) + 1:
         if time.strftime('%A') == 'Sunday':
             count +=1
@@ -103,14 +107,13 @@ def num_of_sundays(year):
     return count
 """
 
+
 # Продуктивность
 """
-from datetime import datetime, timedelta
-
 date = datetime.strptime(input(), '%d.%m.%Y')
-
 delta = timedelta(days = 1)
 temp = date
+
 print(temp.strftime('%d.%m.%Y'))
 
 for i in range(2, 11): 
@@ -119,10 +122,9 @@ for i in range(2, 11):
     date = temp
 """
 
+
 # Соседние даты
 """
-from datetime import datetime, timedelta
-
 temp_list = []
 list_date = list(map(lambda x: datetime.strptime(x, '%d.%m.%Y').toordinal(), input().split(' ')))
 temp = list_date[0]
@@ -133,31 +135,31 @@ for i in range(1, len(list_date)):
 print(temp_list)
 """
 
+
 # Функция fill_up_missing_dates()
 """
-from datetime import datetime, timedelta
-
 def fill_up_missing_dates(dates):
     res_list = []
     list_date = [datetime.strptime(el, '%d.%m.%Y') for el in dates]
     delta = timedelta(days = 1)
     max_date = max(list_date)
     min_date = min(list_date)
+
     while min_date <= max_date:
         res_list.append(min_date.strftime('%d.%m.%Y'))
         min_date += delta
     return res_list
 """
 
+
 # Реп по матеше
 """
-from datetime import datetime, timedelta
-
 time_start = datetime.strptime(input(), '%H:%M')
 time_end = datetime.strptime(input(), '%H:%M')
 delta_45 = timedelta(seconds = 45 * 60)
 delta_10 = timedelta(seconds = 10 * 60)
 temp1 = time_start  
+
 for i in range(1, 100):
     temp2 = temp1 + delta_45
     if temp1 + delta_45 <= time_end:
@@ -169,32 +171,37 @@ for i in range(1, 100):
 """
 
 
-## РЕШЕНИЕ ЗАДАЧ
+####################################################################### 
+                            #РЕШЕНИЕ ЗАДАЧ
+#######################################################################
+
+from datetime import date, time, datetime, timedelta
+
 # 1-я
 """
-from datetime import date, time, datetime, timedelta
 from functools import reduce
 
-data = [('07:14', '08:46'),
-        ('09:01', '09:37'),
-        ('10:00', '11:43'),
-        ('12:13', '13:49'),
-        ('15:00', '15:19'),
-        ('15:58', '17:24'),
-        ('17:57', '19:21'),
-        ('19:30', '19:59')]      
+data = [
+        ('07:14', '08:46'), ('09:01', '09:37'),
+        ('10:00', '11:43'), ('12:13', '13:49'),
+        ('15:00', '15:19'), ('15:58', '17:24'),
+        ('17:57', '19:21'), ('19:30', '19:59')
+        ]      
 
-res_list = reduce(lambda x, y: x + y, [timedelta(minutes = 60 * datetime.strptime(el[1], '%H:%M').hour + datetime.strptime(el[1], '%H:%M').minute).total_seconds() - 
+temp_list = [
+            timedelta(minutes = 60 * datetime.strptime(el[1], '%H:%M').hour + datetime.strptime(el[1], '%H:%M').minute).total_seconds() - 
             timedelta(minutes = 60 * datetime.strptime(el[0], '%H:%M').hour + datetime.strptime(el[0], '%H:%M').minute).total_seconds()
-            for el in data])
+            for el in data
+            ]        
+
+res_list = reduce(lambda x, y: x + y, temp_list)
 
 print(int(res_list//60))
 """
 
+
 # Пятница, 13-е
 """
-from datetime import datetime, timedelta
-
 week = [0 for i in range(0,7)]
 
 start_date = datetime.strptime ('01.01.0001', '%d.%m.%Y')
@@ -210,12 +217,16 @@ for day in week:
     print(day)
 """
 
+
 # Снова не успел
 """
-from datetime import datetime, timedelta
-
 date = datetime.strptime(input(), '%d.%m.%Y %H:%M')
-work_time = {0: ('10:00', '18:00'), 1: ('9:00', '21:00'), 2: ('9:00', '21:00'), 3: ('9:00', '21:00'), 4: ('9:00', '21:00'), 5: ('9:00', '21:00'), 6: ('10:00', '18:00')}
+work_time = {
+            0: ('10:00', '18:00'), 1: ('9:00', '21:00'), 
+            2: ('9:00', '21:00'), 3: ('9:00', '21:00'), 
+            4: ('9:00', '21:00'), 5: ('9:00', '21:00'), 
+            6: ('10:00', '18:00')
+            }
 
 left = datetime.strptime(work_time[int(date.strftime('%w'))][0], '%H:%M')
 left_limit = timedelta(hours = left.hour, minutes = left.minute)
@@ -231,10 +242,9 @@ else:
     print('Магазин не работает')
 """
 
+
 # Самое понятное условие
 """
-from datetime import datetime, timedelta
-
 start_date = datetime.strptime(input(), '%d.%m.%Y')
 finish_date = datetime.strptime(input(), '%d.%m.%Y')
 delta = timedelta(days = 1)
@@ -249,18 +259,15 @@ while start_date <= finish_date + delta:
     start_date += delta3
 """
 
+
 # Сотрудники организации
 """
-from datetime import datetime, timedelta
-
-empl_list = []
 count = 1
 temp = ''
 
 n = int(input())
-for _ in range(n):
-    empl_list.append(input().split())
 
+empl_list = [input().split() for _ in range(n)]
 empl_list = sorted(empl_list, key = lambda x: datetime.strptime(x[2], '%d.%m.%Y').timestamp())
 
 for el in empl_list:
@@ -274,22 +281,21 @@ else:
     print(f'{empl_list[0][2]} {count}')
 """
 
+
 # Сотрудники организации 2
 """
-from datetime import datetime, timedelta
-
 date_list = [datetime.strptime(input().split()[2],'%d.%m.%Y') for _ in range(int(input()))]
 date_filter = set(date_list)
 date_res = {date: date_list.count(date) for date in date_filter}
 date_res = sorted(list(filter(lambda x: date_res.get(x) == max(date_res.values()), date_res)))
+
 for el in date_res:
     print(el.strftime('%d.%m.%Y'))
 """
 
+
 # Сотрудники организации 3
 """
-from datetime import datetime, timedelta
-
 now = datetime.strptime(input(), '%d.%m.%Y')
 delta7 = timedelta(days = 7)
 delta0 = timedelta(days = 0) 
@@ -302,7 +308,16 @@ em_dict = {datetime.strptime(el[2], '%d.%m.%Y').year: None for el in temp_list}
 years_temp_list = sorted(em_dict, reverse = True)
 
 for el in em_dict:
-    temp_list2 = list(filter(lambda x: x if datetime.strptime(x[2], '%d.%m.%Y').year == el and (delta0 < datetime.strptime(x[2], '%d.%m.%Y').replace(year=now.year) - now <= delta7 or datetime.strptime(x[2], '%d.%m.%Y').replace(year=now.year) - now < -delta358) else None, temp_list))
+    temp_list2 = list(
+                    filter(
+                        lambda x: x 
+                            if datetime.strptime(x[2], '%d.%m.%Y').year == el 
+                                and (delta0 < datetime.strptime(x[2], '%d.%m.%Y').replace(year=now.year) - now <= delta7 
+                                or datetime.strptime(x[2], '%d.%m.%Y').replace(year=now.year) - now < -delta358) 
+                            else None, 
+                        temp_list
+                            )
+                        )
    
     em_dict[el] = temp_list2
     temp_list2 = []
@@ -315,51 +330,56 @@ for el_year in years_temp_list:
 if year_list == []:
     print('Дни рождения не планируются')
 else:   
-    em_list = list(filter(lambda x: x if delta0 < datetime.strptime(x[2], '%d.%m.%Y').replace(year=now.year) - now <= delta7 or datetime.strptime(x[2], '%d.%m.%Y').replace(year=now.year) - now < -delta358 else None, em_dict[year_list]))
+    em_list = list(
+                filter(
+                    lambda x: x 
+                        if delta0 < datetime.strptime(x[2], '%d.%m.%Y').replace(year=now.year) - now <= delta7 
+                            or datetime.strptime(x[2], '%d.%m.%Y').replace(year=now.year) - now < -delta358 
+                        else None, 
+                    em_dict[year_list]
+                        )
+                    )
     em_list = sorted(em_list, key = lambda x: datetime.strptime(x[2], '%d.%m.%Y'))
+    
     if len(em_list) != 0:
         print(f'{em_list[0][0]} {em_list[0][1]}')
     else:
         print('Дни рождения не планируются')
 """
 
+
 # FAKE NEWS
 """
-from datetime import datetime, timedelta
 DAY_VAR = ('день', 'дня', 'дней')
 HOUR_VAR = ('час', 'часа', 'часов')
 MIN_VAR = ('минута', 'минуты', 'минут')
 
-def choose_plural(result_input, var_input):
+
+def choose_plural(result_input, var_input) -> str:
     if result_input > 0:
         if len(str(result_input)) < 2:
             if str(result_input)[-1] in '1':
                 return '{0} {1}'.format(result_input, var_input[0])
             elif str(result_input)[-1] in '234':
                 return '{0} {1}'.format(result_input, var_input[1])
-
         else:
             if str(result_input)[-1] in '1' and str(result_input)[-2] not in '1':
                 return '{0} {1}'.format(result_input, var_input[0])
             elif str(result_input)[-1] in '234' and str(result_input)[-2] not in '1':
                 return '{0} {1}'.format(result_input, var_input[1])
-
         return '{0} {1}'.format(result_input, var_input[2])  
     else:
         return     
     
+        
 def ded_l(dead_line, now_date):
     return dead_line - now_date
     
-    
 dead_line = datetime(year=2022, month = 11, day = 8, hour = 12, minute = 0)
 now_date = datetime.strptime(input(), '%d.%m.%Y %H:%M')
-
-
 result_input = ded_l(dead_line, now_date)
 
 if result_input.total_seconds() > 0:
-
     result_input_days = int(result_input.days)
     result_input_hours = int((result_input.seconds / 60) // 60)
     result_input_minutes = int(result_input.seconds / 60 - result_input_hours * 60)
@@ -384,39 +404,44 @@ if result_input.total_seconds() > 0:
     
     if MIN_VAR != None:
         if DAY_VAR == None or HOUR_VAR == None or (DAY_VAR == None and HOUR_VAR == None):
-            print(MIN_VAR)
-                
+            print(MIN_VAR)       
 else:
     print('Курс уже вышел!')
 """
 
 
-## модуль calendar
-# Функция get_days_in_month()
-"""
+####################################################################### 
+                            #модуль calendar
+#######################################################################
+
 import calendar
 
-from datetime import date
-
+# Функция get_days_in_month()
+"""
 def get_days_in_month(year, month):
-    months_list = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+    months_list = [
+                    '', 
+                    'January', 'February', 'March', 
+                    'April', 'May', 'June', 
+                    'July', 'August', 'September', 
+                    'October', 'November', 'December'
+                    ]
+
     day_num = calendar.monthrange(year, months_list.index(month))
     res_list = [date(year = year, month = months_list.index(month), day = i) for i in range(1, day_num[1] + 1)]
     return res_list
 """
 
+
 # Функция get_all_mondays()
 """
-import calendar
-
-from datetime import date, timedelta
-
-
 def get_all_mondays(year):
     delta = timedelta(days = 1)
     start_date = date(year = year, month = 1, day = 1)
     end_date = date(year = year, month = 12, day = 31)
     res_list = list()
+    
     while start_date <= end_date:
         if calendar.weekday(start_date.year, start_date.month, start_date.day) == 0:
             res_list.append(start_date)
@@ -424,13 +449,10 @@ def get_all_mondays(year):
     return res_list
 """
 
+
 # ТЧМ
 """
-import calendar
-
-from datetime import date, timedelta
-
-year = int(input())
+YEAR = int(input())
 
 def get_all_mondays(year):
     delta = timedelta(days = 1)
@@ -438,8 +460,8 @@ def get_all_mondays(year):
     end_date = date(year = year, month = 12, day = 31)
     res_list = list()
     thursday_count = 0
+    
     while start_date <= end_date:
-
         if calendar.weekday(start_date.year, start_date.month, start_date.day) == 3:
             thursday_count += 1
             if thursday_count == 3:        

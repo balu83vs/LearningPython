@@ -1,14 +1,15 @@
+##########################################################################################
+                                    # namedtuple
+##########################################################################################
 
-##########################################################################################
-# namedtuple
-##########################################################################################
+# 1
 """
 from collections import namedtuple
 import pickle
 
 Animal = namedtuple('Animal', ['name', 'family', 'sex', 'color'])
 
-with open('D:/py_learning/py_programs/data.pkl', 'rb') as input_pkl:
+with open('D:/py_learning/py_programs/files/data.pkl', 'rb') as input_pkl:
      
 # реализация через обычный словарь    
  #   for in_dict in pickle.load(input_pkl):
@@ -23,7 +24,8 @@ with open('D:/py_learning/py_programs/data.pkl', 'rb') as input_pkl:
         print()
 """
 
-# 
+
+# 2
 """
 from collections import namedtuple
 
@@ -48,8 +50,9 @@ users = [User('Mary', 'Griffin', 'sonnen@yahoo.com', 'Basic'),
          User('Russell', 'Smith', 'isaacson@comcast.net', 'Bronze'),
          User('Megan', 'Patterson', 'hoangle@outlook.com', 'Basic')]
 
-# функция вывода на экран
+
 def view(input_list):
+    # функция вывода на экран
     for el in input_list:
         print(el.name, el.surname)
         print(f'  {User._fields[2].capitalize()}: {el.email}')
@@ -60,22 +63,23 @@ def view(input_list):
 for el in users:
     res_list.append(el)
 
-res_list = sorted(res_list, key = lambda x: x.email)     # сортируем по почте
-temp_list = list(filter(lambda x: x if x.plan == 'Gold' else None, res_list)) # фильтруем по статусу подписки Gold
+res_list = sorted(res_list, key = lambda x: x.email)                            # сортируем по почте
+temp_list = list(filter(lambda x: x if x.plan == 'Gold' else None, res_list))   # фильтруем по статусу подписки Gold
 view(temp_list)
 temp_list = list(filter(lambda x: x if x.plan == 'Silver' else None, res_list)) # фильтруем по статусу подписки Silver
 view(temp_list)
 temp_list = list(filter(lambda x: x if x.plan == 'Bronze' else None, res_list)) # фильтруем по статусу подписки Bronze
 view(temp_list)
-temp_list = list(filter(lambda x: x if x.plan == 'Basic' else None, res_list)) # фильтруем по статусу подписки Basic
+temp_list = list(filter(lambda x: x if x.plan == 'Basic' else None, res_list))  # фильтруем по статусу подписки Basic
 view(temp_list)
 
-                                                                              # вариант реализации через обычные Tuple
-users = sorted(users, key = lambda x: x[2])
-temp = list(filter(lambda x: x if x[3] == 'Gold' else None, users))
-for el in temp:
-    print(el)
+# вариант реализации через обычные Tuple
+#users = sorted(users, key = lambda x: x[2])
+#temp = list(filter(lambda x: x if x[3] == 'Gold' else None, users))
+#for el in temp:
+#    print(el)
 """
+
 
 # Вы кто такие? Я вас не звал
 """
@@ -98,14 +102,34 @@ with open('D:/py_learning/py_programs/meetings.csv', encoding='utf-8') as input_
         print(f'{el.surname} {el.name}')
 """
 
-########################################################################################## 
 
-# defaultdict
 ##########################################################################################
+                                    # defaultdict
+##########################################################################################
+# 1
 """
 from collections import defaultdict
 
-data = [('Books', 1343), ('Books', 1166), ('Merch', 616), ('Courses', 966), ('Merch', 1145), ('Courses', 1061), ('Books', 848), ('Courses', 964), ('Tutorials', 832), ('Merch', 642), ('Books', 815), ('Tutorials', 1041), ('Books', 1218), ('Tutorials', 880), ('Books', 1003), ('Merch', 951), ('Books', 920), ('Merch', 729), ('Tutorials', 977), ('Books', 656)]
+data = [('Books', 1343), 
+        ('Books', 1166), 
+        ('Merch', 616), 
+        ('Courses', 966), 
+        ('Merch', 1145), 
+        ('Courses', 1061), 
+        ('Books', 848), 
+        ('Courses', 964), 
+        ('Tutorials', 832), 
+        ('Merch', 642), 
+        ('Books', 815), 
+        ('Tutorials', 1041), 
+        ('Books', 1218), 
+        ('Tutorials', 880), 
+        ('Books', 1003), 
+        ('Merch', 951), 
+        ('Books', 920), 
+        ('Merch', 729), 
+        ('Tutorials', 977), 
+        ('Books', 656)]
 data = sorted(data)
 res_dict = defaultdict(int)
 
@@ -116,11 +140,62 @@ for el in res_dict:
     print(f'{el}: ${res_dict.get(el)}')
 """
 
+
 # подсчет сотрудников в каждом отделе
 """
 from collections import defaultdict
 
-staff = [('Sales', 'Robert Barnes'), ('Developing', 'Thomas Porter'), ('Accounting', 'James Wilkins'), ('Sales', 'Connie Reid'), ('Accounting', 'Brenda Davis'), ('Developing', 'Miguel Norris'), ('Accounting', 'Linda Hudson'), ('Developing', 'Deborah George'), ('Developing', 'Nicole Watts'), ('Marketing', 'Billy Lloyd'), ('Sales', 'Charlotte Cox'), ('Marketing', 'Bernice Ramos'), ('Sales', 'Jose Taylor'), ('Sales', 'Katie Warner'), ('Accounting', 'Steven Diaz'), ('Accounting', 'Kimberly Reynolds'), ('Accounting', 'John Watts'), ('Accounting', 'Dale Houston'), ('Developing', 'Arlene Gibson'), ('Marketing', 'Joyce Lawrence'), ('Accounting', 'Rosemary Garcia'), ('Marketing', 'Ralph Morgan'), ('Marketing', 'Sam Davis'), ('Marketing', 'Gail Hill'), ('Accounting', 'Michelle Wright'), ('Accounting', 'Casey Jenkins'), ('Sales', 'Evelyn Martin'), ('Accounting', 'Aaron Ferguson'), ('Marketing', 'Andrew Clark'), ('Marketing', 'John Gonzalez'), ('Developing', 'Wilma Woods'), ('Sales', 'Marie Cooper'), ('Accounting', 'Kay Scott'), ('Sales', 'Gladys Taylor'), ('Accounting', 'Ann Bell'), ('Accounting', 'Craig Wood'), ('Accounting', 'Gloria Higgins'), ('Marketing', 'Mario Reynolds'), ('Marketing', 'Helen Taylor'), ('Marketing', 'Mary King'), ('Accounting', 'Jane Jackson'), ('Marketing', 'Carol Peters'), ('Sales', 'Alicia Mendoza'), ('Accounting', 'Edna Cunningham'), ('Developing', 'Joyce Rivera'), ('Sales', 'Joseph Lee'), ('Sales', 'John White'), ('Marketing', 'Charles Bailey'), ('Sales', 'Chester Fernandez'), ('Sales', 'John Washington')]
+staff = [('Sales', 'Robert Barnes'), 
+         ('Developing', 'Thomas Porter'), 
+         ('Accounting', 'James Wilkins'), 
+         ('Sales', 'Connie Reid'), 
+         ('Accounting', 'Brenda Davis'), 
+         ('Developing', 'Miguel Norris'), 
+         ('Accounting', 'Linda Hudson'), 
+         ('Developing', 'Deborah George'), 
+         ('Developing', 'Nicole Watts'), 
+         ('Marketing', 'Billy Lloyd'), 
+         ('Sales', 'Charlotte Cox'), 
+         ('Marketing', 'Bernice Ramos'), 
+         ('Sales', 'Jose Taylor'), 
+         ('Sales', 'Katie Warner'), 
+         ('Accounting', 'Steven Diaz'), 
+         ('Accounting', 'Kimberly Reynolds'), 
+         ('Accounting', 'John Watts'), 
+         ('Accounting', 'Dale Houston'),
+         ('Developing', 'Arlene Gibson'), 
+         ('Marketing', 'Joyce Lawrence'), 
+         ('Accounting', 'Rosemary Garcia'), 
+         ('Marketing', 'Ralph Morgan'), 
+         ('Marketing', 'Sam Davis'), 
+         ('Marketing', 'Gail Hill'), 
+         ('Accounting', 'Michelle Wright'), 
+         ('Accounting', 'Casey Jenkins'), 
+         ('Sales', 'Evelyn Martin'), 
+         ('Accounting', 'Aaron Ferguson'), 
+         ('Marketing', 'Andrew Clark'), 
+         ('Marketing', 'John Gonzalez'), 
+         ('Developing', 'Wilma Woods'), 
+         ('Sales', 'Marie Cooper'), 
+         ('Accounting', 'Kay Scott'),
+         ('Sales', 'Gladys Taylor'), 
+         ('Accounting', 'Ann Bell'), 
+         ('Accounting', 'Craig Wood'), 
+         ('Accounting', 'Gloria Higgins'), 
+         ('Marketing', 'Mario Reynolds'), 
+         ('Marketing', 'Helen Taylor'),
+         ('Marketing', 'Mary King'),
+         ('Accounting', 'Jane Jackson'),
+         ('Marketing', 'Carol Peters'),
+         ('Sales', 'Alicia Mendoza'),
+         ('Accounting', 'Edna Cunningham'),
+         ('Developing', 'Joyce Rivera'),
+         ('Sales', 'Joseph Lee'),
+         ('Sales', 'John White'),
+         ('Marketing', 'Charles Bailey'),
+         ('Sales', 'Chester Fernandez'),
+         ('Sales', 'John Washington')]
+
 staff = sorted(staff)
 res_dict = defaultdict(int)
 
@@ -129,16 +204,88 @@ for el in staff:
     
 for el in res_dict.keys():
     print(f'{el}: {res_dict.get(el)}') 
-"""    
+"""
+
 
 # списки работников по отделам
 """
 from collections import defaultdict
 
-staff_broken = [('Developing', 'Miguel Norris'), ('Sales', 'Connie Reid'), ('Sales', 'Joseph Lee'), ('Marketing', 'Carol Peters'), ('Accounting', 'Linda Hudson'), ('Accounting', 'Ann Bell'), ('Marketing', 'Ralph Morgan'), ('Accounting', 'Gloria Higgins'), ('Developing', 'Wilma Woods'), ('Developing', 'Wilma Woods'), ('Marketing', 'Bernice Ramos'), ('Marketing', 'Joyce Lawrence'), ('Accounting', 'Craig Wood'), ('Developing', 'Nicole Watts'), ('Sales', 'Jose Taylor'), ('Accounting', 'Linda Hudson'), ('Accounting', 'Edna Cunningham'), ('Sales', 'Jose Taylor'), ('Marketing', 'Helen Taylor'), ('Accounting', 'Kimberly Reynolds'), ('Marketing', 'Mary King'), ('Sales', 'Joseph Lee'), ('Accounting', 'Gloria Higgins'), ('Marketing', 'Andrew Clark'), ('Accounting', 'John Watts'), ('Accounting', 'Rosemary Garcia'), ('Accounting', 'Steven Diaz'), ('Marketing', 'Mary King'), ('Sales', 'Gladys Taylor'), ('Developing', 'Thomas Porter'), ('Accounting', 'Brenda Davis'), ('Sales', 'Connie Reid'), ('Sales', 'Alicia Mendoza'), ('Marketing', 'Mario Reynolds'), ('Sales', 'John White'), ('Developing', 'Joyce Rivera'), ('Accounting', 'Steven Diaz'), ('Developing', 'Arlene Gibson'), ('Sales', 'Robert Barnes'), ('Sales', 'Charlotte Cox'), ('Accounting', 'Craig Wood'), ('Marketing', 'Carol Peters'), ('Marketing', 'Ralph Morgan'), ('Accounting', 'Kay Scott'), ('Sales', 'Evelyn Martin'), ('Marketing', 'Billy Lloyd'), ('Sales', 'Gladys Taylor'), ('Developing', 'Deborah George'), ('Sales', 'Charlotte Cox'), ('Marketing', 'Sam Davis'), ('Sales', 'John White'), ('Sales', 'Marie Cooper'), ('Marketing', 'John Gonzalez'), ('Sales', 'John Washington'), ('Sales', 'Chester Fernandez'), ('Sales', 'Alicia Mendoza'), ('Sales', 'Katie Warner'), ('Accounting', 'Jane Jackson'), ('Sales', 'Chester Fernandez'), ('Marketing', 'Charles Bailey'), ('Marketing', 'Gail Hill'), ('Accounting', 'Casey Jenkins'), ('Accounting', 'James Wilkins'), ('Accounting', 'Casey Jenkins'), ('Marketing', 'Mario Reynolds'), ('Accounting', 'Aaron Ferguson'), ('Accounting', 'Kimberly Reynolds'), ('Sales', 'Robert Barnes'), ('Accounting', 'Aaron Ferguson'), ('Accounting', 'Jane Jackson'), ('Developing', 'Deborah George'), ('Accounting', 'Michelle Wright'), ('Accounting', 'Dale Houston')]
+staff_broken = [('Developing', 'Miguel Norris'), 
+                ('Sales', 'Connie Reid'), 
+                ('Sales', 'Joseph Lee'), 
+                ('Marketing', 'Carol Peters'), 
+                ('Accounting', 'Linda Hudson'), 
+                ('Accounting', 'Ann Bell'), 
+                ('Marketing', 'Ralph Morgan'), 
+                ('Accounting', 'Gloria Higgins'), 
+                ('Developing', 'Wilma Woods'),
+                ('Developing', 'Wilma Woods'),
+                ('Marketing', 'Bernice Ramos'),
+                ('Marketing', 'Joyce Lawrence'),
+                ('Accounting', 'Craig Wood'),
+                ('Developing', 'Nicole Watts'),
+                ('Sales', 'Jose Taylor'),
+                ('Accounting', 'Linda Hudson'),
+                ('Accounting', 'Edna Cunningham'),
+                ('Sales', 'Jose Taylor'),
+                ('Marketing', 'Helen Taylor'),
+                ('Accounting', 'Kimberly Reynolds'),
+                ('Marketing', 'Mary King'),
+                ('Sales', 'Joseph Lee'),
+                ('Accounting', 'Gloria Higgins'),
+                ('Marketing', 'Andrew Clark'),
+                ('Accounting', 'John Watts'),
+                ('Accounting', 'Rosemary Garcia'),
+                ('Accounting', 'Steven Diaz'),
+                ('Marketing', 'Mary King'),
+                ('Sales', 'Gladys Taylor'),
+                ('Developing', 'Thomas Porter'),
+                ('Accounting', 'Brenda Davis'),
+                ('Sales', 'Connie Reid'),
+                ('Sales', 'Alicia Mendoza'),
+                ('Marketing', 'Mario Reynolds'),
+                ('Sales', 'John White'),
+                ('Developing', 'Joyce Rivera'),
+                ('Accounting', 'Steven Diaz'),
+                ('Developing', 'Arlene Gibson'),
+                ('Sales', 'Robert Barnes'),
+                ('Sales', 'Charlotte Cox'),
+                ('Accounting', 'Craig Wood'),
+                ('Marketing', 'Carol Peters'),
+                ('Marketing', 'Ralph Morgan'),
+                ('Accounting', 'Kay Scott'),
+                ('Sales', 'Evelyn Martin'),
+                ('Marketing', 'Billy Lloyd'),
+                ('Sales', 'Gladys Taylor'),
+                ('Developing', 'Deborah George'),
+                ('Sales', 'Charlotte Cox'),
+                ('Marketing', 'Sam Davis'),
+                ('Sales', 'John White'),
+                ('Sales', 'Marie Cooper'),
+                ('Marketing', 'John Gonzalez'),
+                ('Sales', 'John Washington'),
+                ('Sales', 'Chester Fernandez'),
+                ('Sales', 'Alicia Mendoza'),
+                ('Sales', 'Katie Warner'),
+                ('Accounting', 'Jane Jackson'),
+                ('Sales', 'Chester Fernandez'),
+                ('Marketing', 'Charles Bailey'),
+                ('Marketing', 'Gail Hill'),
+                ('Accounting', 'Casey Jenkins'),
+                ('Accounting', 'James Wilkins'),
+                ('Accounting', 'Casey Jenkins'),
+                ('Marketing', 'Mario Reynolds'),
+                ('Accounting', 'Aaron Ferguson'),
+                ('Accounting', 'Kimberly Reynolds'),
+                ('Sales', 'Robert Barnes'),
+                ('Accounting', 'Aaron Ferguson'),
+                ('Accounting', 'Jane Jackson'),
+                ('Developing', 'Deborah George'),
+                ('Accounting', 'Michelle Wright'),
+                ('Accounting', 'Dale Houston')]
 
 staff_broken = sorted(staff_broken)
-
 res_dict = defaultdict(str)
 
 for el in staff_broken:
@@ -157,6 +304,7 @@ for res in res_dict:
     print()
 """
 
+
 # Функция wins()
 """
 from collections import defaultdict
@@ -167,11 +315,15 @@ def wins(args):
         res_dict[el[0]].add(el[1])
     return res_dict
 
-result = wins([('Артур', 'Дима'), ('Артур', 'Тимур'), ('Артур', 'Анри'), ('Дима', 'Артур')])
+result = wins([('Артур', 'Дима'),
+                ('Артур', 'Тимур'),
+                ('Артур', 'Анри'),
+                ('Дима', 'Артур')])
 
 for winner, losers in sorted(result.items()):
     print(winner, '->', *sorted(losers))
 """
+
 
 # Функция flip_dict()
 """
@@ -189,6 +341,7 @@ data = {'Arthur': ['cacao', 'tea', 'juice'], 'Timur': ['coffee', 'tea', 'juice']
 for key, values in flip_dict(data).items():
     print(f'{key}: {", ".join(values)}')
 """
+
 
 # Функция best_sender()
 """
@@ -213,9 +366,11 @@ senders = ['dima', 'anri', 'timur', 'timur', 'anri', 'dima']
 print(best_sender(messages, senders))
 """
 
+
 ##########################################################################################
-#OrderedDict
+                                    # OrderedDict
 ##########################################################################################
+#1
 """
 from collections import OrderedDict
 
@@ -228,18 +383,35 @@ for rule in (True, False, False, True):
 print(*new_grades)
 """
 
-#
+
+#2
 """
 from collections import OrderedDict
-data = OrderedDict({'Name': 'Брусника', 'IsNetObject': 'да', 'OperatingCompany': 'Брусника', 'TypeObject': 'кафе', 'AdmArea': 'Центральный административный округ', 'District': 'район Арбат', 'Address': 'город Москва, переулок Сивцев Вражек, дом 6/2', 'SeatsCount': '10'})
+
+data = OrderedDict({'Name': 'Брусника', 
+                    'IsNetObject': 'да', 
+                    'OperatingCompany': 'Брусника', 
+                    'TypeObject': 'кафе', 
+                    'AdmArea': 'Центральный административный округ', 
+                    'District': 'район Арбат', 
+                    'Address': 'город Москва, переулок Сивцев Вражек, дом 6/2', 
+                    'SeatsCount': '10'})
 print(OrderedDict(reversed(data.items())))
 """
 
-#
+
+#3
 """
 from collections import OrderedDict
 
-data = OrderedDict({'Name': 'Брусника', 'IsNetObject': 'да', 'OperatingCompany': 'Брусника', 'TypeObject': 'кафе', 'AdmArea': 'Центральный административный округ', 'District': 'район Арбат', 'Address': 'город Москва, переулок Сивцев Вражек, дом 6/2', 'SeatsCount': '10'})
+data = OrderedDict({'Name': 'Брусника', 
+                    'IsNetObject': 'да',
+                    'OperatingCompany': 'Брусника',
+                    'TypeObject': 'кафе',
+                    'AdmArea': 'Центральный административный округ',
+                    'District': 'район Арбат',
+                    'Address': 'город Москва, переулок Сивцев Вражек, дом 6/2',
+                    'SeatsCount': '10'})
 new_data = OrderedDict()
 
 for rule in range(1, len(data) + 1):
@@ -254,7 +426,8 @@ for rule in range(1, len(data) + 1):
 print(OrderedDict(new_data.items()))       
 """
 
-#
+
+#4
 """
 from collections import OrderedDict
 
@@ -264,7 +437,33 @@ def my_sort_keys(reverse = False):
 def my_sort_values(reverse = False):
     return sorted(data.values(), reverse = reverse)    
 
-data = OrderedDict({'Law & Order': 1990, 'The Practice': 1997, 'Six Feet Under': 2001, 'Joan of Arcadia': 2003, 'The West Wing': 1999, 'Deadwood': 2004, 'The Sopranos': 1999, 'Boston Legal': 2004, 'ER': 1994, 'Friday Night Lights': 2006, '24': 2001, 'Heroes': 2006, 'Lost': 2004, 'Dexter': 2006, 'Damages': 2007, 'Big Love': 2006, 'House': 2004, 'Downton Abbey': 2010, "Grey's Anatomy": 2005, 'Homeland': 2011, 'Breaking Bad': 2008, 'Game of Thrones': 2011, 'CSI: Crime Scene Investigations': 2000, 'Boardwalk Empire': 2010, 'True Blood': 2008, 'House of Cards': 2013, 'True Detective': 2014})
+data = OrderedDict({'Law & Order': 1990,
+                    'The Practice': 1997,
+                    'Six Feet Under': 2001,
+                    'Joan of Arcadia': 2003,
+                    'The West Wing': 1999,
+                    'Deadwood': 2004,
+                    'The Sopranos': 1999,
+                    'Boston Legal': 2004,
+                    'ER': 1994,
+                    'Friday Night Lights': 2006,
+                    '24': 2001,
+                    'Heroes': 2006,
+                    'Lost': 2004,
+                    'Dexter': 2006,
+                    'Damages': 2007,
+                    'Big Love': 2006,
+                    'House': 2004,
+                    'Downton Abbey': 2010,
+                    "Grey's Anatomy": 2005,
+                    'Homeland': 2011,
+                    'Breaking Bad': 2008,
+                    'Game of Thrones': 2011,
+                    'CSI: Crime Scene Investigations': 2000,
+                    'Boardwalk Empire': 2010,
+                    'True Blood': 2008,
+                    'House of Cards': 2013,
+                    'True Detective': 2014})
 
 data.sorted_keys = my_sort_keys
 data.sorted_values = my_sort_values
@@ -272,6 +471,7 @@ data.sorted_values = my_sort_values
 print(data.sorted_keys(reverse = True))
 print(data.sorted_values(reverse = True))
 """
+
 
 # custom_sort()
 """
@@ -297,9 +497,11 @@ custom_sort(data, by_values=False)
 print(data)
 """
 
+
 ##########################################################################################
-# Counter
+                                        # Counter
 ##########################################################################################
+#1
 """
 from collections import Counter
 
@@ -323,6 +525,7 @@ for el in sorted(res_dict.keys()):
     print(f'{el}: {res_dict[el]}')
 """
 
+
 # Функция count_occurences()
 """
 from collections import Counter
@@ -338,12 +541,12 @@ words = 'Python Conferences python training python events'
 print(count_occurences(word, words))
 """
 
+
 # А сколько стоит курс?
 """
 from collections import Counter, defaultdict
 
 count_symbol = defaultdict(int)
-
 products = input().split(',')
 
 for el in products:
@@ -358,15 +561,17 @@ for key in keys:
     print(f'{key}{" "*(max_len - len(key))}: {sum_ord} UC x {res[key]} = {sum_ord*res[key]} UC')
 """
 
-#The Zen of Python
+
+# The Zen of Python
 """
+# длинное решение с алфавитом и сравнением
 from collections import Counter, OrderedDict
 
 abc = [chr(el) for el in range(97, 123)]
 
-with open('D:/py_learning/py_programs/pythonzen.txt', encoding='utf-8') as input_file:
+with open('D:/py_learning/py_programs/files/pythonzen.txt', encoding='utf-8') as input_file:
     data = input_file.read().lower()   
-    small_data = list(filter(lambda x: x if x in abc else None, data))                   # длинное решение с алфавитом и сравнением
+    small_data = list(filter(lambda x: x if x in abc else None, data))                   
     
 res = OrderedDict(Counter(small_data))
 res.items_sorted = lambda: sorted(res.items())
@@ -374,19 +579,19 @@ res.items_sorted = lambda: sorted(res.items())
 for key, value in dict(res.items_sorted()).items():
     print(f'{key}: {value}')
 
-###################
-
+# упрощенное решение с использованием isalpha()
 from collections import Counter, OrderedDict
 
-with open('D:/py_learning/py_programs/pythonzen.txt', encoding='utf-8') as input_file:
-    data = list(filter(lambda x: x if x.isalpha() else None, input_file.read().lower())) # упрощенное решение с использованием isalpha()
+with open('D:/py_learning/py_programs/files/pythonzen.txt', encoding='utf-8') as input_file:
+    data = list(filter(lambda x: x if x.isalpha() else None, input_file.read().lower())) 
 
 res = OrderedDict(Counter(data))
 res.items_sorted = lambda: sorted(res.items())
 
 for key, value in dict(res.items_sorted()).items():
     print(f'{key}: {value}')
-"""    
+"""
+
 
 # Статистика длин слов
 """
@@ -414,6 +619,7 @@ for key, value in res_dict.items():
     print(f'Слов длины {key}: {value}')
 """
 
+
 # Все еще достоин
 """
 import sys
@@ -424,7 +630,8 @@ data_dict = {el.strip('\n').split(' ')[0]: int(el.strip('\n').split(' ')[1]) for
 print(Counter(data_dict).most_common()[-2][0])
 """
 
-############################################################################
+
+#2
 """
 from collections import Counter
 
@@ -437,15 +644,17 @@ print(data.min_values())
 print(data.max_values())
 """
 
+
 # Here we go again
 """
-# defaultdict
 import csv
+
+# с помощью defaultdict
 from collections import Counter, defaultdict
 
 res_dict = defaultdict(int)
 
-with open('D:/py_learning/py_programs/name_log.csv', encoding='utf-8') as input_data:
+with open('D:/py_learning/py_programs/files/name_log.csv', encoding='utf-8') as input_data:
     
     data = csv.DictReader(input_data, delimiter=',')
     data = sorted(data, key = lambda x: x['email'])
@@ -455,11 +664,11 @@ with open('D:/py_learning/py_programs/name_log.csv', encoding='utf-8') as input_
 
     for key, value in res_dict.items():    
         print(f'{key}: {value}')
-# Counter
-import csv
+
+# с помощью Counter
 from collections import Counter
 
-with open('D:/py_learning/py_programs/name_log.csv', encoding='utf-8') as input_data:
+with open('D:/py_learning/py_programs/files/name_log.csv', encoding='utf-8') as input_data:
     
     data = csv.DictReader(input_data, delimiter=',')
     email_list = sorted([el.get('email') for el in data])
@@ -467,7 +676,9 @@ with open('D:/py_learning/py_programs/name_log.csv', encoding='utf-8') as input_
     for key, value in Counter(email_list).items():
         print(f'{key}: {value}')
 """
-#Функция print_bar_chart()
+
+
+# Функция print_bar_chart()
 """
 from collections import Counter, OrderedDict
 
@@ -480,6 +691,8 @@ def print_bar_chart(languages, symbol):
 my_list = ['bbb', 'bbb', 'e', 'e', 'bbb', 'gggg', 'gggg', 'kkkkk', 'kkkkk', 'e', 'bbb', 'kkkkk']
 print_bar_chart(my_list, '#')        
 """
+
+
 # Расчет заработка
 """
 import csv, json
@@ -489,7 +702,7 @@ data_dict = defaultdict(int)
 sum_res = Counter()
     
 def load_data(i):
-    file = open(f'D:/py_learning/py_programs/collections/quarter{i}.csv', encoding='utf-8')
+    file = open(f'D:/py_learning/py_programs/collections/files/quarter{i}.csv', encoding='utf-8')
     data = csv.reader(file, delimiter=',') 
     next(data)
     #_, *data = csv.reader(file, delimiter=',') # более изящный вариант next на итераторе         
@@ -502,12 +715,13 @@ def load_data(i):
 for i in range(1,5):
     sum_res += Counter(load_data(i))  
 
-with open('D:/py_learning/py_programs/collections/prices.json', encoding='utf-8') as prices:
+with open('D:/py_learning/py_programs/collections/files/prices.json', encoding='utf-8') as prices:
     price = json.load(prices)
     for key, value in sum_res.items():
        sum_res[key] = value * price[key]
 print(Counter(sum_res).total())
 """
+
 
 # Расчет заработка2
 """
@@ -525,10 +739,10 @@ for _ in range(int(input())):
 print(summa)
 """
 
-######################################################################################
-#ChainMap
-######################################################################################
 
+######################################################################################
+                                    # ChainMap
+######################################################################################
 # Зоопарк
 """
 import json
@@ -547,21 +761,20 @@ def show_time(func):
 
 @ show_time
 def animals_zoo():
-    with open('D:/py_learning/py_programs/collections/zoo.json', encoding='utf-8') as animals:
+    with open('D:/py_learning/py_programs/collections/files/zoo.json', encoding='utf-8') as animals:
 
         animals_data = json.load(animals)
 
-        # res = Counter(ChainMap(*animals_data)).total() # через Counter
-
-        # res = sum(ChainMap(*animals_data).values()) # просто через SUM
-        
-        # res = sum([value for value in ChainMap(*animals_data).values()]) # через суммирование значений списка value
+        # res = Counter(ChainMap(*animals_data)).total()                    # через Counter
+        # res = sum(ChainMap(*animals_data).values())                       # просто через SUM
+        # res = sum([value for value in ChainMap(*animals_data).values()])  # через суммирование значений списка value
 
         #print(asizeof.asizeof(res))
         return res
 
 print(animals_zoo())
 """
+
 
 # Булочный магнат
 """
@@ -592,6 +805,7 @@ print("-" * len(max_string))
 print(f'ИТОГ: {summa}р')
 """
 
+
 # Функция get_all_values()
 """
 from collections import ChainMap
@@ -605,6 +819,7 @@ result = get_all_values(chainmap, 'age')
 
 print(*sorted(result))
 """
+
 
 # Функция deep_update()
 """

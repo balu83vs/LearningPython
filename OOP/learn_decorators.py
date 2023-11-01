@@ -1,5 +1,4 @@
 # Вычисление Фибоначи
-####################################################################
 """
 from timeit import default_timer
 
@@ -12,8 +11,9 @@ def show_time(func):
         print('Результат:{}'.format(res))
         return res
     return wraper    
-
+"""
 # вариант Фибоначи 1    
+"""
 @ show_time
 def fib(n):
     if n == 0:
@@ -27,8 +27,9 @@ def fib(n):
         return fib.__dict__[n]
 
 fib(10)
-
+"""
 # вариант Фибоначи 2
+"""
 @ show_time
 def fib(step):
     res = [0, 1]
@@ -39,11 +40,13 @@ def fib(step):
 fib(10000)
 """
 
+
 # разложение матрицы в словарь
 """
 from time import perf_counter
 
-def timer(func):                   # декоратор подсчета времени
+# декоратор подсчета времени
+def timer(func): 
     def wraper(data):
         time_start = perf_counter()
         res = func(data)
@@ -52,14 +55,15 @@ def timer(func):                   # декоратор подсчета вре�
         print('Время выполнения программы: {:.10f}'.format(time_process))
         return res
     return wraper
-
-
+"""
 # через Enumerate
+"""
 @ timer
 def matrix_to_dict_1(matrix: list[list[int|float]]) -> dict[int, list[int|float]]:
     return dict(enumerate(matrix, 1))
-
+"""
 # через генератор словаря
+"""
 @timer
 def matrix_to_dict_2(matrix: list[list[int|float]]) -> dict[int, list[int|float]]:
     return {i+1: matrix[i] for i in range(len(matrix))}
@@ -70,6 +74,7 @@ print(matrix_to_dict_1(matrix))
 print()
 print(matrix_to_dict_2(matrix))
 """
+
 
 #
 """
@@ -94,6 +99,7 @@ try:
 except Exception as err:
     print(type(err))
 """
+
 
 # декораторы с аргументами
 """
@@ -124,6 +130,7 @@ print(beegeek.__name__)
 print(beegeek.__doc__)
 """
 
+
 #
 """
 import functools as f
@@ -148,6 +155,7 @@ try:
 except TypeError as e:
     print(type(e))
 """
+
 
 #
 """
@@ -189,6 +197,7 @@ except TypeError as e:
     print(type(e))
 """
 
+
 # добавление аргументов и их значений к декорируемой функции
 """
 import functools as f
@@ -219,6 +228,7 @@ print(add.at4)
 print(add.atf)
 """
 
+
 # обработка исключений из списка
 """
 import functools as f
@@ -247,7 +257,9 @@ except Exception as e:
     print(type(e))
 """
 
+
 #
+"""
 class MaxRetriesException(Exception):
     pass
 
@@ -275,3 +287,5 @@ def retry(times):
                     raise MaxRetriesException
         return wrapper
     return decorator
+"""
+    

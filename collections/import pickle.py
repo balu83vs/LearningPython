@@ -1,38 +1,39 @@
 import pickle
 import operator
+
+#1
 """
 obj = {'Python': 1991, 'Java': 1995, 'C#': 2002}
 
-with open('D:/py_learning/py_programs/file.pkl', 'wb') as file:
-    pickle.dump(obj, file)               # запись сериализованного бинарного представления в файл
+# запись сериализованного бинарного представления в файл
+with open('D:/py_learning/py_programs/collections/files/file.pkl', 'wb') as file:
+    pickle.dump(obj, file)                                          
 
-
-with open('file.pkl', 'rb') as file:     # используется файл полученный на предыдущем шаге
+# используется файл полученный на предыдущем шаге    
+with open('D:/py_learning/py_programs/collections/files/file.pkl', 'rb') as file:
     obj = pickle.load(file)
     print(obj)
     print(type(obj))    
 """    
 
+
 # filter_dump()
 """ 
-import pickle
-
-def filter_dump(filename, objects, typename):                                # функция генерации pickle-файла
-    
+def filter_dump(filename, objects, typename):                                
+    # функция генерации pickle-файла
     res = list(filter(lambda x: x if type(x) is typename else None, objects))
     with open(f'D:/py_learning/py_programs/{filename}', 'wb') as pi_file:
         pickle.dump(res, pi_file)
 
-filter_dump('numbers.pkl', [1, '2', 3, 4, '5'], int)                          # запуск функции
+filter_dump('numbers.pkl', [1, '2', 3, 4, '5'], int)                                            # запуск функции
 
-with open('D:/py_learning/py_programs/numbers.pkl', 'rb') as file:            # десереализация содержимого файла
+with open('D:/py_learning/py_programs/collections/files/numbers.pkl', 'rb') as file:            # десереализация содержимого файла
     print(pickle.load(file))
 """
 
+
 # Контрольная сумма
 """
-import pickle
-
 with open(input(), 'rb') as pi_file:
     obj = pickle.load(pi_file)
     if type(obj) is dict:

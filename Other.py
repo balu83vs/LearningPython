@@ -60,3 +60,54 @@ def failure(login, text):
 
 verification('Ruslan_Chaniev', 'stepikstepik2', success, failure)    
 """
+
+# Распределение по комнатам
+
+import random
+
+    #Реализовать класс Room()
+class Room:
+
+    room_number = 0
+
+    #У него должно быть поле users типа список []
+    def __init__(self):
+        self.users = []
+        Room.room_number +=1
+        self.room_number = Room.room_number
+                
+    #Реализовать у Класса метод append_user_id он принимает user_id и добавляет его в users    
+    def append_user_id(self, user_id):
+        self.users.append(user_id)    
+
+if __name__ == "__main__":
+    #создать 3 переменные с экземпляром класса Room
+    one = Room() 
+    two = Room()  
+    three = Room() 
+
+    id_list = [100, random.randint(1,99), random.randint(1,99)]
+    random.shuffle(id_list)
+
+    #у каждой переменной вызвать метод append_user_id и передать туда рандомной число но у одной из 3 user_id должен  быть 100
+    one.append_user_id(id_list[0])
+    two.append_user_id(id_list[1])
+    three.append_user_id(id_list[2])
+    
+    rooms = [one, two, three]
+
+	#Пример:
+	#room1 = создаем экземпляр класса
+	#Дале помещаем эти переменные в новый список rooms
+
+	#Задача найти комнату в которой находится вот такой 100 user_id
+    for room in rooms:
+        if 100 in room.users:
+            print(f'User с id 100 находится в комнате {room.room_number}')
+
+
+    
+
+	
+        
+

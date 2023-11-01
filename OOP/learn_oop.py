@@ -1,4 +1,4 @@
-# Не доделал!!!
+######################################################## Не доделал!!! ########################################################
 """
 import functools
 
@@ -24,7 +24,8 @@ def fact(n):
 fact(5)
 """
 
-# Декоратор @recviz
+
+######################################################## Декоратор @recviz ########################################################
 # процедурное решение
 """
 def recviz(func): 
@@ -89,7 +90,8 @@ def fib(n):
 fib(4)
 """  
 
-# Scales
+
+######################################################## Scales ########################################################
 """
 class Scales:
     def __init__(self, right_weight = 0, left_weight = 0):
@@ -119,7 +121,8 @@ scales.add_left(2)
 print(scales.get_result()) 
 """
 
-#
+
+########################################################          ########################################################
 """
 from math import sqrt
 
@@ -137,7 +140,8 @@ print(vector.x, vector.y)
 print(vector.abs())    
 """
 
-# ежедневник
+
+######################################################## ежедневник ########################################################
 """
 class Todo:
     def __init__(self):
@@ -174,7 +178,8 @@ print(todo.get_high_priority())
 print(todo.get_by_priority(3))
 """
 
-# Почтальон
+
+######################################################## Почтальон ########################################################
 """
 class Postman:
     def __init__(self):
@@ -204,7 +209,8 @@ print(postman.get_houses_for_street('Советская'))
 print(postman.get_flats_for_house('Советская', 151))
 """
 
-#
+
+########################################################             ########################################################
 """
 from re import sub
 
@@ -237,7 +243,8 @@ print(words)
 print(wordplay.words)
 """    
 
-# шахматы
+
+######################################################## шахматы ########################################################
 """
 class Knight:
     def __init__(self, horizontal, vertical, color):
@@ -280,7 +287,8 @@ print()
 knight.draw_board()
 """
 
-#
+
+########################################################              ########################################################
 """
 class BankAccount:
     def __init__(self, balance = 0):
@@ -310,7 +318,8 @@ print(account1.get_balance())
 print(account2.get_balance())
 """
 
-# 
+
+########################################################                 ######################################################## 
 """
 class User:
     def __init__(self, name, age):
@@ -347,7 +356,8 @@ print(user.get_name())
 print(user.get_age())
 """       
 
-# login password
+
+######################################################## login password ########################################################
 """
 def hash_function(password):
     hash_value = 0
@@ -382,7 +392,8 @@ account.password = 'verylovebeegeek'
 print(account.password)
 """
 
-# многочлен
+
+######################################################## многочлен ########################################################
 """
 from math import sqrt
 
@@ -447,7 +458,8 @@ print(polynom.x2)
 print(polynom.view)
 """
 
-# color
+
+######################################################## color ########################################################
 """
 from re import findall
 
@@ -507,7 +519,8 @@ for hc in hexcodes:
     count += 1
 """    
 
-# различные варианты внесения данных в класс
+
+######################################################## различные варианты внесения данных в класс ###############################################
 """
 class QuadraticPolynomial:
     def __init__(self, *args):
@@ -538,7 +551,8 @@ print(polynom.c)
 print(polynom.a + polynom.b + polynom.c)
 """
 
-#
+
+########################################################                      ########################################################
 """
 class Pet:
     pets_list = []
@@ -561,12 +575,10 @@ class Pet:
     def num_of_pets(cls):
         return len(cls.pets_list)
         
-
 print(Pet.first_pet())
 print(Pet.last_pet())
 print(Pet.num_of_pets())
 
-       
 pet1 = Pet('Ratchet')
 pet2 = Pet('Clank')
 pet3 = Pet('Rivet')
@@ -574,7 +586,6 @@ pet3 = Pet('Rivet')
 print(Pet.first_pet().name)
 print(Pet.last_pet().name)
 print(Pet.num_of_pets())
-
 
 pet1 = Pet('Ratchet')
 pet2 = Pet('Clank')
@@ -587,7 +598,8 @@ print(Pet.last_pet().name)
 print(Pet.num_of_pets())
 """
 
-#
+
+########################################################                     ########################################################
 """
 from re import sub, IGNORECASE
 
@@ -621,11 +633,13 @@ print(StrExtension.replace_all('Python', 'Ptn', '-'))
 print(StrExtension.replace_all('Stepik', 'stk', '#'))
 """
 
-#
+
+########################################################                ########################################################
 """
 from re import findall
 
 class CaseHelper:
+
     @staticmethod
     def is_snake(string):
         if ' ' not in string and string[0].isalpha() and string[-1].isalpha() and string == string.lower():
@@ -652,7 +666,6 @@ class CaseHelper:
             return ''.join(list(map(lambda x: x.capitalize(), string.split('_'))))        
         return string    
 
-    
 print(CaseHelper.is_snake('beegeek'))
 print(CaseHelper.is_snake('bee_geek'))
 print(CaseHelper.is_snake('Beegeek'))
@@ -694,7 +707,8 @@ for case in cases:
 # AssertEqual TearDown AssertRaisesRegex AssertAlmostEqual AssertNotAlmostEqual Beegeek   
     """    
 
-#
+
+########################################################                 ########################################################
 """
 from functools import singledispatchmethod
 
@@ -764,7 +778,8 @@ for item in not_supported:
 #Аргумент переданного типа не поддерживается        
 """
 
-#
+
+########################################################                  ########################################################
 """
 from datetime import date, timedelta
 from functools import singledispatchmethod
@@ -828,7 +843,6 @@ print(type(birthinfo3.birth_date))
 #<class 'datetime.date'>
 #<class 'datetime.date'>   
     
-
 errors = [20200918, True, {1: 'one'}, {1, 2, 3}, 100.9]
 
 for obj in errors:
@@ -844,7 +858,7 @@ for obj in errors:
 """     
 
 
-############### Строковое представление объектов (методы __str__, __repr__)
+######################################################## Строковое представление объектов (методы __str__, __repr__) ##############################
 #
 """
 from functools import singledispatchmethod
@@ -871,9 +885,11 @@ print(str(ip))
 print(repr(ip))        
 """
 
+
 #
 """
 class AnyClass:
+
     def __init__(self, **kwargs):
         for key, value in kwargs.items():
             #self.__dict__[key] = self.__dict__.get(key, value)
@@ -914,10 +930,11 @@ print(obj.age)
 print(obj.career)
 """
 
-############################## Сравнение объектов (методы __eq__, __ne__)
-#
+
+######################################################## Сравнение объектов (методы __eq__, __ne__) ###############################################
 """
 class Vector:
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -954,7 +971,8 @@ for item in not_supported:
     print(a == item)
 """
 
-######################### методы __lt__, __gt__, __le__, __ge__, @total_ordering
+
+######################################################## методы __lt__, __gt__, __le__, __ge__, @total_ordering ###################################
 #
 """
 from functools import total_ordering
@@ -993,6 +1011,7 @@ from functools import total_ordering
 
 @total_ordering
 class Month:
+
     def __init__(self, year, month):
         self.year = year
         self.month = month
@@ -1028,12 +1047,15 @@ print(sorted(months))
 print(min(months))
 print(max(months))
 """
+
+
 #
 """
 from functools import total_ordering
 
 @total_ordering
 class Version:
+
     def __init__(self, version):      
         self.version = __class__._transform(version)
     
@@ -1081,10 +1103,11 @@ print(max(versions))
 """
 
 
-################# Унарные операции (__pos__, __neg__, __invert__)
+######################################################## Унарные операции (__pos__, __neg__, __invert__) ########################################
 #
 """
 class ColoredPoint:
+
     def __init__(self, x, y, color = (0,0,0)):
         self.x, self.y, self.color = x, y, color
         self.new_color = [0,0,0]
@@ -1113,9 +1136,11 @@ print(repr(point1))
 print(repr(point2))
 """
 
+
 #
 """
 class Matrix:
+
     def __init__(self, rows, cols, value = 0):
         self.rows = rows
         self.cols = cols
@@ -1203,10 +1228,12 @@ print()
 print(~matrix)
 """
 
-## ###################### Арифметические операции __add__, __mul__, __truediv__, __floordiv__
+
+######################################################## Арифметические операции __add__, __mul__, __truediv__, __floordiv__ ######################
 """
 #
 class FoodInfo:
+
     def __init__(self, proteins, fats, carbohydrates):
         self.proteins, self.fats, self.carbohydrates = proteins, fats, carbohydrates
         
@@ -1251,9 +1278,11 @@ except TypeError:
     print('Некорректный тип данных')
 """
 
+
 #
 """
 class Vector:
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -1300,9 +1329,11 @@ print(2 * a)
 print(a / 2)
 """
 
+
 #
 """
 class SuperString:
+
     def __init__(self, string):
         self.string = string
         
@@ -1356,10 +1387,13 @@ print(s << 4)
 print(s >> 3)
 """
 
+
 #
 """
 from datetime import time
+
 class Time:
+
     def __init__(self, hours, minutes):
         self.hours, self.minutes = __class__.time_format(hours, minutes)
         
@@ -1407,9 +1441,11 @@ print(time1)
 print(time2)
 """
 
+
 #
 """
 class Queue:
+
     def __init__(self, *args):
         self.args = list(args)
         
@@ -1476,11 +1512,12 @@ for i in range(9):
     print(f'Queue >> {i} =', queue >> i)    
 """    
 
-#######################  Вызываемые объекты метод __call__
 
+########################################################  Вызываемые объекты метод __call__ ########################################################
 # Фибоначи
 """
 class CachedFunction:
+
     def __init__(self, func):
         self.func = func
         if self.__dict__.get('cache_dict') is None:
@@ -1507,9 +1544,11 @@ print(slow_fibonacci(100))
 print(slow_fibonacci.cache)    
 """
 
+
 # сортировка по любому количеству атрибутов экземпляра класса
 """
 class SortKey:
+
     def __init__(self, *args):
         self.args = args
         
@@ -1531,10 +1570,12 @@ print(sorted(users, key=SortKey('age')))
 print(sorted(users, key=SortKey('age', 'name')))
 """
 
-## Преобразования типов __bool__, __int__, __float__, __complex__, __oct__, __hex__
+
+######################################################## Преобразования типов __bool__, __int__, __float__, __complex__, __oct__, __hex__
 # градусник
 """
 class Temperature:
+
     def __init__(self, temperature):
         self.temperature = temperature
         
@@ -1580,12 +1621,14 @@ print(float(t))
 print(t.to_fahrenheit())
 """
 
+
 # Сравнение римских чисел RomanNumeral
 """
 from functools import total_ordering
 
 @total_ordering
 class RomanNumeral:
+
     def __init__(self, roman_number: str) -> None:
         self.roman_number = roman_number
         
@@ -1669,11 +1712,13 @@ print(roman.__ge__({4, 5, 6}))
 print(roman.__le__({1: 'one'}))
 """
 
-## Работа с атрибутами __getatribute__, __getattr__, __setattr__, __delattr__
+
+######################################################## Работа с атрибутами __getatribute__, __getattr__, __setattr__, __delattr__
 
 # Защита от изменения и удаления атрибутов
 """
 class Const:
+
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
     
@@ -1704,9 +1749,11 @@ except AttributeError as e:
     print(e)    
 """    
 
+
 # Защита от удаления атрибутов _ и __
 """
 class ProtectedObject:
+
     def __init__(self, **kwargs):
         for key, value in kwargs.items():
             object.__setattr__(self, key, value)
@@ -1749,8 +1796,8 @@ except AttributeError:
     print('Атрибут отсутствует')
 """
 
-## Hash функции
 
+######################################################## Hash функции ########################################################
 #
 """
 def limited_hash(left, right, hash_function = hash):
@@ -1797,9 +1844,11 @@ for item in array:
     print(hash_function(item))
 """
 
+
 #
 """
 class Row:
+
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
         
@@ -1855,9 +1904,11 @@ except AttributeError as e:
     print(e)
 """    
 
+
 #
 """
 class SkipIterator:
+
     def __init__(self, iterable, n):
         self.iterable, self.n = iterable, n
         self.index = -1
@@ -1900,9 +1951,11 @@ skipiterator = SkipIterator(iter(data), 4)
 print(*skipiterator)
 """
 
+
 #
 """
 class LoopTracker:
+
     def __init__(self, iterable):
         self.iterable = list(iterable)
         self.index = 0
@@ -1960,12 +2013,14 @@ print(loop_tracker.last)
 print(loop_tracker.is_empty())
 """    
 
+
 #
 """
 from copy import deepcopy
 import itertools
 
 class SequenceZip:
+
     def __init__(self, *args):
         self.args = deepcopy(args)
         if self.args:
@@ -2017,9 +2072,11 @@ print(sequencezip[0])
 print(list(sequencezip))
 """
 
+
 #
 """
 class OrderedSet:
+
     def __init__(self, iterable = []):
         self.iterable = iterable.copy()   
         self.iterable = list({el: self.iterable.count(el) for el in self.iterable}.keys())
@@ -2054,7 +2111,6 @@ class OrderedSet:
         except ValueError:
             pass
 
-
 orderedset = OrderedSet(['bee', 'python', 'stepik', 'bee', 'geek', 'python', 'bee'])
 print(*orderedset)
 print(len(orderedset))
@@ -2083,11 +2139,13 @@ for item in not_supported:
     print(item != orderedset)
 """
 
+
 #
 """
 import copy
 
 class AttrDict:
+
     def __init__(self, data = {}):
         self.data = copy.deepcopy(data) 
         
@@ -2134,11 +2192,13 @@ print(attrdict['school_name'])
 print(attrdict.school_name)
 """
 
+
 #
 """
 import copy
 
 class PermaDict:
+
     def __init__(self, data = {}):
         self.data = copy.deepcopy(data)
         
@@ -2193,11 +2253,13 @@ except KeyError as e:
     print(e)
 """
 
+
 #
 """
 import copy
 
 class HistoryDict:
+
     def __init__(self, data = {}):
         self.data = copy.deepcopy(data)
         self.memo_dict = {}
@@ -2272,9 +2334,11 @@ del historydict['cats']
 print(len(historydict))
 """
 
+
 #
 """
 class MutableString:
+
     def __init__(self, string = ''):
         self.string = string
         
@@ -2341,9 +2405,11 @@ mutablestring[-4] = 'G'
 print(mutablestring)
 """
 
+
 #
 """
 class Grouper:
+
     def __init__(self, iterable, key):
         self.key = key
         self.iterable = iterable.copy()
@@ -2400,11 +2466,13 @@ grouper = Grouper(persons, key=lambda x: x.height)
 print(sorted(grouper))
 """
 
+
 #
 """
 import sys
 
 class UpperPrint:
+
     def __enter__(self):
         self.standart_stdout = sys.stdout.write
         sys.stdout.write = self.temp_func
@@ -2423,10 +2491,12 @@ with UpperPrint():
     print('Что мне с ними делать?')
 print('Требуйте встречи с менеджером, отвечающим за жизнь!')        
 """
-        
+
+
 #
 """
 class WriteSpy:
+
     def __init__(self, file1, file2, to_close = False):
         self.file1 = file1
         self.file2 = file2
@@ -2483,11 +2553,13 @@ with WriteSpy(f1, f2, to_close=True) as combined:
     print(combined.closed())    
 """
 
+
 #
 """
 from copy import deepcopy
 
 class Atomic:
+
     def __init__(self, data, deep = False):
         self.data = data 
         if deep:    
@@ -2532,11 +2604,13 @@ with Atomic(data) as atomic:                # deep = False
 print(data)
 """
 
+
 # Timer
 """
 import time
 
 class AdvancedTimer:
+
     def __init__(self):
         self.last_run = None
         self.runs = []
@@ -2567,11 +2641,14 @@ print(round(timer.min, 1))
 print(round(timer.max, 1))        
 """
 
+
 # HTMLTags
 """
 class HtmlTag:
+
     step = 0
     temp = False
+
     def __init__(self, tag, inline = False):
         self.tag = tag
         self.inline = inline
@@ -2611,7 +2688,8 @@ with HtmlTag('body') as _:
         section.print('Cерия курсов по языку программирования Python от команды BEEGEEK')
 """  
 
-############################### contextmanager ###########################
+
+######################################################## contextmanager ########################################################
 
 # защита файлов от внесения информации с ошибками
 """
@@ -2643,14 +2721,15 @@ with open('undertale.txt') as file:
     
 with safe_write('poem.txt') as file:
     print('''Я кашлянул в звенящей тишине,
-И от шального эха стало жутко…, 
-Расскажет ли утятам обо мне,
-под утро мной испуганная утка?''', file=file)
+            И от шального эха стало жутко…, 
+            Расскажет ли утятам обо мне,
+            под утро мной испуганная утка?''', file=file)
 with safe_write('poem.txt') as file:
     file.insert('Стихотворение про утку')       # неверный метод для записи в файл
 with open('poem.txt') as file:
     print(file.read())    
 """   
+
 
 # контроль открываемого файла
 """
@@ -2681,11 +2760,13 @@ with safe_open('Ellies_jokes_2.txt') as file:
     print(error)
 """    
 
-## Дискрипторы
+
+######################################################## Дискрипторы ########################################################
 
 #
 """
 class NonNegativeInteger:
+
     def __init__(self, name, default = None):
         self.name = name
         self.default = default
@@ -2721,13 +2802,15 @@ student.score = 0
 print(student.score)
 """
 
+
 #
 """
 class MaxCallsException(Exception):
     pass
 
 class LimitedTakes:
-    def __set_name__(self, cls, attr): # закрепляем дескриптор за атрибутом, имеющим то же имя, что и переменная, которой присваивается дескриптор
+    # закрепляем дескриптор за атрибутом, имеющим то же имя, что и переменная, которой присваивается дескриптор
+    def __set_name__(self, cls, attr): 
         self._attr = attr
         
     def __init__(self, times):
@@ -2758,6 +2841,7 @@ try:
 except MaxCallsException as e:
     print(e)    
 """
+
 
 #
 """
@@ -2812,11 +2896,13 @@ try:
     magicpoint.x = 10
 except AttributeError as e:
     print(e)
-"""    
+""" 
+
 
 #
 """
 class Versioned:
+
     def __set_name__(self, obj, attr):
         self._attr = attr
         
@@ -2862,10 +2948,12 @@ except AttributeError as e:
 """
 
 
-## Наследование
+######################################################## Наследование ########################################################
+
 #
 """
 class FieldTracker:
+
     changed_dict = {}
     
     def __getattribute__(self, attr):
@@ -2913,9 +3001,11 @@ print(point.has_changed('z'))
 print(point.changed())
 """
 
-# переопределение __new__ и наследование базовых классов типов данных
+
+######################################################## переопределение __new__ и наследование базовых классов типов данных
 """
 class LowerString(str):
+
     def __new__(cls, obj = ''):
         if isinstance(obj, str):
             obj = obj.lower()
@@ -2938,9 +3028,11 @@ print(LowerString(['Bee', 'Geek']))
 print(LowerString({'A': 1, 'B': 2, 'C': 3}))
 """
 
+
 # сравнение без учета регистра
 """
 class FuzzyString(str):
+
     def __new__(cls, obj):
         obj = obj.lower()
         return super().__new__(cls, obj)
@@ -3013,9 +3105,11 @@ print(s > 'BEEGEEK')
 print(s < 'BEEGEEK')
 """
 
+
 #
 """
 class SuperInt(int):
+
     def __init__(self, digit):
         self.digit = digit  
         self.index = -1    
@@ -3068,6 +3162,7 @@ for n in digits:
     print(superint.repeat(n))    
 """
 
+
 #
 """
 class AdvancedTuple(tuple):
@@ -3107,12 +3202,13 @@ print(type(advancedtuple))
 """
 
 
-## Абстрактные классы
+######################################################## Абстрактные классы ########################################################
 """
 #
 from abc import ABC, abstractmethod
 
 class Middle(ABC):
+
     def __init__(self, user_votes, expert_votes):
         self.user_votes = user_votes                   # пользовательские оценки
         self.expert_votes = expert_votes               # оценки критиков
@@ -3215,13 +3311,14 @@ print(round(harmonic.get_average(), 2))
 print(round(harmonic.get_average(False), 2))
 """
 
-## Полиморфизм
 
+######################################################## Полиморфизм ########################################################
 #
 """"
 from abc import ABC, abstractmethod
 
 class StringCreator(ABC):
+
     def __init__(self, length):
         self.length = length
         self.res_list = []
@@ -3293,13 +3390,16 @@ rightparagraph.add('Like the fingers of a young maiden')
 rightparagraph.end()
 """
 
-## Композиция
+
+######################################################## Композиция ########################################################
+
 # Колода карт (через product)
 """
 from itertools import product
 from random import shuffle
 
 class Card:
+
     def __init__(self, suit, rank):
         self.suit = suit
         self.rank = rank
@@ -3307,9 +3407,12 @@ class Card:
     def __str__(self):
         return f'{self.suit}{self.rank}'
 
+        
 class Deck:
+
     suits = ['♣', '♢', '♡', '♠']
     ranks = [str(rank) for rank in range(2, 11)] + ['J', 'Q', 'K', 'A']
+
     def __init__(self):
         self.deck = list(product(self.suits, self.ranks))
         
@@ -3329,13 +3432,15 @@ class Deck:
 
     def __str__(self):
         return f'Карт в колоде: {len(self.deck)}'
+""" 
 
-"""        
+
 # Колода карт (через композицию)
 """
 from random import shuffle
 
 class Card:
+
     def __init__(self, suit, rank):
         self.suit = suit
         self.rank = rank
@@ -3343,6 +3448,7 @@ class Card:
     def __str__(self):
         return f'{self.suit}{self.rank}'
 
+        
 class Deck:
     
     def __init__(self):
@@ -3375,14 +3481,18 @@ print(deck.deal())
 print(deck)
 """
 
+
 # OrderedDict через композицию
 """
 class View:
+
     def __init__(self, element):
         self.element = element  
         self.key, self.value = self.element
 
+        
 class Queue:
+
     def __init__(self, pairs = []):
         if isinstance(pairs, dict):
             self.pairs = [View(item) for item in pairs.items()]
@@ -3422,6 +3532,7 @@ print(queue.pop())
 print(queue)
 """
 
+
 #
 """
 from datetime import datetime
@@ -3434,14 +3545,18 @@ def minutes_to_hours(minutes):
     minutes = minutes - (hours*60)
     return datetime(year = 1900, month = 1, day = 1, hour = hours, minute = minutes).strftime('%H:%M')
 
+    
 class Lecture:
+
     def __init__(self, topic, start_time, duration):
         self.topic = topic 
         self.start_time = datetime.strptime(start_time, '%H:%M')
         self.duration = datetime.strptime(duration, '%H:%M')
         self.end_time = hours_to_minutes(self.start_time) + hours_to_minutes(self.duration)
         
+
 class Conference:
+
     def __init__(self, schedule = [], pause = []):
         self.schedule = schedule
         self.pause = pause
@@ -3486,13 +3601,15 @@ print(conference.longest_break())
 """
 
 
-## __slots__
+######################################################## __slots__ ########################################################
+
 #
 """
 from functools import total_ordering
 
 @total_ordering
 class Shape:
+
     __slots__ = ('name', 'color', 'area')
     
     def __init__(self, name, color, area):
@@ -3526,6 +3643,7 @@ from enum import Enum
 Weekday = Enum('Weekday', ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'], start = 0)
     
 class NextDate:
+
     def __init__(self, today, weekday, after_today = False):
         self.today, self.weekday, self.after_today = today, weekday, after_today
         self.weekday_today = self.today.weekday() + 1
@@ -3543,38 +3661,40 @@ class NextDate:
         return (self.weekday.value + self.weekday_today)-7*((self.weekday.value + self.weekday_today)//7)
 
 from datetime import date
-today = date(2023, 4, 17)                              # понедельник
-next_friday = NextDate(today, Weekday.FRIDAY)          # следующая пятница
+today = date(2023, 4, 17)                                   # понедельник
+next_friday = NextDate(today, Weekday.FRIDAY)               # следующая пятница
 print(next_friday.date())
 print(next_friday.days_until())   
 
 from datetime import date
-today = date(2023, 4, 17)                              # понедельник
-next_monday = NextDate(today, Weekday.MONDAY)          # следующий понедельник без учета текущего
+today = date(2023, 4, 17)                                   # понедельник
+next_monday = NextDate(today, Weekday.MONDAY)               # следующий понедельник без учета текущего
 print(next_monday.date())
 print(next_monday.days_until())
 
 from datetime import date
-today = date(2023, 4, 17)                              # понедельник
-next_monday = NextDate(today, Weekday.MONDAY, True)    # следующий понедельник с учетом текущего
+today = date(2023, 4, 17)                                   # понедельник
+next_monday = NextDate(today, Weekday.MONDAY, True)         # следующий понедельник с учетом текущего
 print(next_monday.date())
 print(next_monday.days_until())
 
 from datetime import date
 for weekday in Weekday:
-    today = date(2023, 4, 27)                              # четверг
+    today = date(2023, 4, 27)                               # четверг
     next_date = NextDate(today, weekday)
     print(next_date.date())
     print(next_date.days_until())
 """
 
-### Декораторы в виде класса
+
+######################################################## Декораторы в виде класса ########################################################
 
 #
 """
 import functools
 
 class reverse_args:
+
     def __init__(self, func):
         functools.update_wrapper(self, func)
         self.func = func
@@ -3590,6 +3710,7 @@ def concat(a, b, c):
 print(concat('apple', 'cherry', 'melon'))
 """ 
 
+
 #
 """
 import functools
@@ -3597,7 +3718,9 @@ import functools
 class MaxCallsException(Exception):
     pass
 
+    
 class limited_calls:
+
     def __init__(self, n):
         self.n = n
         self.i = 0
@@ -3625,11 +3748,13 @@ except MaxCallsException as e:
     print(e)    
 """
 
+
 #
 """
 import functools
 
 class takes_numbers:
+
     def __init__(self, func):
         functools.update_wrapper(self, func)
         self.func = func
@@ -3650,11 +3775,13 @@ except TypeError as error:
     print(error)
 """    
 
+
 #
 """
 import functools
 
 class returns:
+
     def __init__(self, datatype):
         self.datatype = datatype
         
@@ -3676,11 +3803,13 @@ except Exception as error:
     print(type(error))
 """
 
+
 #
 """
 import functools
 
 class exception_decorator:
+
     def __init__(self, func):
         functools.update_wrapper(self, func)
         self.func = func
@@ -3705,6 +3834,7 @@ print(func('bee'))
 import functools
 
 class ignore_exception:
+
     def __init__(self, *errors):
         self.errors = errors
         
@@ -3734,11 +3864,13 @@ except Exception as error:
     print(type(error))    
 """    
 
+
 #
 """
 import functools
 
 class type_check:
+
     def __init__(self, types):
         self.types = types
         
@@ -3764,6 +3896,7 @@ try:
 except Exception as error:
     print(type(error))        
 """    
+
 
 #
 """
@@ -3832,6 +3965,7 @@ print(MyClass.first_attr)
 print(MyClass.super_second_attr)
 """
 
+
 # декоратор для __repr__
 """
 def auto_repr(args, kwargs):
@@ -3870,6 +4004,7 @@ class Person:
 person = Person('Gvido', 'van Rossum')
 print(person)
 """
+
 
 # декоратор для ограничения количества новых экземпляров класса
 """
@@ -3910,7 +4045,8 @@ print(obj3.value)
 print(obj4.value)
 """
 
-## dataclasses
+
+######################################################## dataclasses ########################################################
 """
 from dataclasses import dataclass, field
 
@@ -3951,6 +4087,7 @@ print(point.symmetric_x())
 print(point.symmetric_y())
 """
 
+
 #
 """
 from dataclasses import dataclass, field
@@ -3984,13 +4121,15 @@ team.add_players(FootballPlayer('Kylian', 'Mbappe', 180000000))
 print(team.players)
 """
 
-## Final exersices
+
+######################################################## Final exersices ########################################################
 
 # 2
 """
 import math
 
 class Vector:
+
     def __init__(self, *args):
         self.args = args
         
@@ -4054,6 +4193,7 @@ print(type(vector3))
 print(type(vector4)) 
 """
 
+
 # 3 Не доделана!!!!!
 """
 class CaesarCipher:
@@ -4097,12 +4237,12 @@ class CaesarCipher:
             return True
         return False
 
-    
 cipher = CaesarCipher(10)
 
 print(cipher.encode('G'))
 print(cipher.decode('G'))
 """
+
 
 # 4
 """
@@ -4122,6 +4262,7 @@ class ArithmeticProgression:
         self.flag = True    
         return self.start 
 
+        
 class GeometricProgression(ArithmeticProgression):
     
     def __next__(self):
@@ -4145,15 +4286,19 @@ for elem in progression:
     print(elem, end=' ')    # 1 2 4 8
 """
 
+
 # 5
 """
 from re import fullmatch, sub, split
 
 class DomainException(Exception):
+
     def __str__(self):
         return 'Недопустимый домен, url или email'
 
+        
 class Domain:
+
     def __init__(self, domen):
         self.domen = type(self).check_domen(domen)
 
@@ -4188,4 +4333,416 @@ domain3 = Domain.from_email('support@pygen.ru')    # на основе адре�
 print(str(domain1))                                # pygen.ru
 print(str(domain2))                                # pygen.ru
 print(str(domain3))                                # pygen.ru
+"""
+
+
+# 6
+"""
+class HighScoreTable:
+
+    def __init__(self, max_score, iterable = []):
+        self.max_score = max_score
+        self.iterable = iterable
+    
+    @property
+    def scores(self):
+        self.iterable = sorted(self.iterable, reverse = True)
+        self.iterable = self.iterable[:]
+        return self.iterable
+
+    def update(self, figure):
+        if len(self.iterable) >= self.max_score:
+            if min(self.iterable) < figure:
+                self.iterable.remove(min(self.iterable))
+                self.iterable.append(figure) 
+        else:    
+            self.iterable.append(figure)    
+
+    def reset(self):
+        return self.iterable.clear()
+    
+high_score_table = HighScoreTable(3)
+
+print(high_score_table.scores)    # []
+high_score_table.update(10)
+high_score_table.update(8)
+high_score_table.update(12)
+print(high_score_table.scores)    # [12, 10, 8]
+
+high_score_table.update(6)
+high_score_table.update(7)
+print(high_score_table.scores)    # [12, 10, 8]
+high_score_table.update(9)
+print(high_score_table.scores)    # [12, 10, 9]
+
+high_score_table.reset()
+print(high_score_table.scores)
+"""  
+
+
+# 7
+"""
+class Pagination:
+
+    def __init__(self, alphabet, number):
+        self.alphabet = alphabet
+        self.number = number
+        self.index = 1
+        if len(alphabet)%self.number > 0:
+            self.max_page = len(alphabet)//self.number + 1   
+        else:
+            self.max_page = int(len(alphabet)/self.number)    
+
+    def get_visible_items(self):
+        return self.alphabet[self.number*(self.index-1) : self.number*(self.index)]  
+
+    def next_page(self):
+        self.index += 1
+        self.index = self.check_number()
+        return self
+
+    def prev_page(self):
+        self.index -= 1
+        self.index = self.check_number() 
+        return self
+
+    def first_page(self):
+        self.index = 1
+        return self
+
+    def last_page(self):
+        self.index = self.max_page 
+        return self
+
+    def go_to_page(self, page):
+        self.index = page
+        self.index = self.check_number()
+        return self
+
+    def check_number(self):
+        if self.index > self.max_page:
+            self.index = self.max_page
+        if self.index < 1:
+            self.index = 1    
+        return self.index   
+
+    @property
+    def total_pages(self):
+        return self.max_page
+    
+    @property
+    def current_page(self):
+        return self.index
+
+
+alphabet = list('abcdefghijklmnopqrstuvwxyz')
+
+pagination = Pagination(alphabet, 4)
+print(pagination.get_visible_items())    # ['a', 'b', 'c', 'd']
+
+pagination.next_page()
+print(pagination.get_visible_items())    # ['e', 'f', 'g', 'h']
+
+pagination.last_page()
+print(pagination.get_visible_items())    # ['y', 'z']
+
+pagination.first_page()
+pagination.next_page().next_page()   
+print(pagination.get_visible_items())    # ['i', 'j', 'k', 'l']
+
+print(pagination.total_pages)            # 7
+print(pagination.current_page)           # 3
+
+pagination.first_page()
+pagination.prev_page()
+print(pagination.get_visible_items())    # ['a', 'b', 'c', 'd']
+
+pagination.last_page()
+pagination.next_page()
+print(pagination.get_visible_items())    # ['y', 'z']
+
+pagination.go_to_page(-100)
+print(pagination.get_visible_items())    # ['a', 'b', 'c', 'd']
+
+pagination.go_to_page(100)
+print(pagination.get_visible_items())    # ['y', 'z']
+"""
+
+
+# Классы Testpaper и Student - составляет и проверяет экзаменационные тесты. 
+# Каждый тест должен создаваться на основе темы, схемы верных ответов и минимального процента верных решений
+"""
+class Testpaper:
+
+    def __init__(self, spec, true_answers, pass_degrees):
+        self.spec = spec
+        self.true_answers = true_answers
+        self.pass_degrees = pass_degrees
+
+        
+class Student:
+
+    def __init__(self):
+        self.res_dict = {}
+    
+    def take_test(self, answers, student_answers):
+
+        student_degrees = round((100 / len(answers.true_answers)) * sum([answers.true_answers[i] == student_answers[i] for i in range(len(answers.true_answers))]))
+
+        if  student_degrees >= int(answers.pass_degrees.strip('%')):
+            student_pass = 'Passed!'
+        else:
+            student_pass = 'Failed!'
+        self.res_dict.setdefault(answers.spec, f'{student_pass} ({student_degrees}%)')
+        return self.res_dict
+    
+    @property
+    def tests_taken(self):
+        if self.res_dict:
+            return self.res_dict
+        return 'No tests taken'
+    
+testpaper1 = Testpaper('Maths', ['1A', '2C', '3D', '4A', '5A'], '60%')
+testpaper2 = Testpaper('Chemistry', ['1C', '2C', '3D', '4A'], '75%')
+testpaper3 = Testpaper('Computing', ['1D', '2C', '3C', '4B', '5D', '6C', '7A'], '75%')
+
+student1 = Student()
+student2 = Student()
+student3 = Student()
+
+student1.take_test(testpaper1, ['1A', '2D', '3D', '4A', '5A'])
+student2.take_test(testpaper2, ['1C', '2D', '3A', '4C'])
+student2.take_test(testpaper3, ['1A', '2C', '3A', '4C', '5D', '6C', '7B'])
+
+print(student1.tests_taken)    # {'Maths': 'Passed! (80%)'}
+print(student2.tests_taken)    # {'Chemistry': 'Failed! (25%)', 'Computing': 'Failed! (43%)'}
+print(student3.tests_taken)    # No tests taken
+"""
+
+
+##
+"""
+class TicTacToe:
+
+    def __init__(self):
+        self.game_place = [[' ',' ',' '],[' ',' ',' '],[' ',' ',' ']]
+        self.point = 1
+        self.game_end = False
+        
+    def mark(self, x, y):
+        type(self).winner(self)
+        if self.game_end is not True:
+            if self.point % 2 != 0:
+                mark_point = 'X'
+            else:
+                mark_point = 'O'
+
+            current_element = self.game_place[x-1].pop(y-1)    
+            if current_element != mark_point:
+                self.game_place[x-1].insert(y-1, mark_point)
+                self.point += 1
+            else:
+                self.game_place[x-1].insert(y-1, current_element)
+                print('Недоступная клетка')
+        else:
+            print('Игра окончена')        
+            
+    def show(self):
+        for i in range(len(self.game_place)-1):
+            print('|'.join(self.game_place[i]))
+            print('-'*5)
+        print('|'.join(self.game_place[-1]))    
+            
+    def winner(self):
+        for line in self.game_place:
+            if (
+                line.count('X') == 3 or 
+                [self.game_place[0][0], self.game_place[1][0], self.game_place[2][0]].count('X') == 3 or
+                [self.game_place[0][1], self.game_place[1][1], self.game_place[2][1]].count('X') == 3 or
+                [self.game_place[0][2], self.game_place[1][2], self.game_place[2][2]].count('X') == 3 or
+                [self.game_place[0][0], self.game_place[1][1], self.game_place[2][2]].count('X') == 3 or
+                [self.game_place[0][2], self.game_place[1][1], self.game_place[2][0]].count('X') == 3
+                ): 
+                self.game_end = True   
+                return 'X' 
+            elif (
+                line.count('O') == 3 or 
+                [self.game_place[0][0], self.game_place[1][0], self.game_place[2][0]].count('O') == 3 or
+                [self.game_place[0][1], self.game_place[1][1], self.game_place[2][1]].count('O') == 3 or
+                [self.game_place[0][2], self.game_place[1][2], self.game_place[2][2]].count('O') == 3 or
+                [self.game_place[0][0], self.game_place[1][1], self.game_place[2][2]].count('O') == 3 or
+                [self.game_place[0][2], self.game_place[1][1], self.game_place[2][0]].count('O') == 3
+                ):
+                self.game_end = True   
+                return 'O'  
+            elif self.point >= len(self.game_place)*3+1:
+                self.game_end = True
+                return 'Ничья' 
+            return None 
+                  
+tictactoe = TicTacToe()
+
+tictactoe.mark(1, 1)
+tictactoe.mark(3, 2)
+tictactoe.mark(1, 3)
+tictactoe.mark(1, 2)
+tictactoe.mark(3, 3)
+tictactoe.mark(2, 3)
+tictactoe.mark(3, 1)
+tictactoe.mark(2, 1)
+tictactoe.mark(2, 2)
+
+print(tictactoe.winner())
+tictactoe.show()
+tictactoe.mark(2, 2)
+
+#tictactoe.show()
+"""
+
+
+## Не доделал!!
+"""
+import random
+import itertools
+import time
+
+class Game:
+
+    def __init__(self, rows: int, cols: int, mines: int) -> None:
+        self.rows = rows
+        self.cols = cols
+        self.mines = mines
+    
+    @property
+    def board(self) -> list:
+        res_place = []
+        temp_list = []
+        try:
+            for row in range(self.rows):
+                for col in range(self.cols):
+                    cell = Cell(row, col)
+                    temp_list.append(cell)        
+                res_place.append(temp_list)
+                temp_list = []
+            for row in itertools.cycle(range(self.rows)):
+                for col in range(self.cols):
+                    if res_place[row][col].mine != 1:
+                        res_place[row][col].mine = random.randint(0,1)
+                        if res_place[row][col].mine == 1:
+                            self.mines -= 1
+                    if self.mines == 0:
+                        raise StopIteration
+        except StopIteration:      
+            for row in range(self.rows):
+                for col in range(self.cols):
+                    if col-1 >= 0 or col+1<= self.cols:
+                        print(row, col)
+                        if res_place[row][col-1].mine == 1:
+                            print('test1')
+                            res_place[row][col].neighbours += 1
+                        if res_place[row][col+1].mine == 1:   
+                            print('test2')
+                            res_place[row][col].neighbours += 1
+
+        finally:
+            return res_place                          
+
+            
+class Cell:
+    def __init__(self, row: int, col: int) -> None:
+        self.row = row
+        self.col = col
+        self.mine = 0       #через random 1 или 0 устанавливаем мину или нет
+        self.open = False      #по умолчанию ячейка закрыта
+        self.neighbours = 0 #?
+
+game = Game(2, 2, 2)    # 14 строк, 18 столбцов и 40 мин
+#print(game.rows)           # 14
+#print(game.cols)           # 18
+#print(game.mines)          # 40
+
+#cell = game.board[0][0]
+
+#print(cell.row)            # 0; строка ячейки
+#print(cell.col)            # 0; столбец ячейки
+#print(cell.mine)           # True или False в зависимости от того, содержит ячейка мину или нет
+#print(cell.open)           # True или False в зависимости от того, открыта ячейка или нет, по умолчанию закрыта
+#print(cell.neighbours)     # число от 0 до 8, количество мин в соседних ячейках
+
+
+for line in game.board:
+    for cell in line:
+        print(cell.row, cell.col, cell.mine, cell.neighbours)
+"""
+
+
+## Не доделал!
+"""
+class Currency:
+
+    def __init__(self, value: int, money: str):
+        self.value = value
+        self.money = money
+
+    def __str__(self) -> str:
+        return f'{self.value} {self.money}'
+
+    def change_to(self, money):
+        if self.money == 'RUB':
+            if money == 'USD':
+                self.value = round(self.value / 81.81818, 2)
+            elif money == 'EUR':
+                self.value = round(self.value / 90, 2) 
+        elif self.money == 'USD':
+            if money == 'RUB':
+                self.value = round(self.value * 81.81818, 2)
+            elif money == 'EUR':
+                self.value = round(self.value / 1.1, 2)
+        elif self.money == 'EUR':
+            if money == 'RUB':
+                self.value = round(self.value * 90, 2)
+            elif money == 'USD':
+                self.value = round(self.value * 1.1, 2)
+        self.money = money 
+
+    def __add__(self, other):
+        other.change_to(self.money)
+        self.value = round(self.value + other.value, 2)
+        return self   
+
+    def __sub__(self, other):
+        other.change_to(self.money)
+        self.value = round(self.value - other.value, 2)
+        return self 
+
+    def __mul__(self, other):
+        other.change_to(self.money)
+        self.value = round(self.value * other.value, 2)
+        return self  
+
+    def __truediv__(self, other):
+        other.change_to(self.money)
+        self.value = round(self.value / other.value, 2)
+        return self        
+         
+money = Currency(2000, 'RUB')
+currencies = ['EUR', 'USD', 'RUB']
+operation_funcs = ['__sub__', '__mul__', '__add__', '__truediv__']
+operation_signs = ['-', '*', '+', '/']
+currency = 0
+operation = 0
+
+values = [46, 54, 18, 81, 16, 86, 40, 82, 31, 74, 82, 39, 72, 40, 16, 72, 16, 24, 74, 30, 37, 87, 67, 95, 54, 79, 86,
+          69, 44, 24, 92, 22, 80, 10, 46, 93, 10, 81, 43, 30, 12, 80, 99, 77, 89, 71, 55, 93, 77, 70, 26, 38, 16, 49,
+          34, 33, 98, 22, 13, 79, 67, 99, 48, 97, 38, 96, 43, 72, 64, 74, 97, 52, 96, 86, 37, 36, 52, 63, 43, 13, 39,
+          43, 52, 33, 92, 56, 17, 20, 94, 21, 28, 57, 96, 77, 99, 88, 38, 28, 70, 59]
+
+for value in values:
+    money.change_to(currencies[currency % 3])
+    current_currency = currency % 3 - 1
+    current_operation = operation % 4
+    print(f'{money} {operation_signs[current_operation]} {value} {currencies[current_currency]} = ', end='')
+    print(Currency.__dict__[operation_funcs[current_operation]](money, Currency(value, currencies[current_currency])))
+    currency += 1
+    operation += 1
 """
