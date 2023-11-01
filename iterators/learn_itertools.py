@@ -1,3 +1,7 @@
+########################################################################
+                       # библиотека itertools
+########################################################################
+
 # Функция tabulate()
 """
 from itertools import count
@@ -12,6 +16,7 @@ print(next(values))
 print(next(values))    
 """
 
+
 # Функция factorials()
 """
 from itertools import accumulate
@@ -24,18 +29,21 @@ numbers = factorials(6)
 print(*numbers)    
 """
 
+
 # Функция alnum_sequence()
 """
 from itertools import cycle, starmap
 import string
-
+"""
 # красивое попарное представление (цифра+буква...)
+"""
 def alnum_sequence():
     alphabet = string.ascii_uppercase
     iterable = starmap(lambda x, y: f'{x} {y}', enumerate(alphabet, 1))
     return cycle(iterable)
-
+"""
 # поэлементное представление (цифра, буква, цифра, буква ...)
+"""
 def alnum_sequence():
     alphabet = string.ascii_uppercase
     for i in cycle(enumerate(alphabet, 1)):
@@ -45,12 +53,14 @@ alnum = alnum_sequence()
 print(*(next(alnum) for _ in range(55)))
 """
 
+
 # Функция roundrobin (задача решена очень спорным НЕ оптимальным методом!)
 """
 from itertools import cycle
 
 def roundrobin(*args):
     iter_list = []
+
     for el in args:
         iter_list.append(iter(el))
     final_round = len(iter_list)*5
@@ -74,6 +84,7 @@ letters = iter('betgrsk')
 print(*roundrobin(numbers, letters))
 """
 
+
 # Функция drop_while_negative()
 """
 from itertools import dropwhile, filterfalse
@@ -85,6 +96,7 @@ def drop_while_negative(iterable):
 numbers = [-3, -2, -1, 0, 1, 2, 3]
 print(*drop_while_negative(numbers))    
 """
+
 
 # Функция first_largest()
 # через распаковку в списки и dropwhile
@@ -146,6 +158,7 @@ iterator = iter([4, 100, 102, 334, 5])
 print(first_largest(iterator, 101))
 """
 
+
 # Функция sum_of_digits()
 """
 from itertools import chain
@@ -159,6 +172,7 @@ def sum_of_digits(data):
 print(sum_of_digits([13, 20, 41, 2, 2, 5]))
 """
 
+
 # Функция is_rising()
 """
 from itertools import pairwise
@@ -168,6 +182,7 @@ def is_rising(data: iter) -> bool:
 
 print(is_rising([1, 2, 3, 4, 5]))    
 """
+
 
 # Функция max_pair()
 """
@@ -179,6 +194,7 @@ def max_pair(data: iter) -> int:
 print(max_pair([1, 8, 2, 4, 3]))
 """
 
+
 # Функция ncycles()
 """
 from itertools import tee, chain
@@ -188,6 +204,7 @@ def ncycles(data: iter, times: int) -> iter:
         
 print(*ncycles([1, 2, 3, 4], 3))
 """
+
 
 # Функция grouper()
 """
@@ -205,11 +222,15 @@ def grouper(data: any, times: int) -> iter:
 #print(*grouper(numbers, 3))
 """
 
-#
-"""
+###############################################################
+                        # решение задач
+###############################################################
+
 from collections import namedtuple
 from itertools import groupby
 
+#1
+"""
 Person = namedtuple('Person', ['name', 'age', 'height'])
 
 persons = [Person('Tim', 63, 193), Person('Eva', 47, 158),
@@ -224,11 +245,9 @@ for key, per in res:
     print(f'{key}: {", ".join([el.name for el in sorted(per, key = lambda x: x.name)])}')
 """
 
-#
-"""
-from collections import namedtuple
-from itertools import groupby
 
+#2
+"""
 Student = namedtuple('Student', ['surname', 'name', 'grade'])
 
 students = [Student('Гагиев', 'Александр', 10), Student('Дедегкаев', 'Илья', 11), Student('Кодзаев', 'Георгий', 10),
@@ -247,10 +266,9 @@ res_list = max(sorted([(key, len(list(name))) for key, name in res]), key = lamb
 print(res_list[0])
 """
 
+
 # Группы слов
 """
-from itertools import groupby
-
 def group(text):
     text = sorted(text.split(), key = lambda x: len(x))
     res_text = groupby(text, key = lambda x: len(x))
@@ -260,14 +278,11 @@ res = group(input())
 
 for key, value in res:
     print(f'{key} -> {", ".join(sorted(value))}') 
-
-# hi never here my blueS
 """
+
 
 # Нет дел
 """
-from itertools import groupby
-
 tasks = [('Отдых', 'поспать днем', 3),
         ('Ответы на вопросы', 'ответить на вопросы в дискорде', 1),
         ('ЕГЭ Математика', 'доделать курс по параметрам', 1),
@@ -294,10 +309,9 @@ for key, value in res_tasks:
     print()
 """
 
+
 # Функция group_anagrams()
 """
-from itertools import groupby
-
 def group_anagrams(words: list) -> list[tuple]:
     words = sorted(words, key = lambda x: sorted(x))
     res = groupby(words, key = lambda x: sorted(x))
@@ -310,6 +324,7 @@ print(*groups)
 #groups = group_anagrams(['крона', 'сеточка', 'тесачок', 'лучик', 'стоечка', 'норка', 'чулки'])
 #print(*groups)
 """
+
 
 # Функция ranges()
 """
@@ -335,7 +350,10 @@ numbers = [1, 3, 5, 7]
 print(ranges(numbers))
 """
  
-######################################### комбинаторика #######################################
+######################################################## 
+                    # комбинаторика 
+########################################################
+
 # поиск возможных сочетаний из четырех
 """
 from itertools import permutations
@@ -343,6 +361,8 @@ from itertools import permutations
 number = [1,2,3,4]
 print(len(list(permutations(number))))
 """
+
+
 # поиск возможных сочетаний двух объектов из 26
 """
 from itertools import combinations
@@ -351,6 +371,7 @@ number = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
 print(len(list(combinations(number, r=2))))
 """
 
+
 # Перестановки
 """
 from itertools import permutations
@@ -358,6 +379,7 @@ from itertools import permutations
 res = sorted(set(''.join(el) for el in permutations([el for el in input()])))
 print(*res, sep = '\n')
 """
+
 
 # книжный магазин
 """
@@ -372,6 +394,7 @@ for r in range(1, len(wallet)):
 print(sum(res_list))
 """
 
+
 # книжный магазин 2
 """
 from itertools import combinations_with_replacement
@@ -384,6 +407,7 @@ for r in range(1, 21):
         count += len(res)
 print(count)        
 """
+
 
 # Задача о рюкзаке
 """
@@ -439,16 +463,20 @@ def bag(total_mass, items):
         total_price = 0
         pre_string = []
         pre_dict = dict()
+
     for key, value in sorted(total_res_list, key = lambda x: int(*map(int, x.values())), reverse=True)[0].items():
         print(*sorted(key.split(', ')), sep = '\n')
 
 bag(total_mass, items)       
 """
+
+
 # комбинатор различных систем счисления
 """
 from itertools import product
 
 symbol_list = [el for el in range(10)] + [el for el in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ']
+
 n = int(input())
 m = int(input())
 

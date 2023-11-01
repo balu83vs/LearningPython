@@ -1,4 +1,6 @@
-################################ ИТЕРАТОРЫ и ГЕНЕРАТОРЫ ##########################
+########################################################################
+                       # ИТЕРАТОРЫ и ГЕНЕРАТОРЫ
+########################################################################
 
 # обратный Filter
 """
@@ -9,6 +11,7 @@ numbers = [1, 2, 3, 4, 5]
 
 print(*filterfalse(lambda x: x >= 3, numbers))
 """
+
 
 # Функция transpose()
 """
@@ -26,6 +29,7 @@ matrix = [['1', '2'],
 print(transpose(matrix))
 """
 
+
 # Функция get_min_max()
 """
 def get_min_max(data):
@@ -41,17 +45,19 @@ data = [1, 1, 2, 3, 8, 8]
 print(get_min_max(data))
 """
 
+
 # Функция get_min_max()
 """
 import copy
 
 def get_min_max(iterable):
     if str(type(iterable)) == "<class 'range_iterator'>":
-            iterable = iter(iterable)
-            iterable2 = copy.deepcopy(iterable)
-            return (min(iterable), max(iterable2))
+        iterable = iter(iterable)
+        iterable2 = copy.deepcopy(iterable)
+        return (min(iterable), max(iterable2))
     min_max = {}
     iterable = iter(iterable)
+
     try:
         el = next(iterable)
     except StopIteration:
@@ -73,6 +79,7 @@ data = iter(range(100_000_000))
 print(get_min_max(data))
 """
 
+
 # Функция starmap()
 """
 def starmap(func, iterable):
@@ -82,8 +89,10 @@ pairs = [(1, 3), (2, 5), (6, 4)]
 print(*starmap(lambda a, b: a + b, pairs))    
 """
 
-####################### Создание собственных итераторов ###########################
-##
+########################################################################
+                    # Создание собственных итераторов
+########################################################################
+
 """
 from random import choice
 
@@ -108,6 +117,7 @@ print(next(iterator) in range(1, 11))
 print(next(iterator) in range(1, 11))
 print(next(iterator) in range(1, 11))        
 """
+
 
 # Итератор Fibonacci
 """
@@ -143,8 +153,8 @@ print(next(fibonacci))
 print(next(fibonacci))
 """
 
-# Итератор PowerOf
 
+# Итератор PowerOf
 """
 class PowerOf:
     def __init__(self, number):
@@ -166,6 +176,7 @@ print(next(power_of_two))
 print(next(power_of_two))
 print(next(power_of_two))    
 """
+
 
 # Итератор DictItemsIterator
 """
@@ -189,6 +200,7 @@ class DictItemsIterator:
 pairs = DictItemsIterator({1: 'A', 2: 'B', 3: 'C'})
 print(*pairs)    
 """
+
 
 # Итератор CardDeck
 """
@@ -220,6 +232,7 @@ class CardDeck:
 #print(cards[51])        
 """
 
+
 # Итератор Cycle
 """
 class Cycle:
@@ -247,6 +260,7 @@ print(next(cycle))
 print(next(cycle))
 """
 
+
 # Итератор RandomNumbers
 """
 from random import choices
@@ -270,6 +284,7 @@ class RandomNumbers:
 #print(next(iterator))
 #print(next(iterator))
 """
+
 
 # Итератор Alphabet
 """
@@ -301,6 +316,7 @@ for _ in range(40):
 #print(next(ru_alpha))
 #print(next(ru_alpha))
 """
+
 
 # Итератор Xrange
 """
@@ -340,7 +356,9 @@ class Xrange:
 #print(*xrange, sep='; ')    
 """
 
-########################## Генераторы ##############################
+########################################################################
+                        # Генераторы
+########################################################################
 
 # Функция alternating_sequence()
 """
@@ -371,6 +389,7 @@ print(next(generator))
 print(next(generator))
 """
 
+
 # Функция primes()
 """
 def primes(left, right):
@@ -381,6 +400,7 @@ def primes(left, right):
 generator = primes(1, 15)
 print(*generator)            
 """
+
 
 # Функция reverse()
 """
@@ -393,6 +413,7 @@ generator = reverse('beegeek')
 print(type(generator))
 print(*generator)       
 """
+
 
 # Функция dates()
 """
@@ -435,6 +456,7 @@ except StopIteration:
     print('Error')
 """
 
+
 # Функция card_deck()
 """
 def card_deck(suit):
@@ -446,7 +468,6 @@ def card_deck(suit):
             for num in numbers:
                 yield f'{num} {mast}'            
 
-    
 generator = card_deck('треф')
 cards = [next(generator) for _ in range(40)]
 
@@ -467,6 +488,7 @@ matrix = [[1, 2, 3],
 print(*matrix_by_elem(matrix))  
 """
 
+
 # Функция palindromes()
 """
 def test():
@@ -479,11 +501,11 @@ def test():
 def palindromes():
     yield from test() 
 
-
 generator = palindromes()
 numbers = [next(generator) for _ in range(30)]
 print(*numbers)
 """
+
 
 # Функция flatten()
 """
@@ -498,7 +520,10 @@ generator = flatten([[1, 2], [[3]], [[4], 5]])
 print(*generator)
 """
 
-###################### Генераторные выражения #####################
+
+########################################################################
+                        # Генераторные выражения
+########################################################################
 
 # Функция cubes_of_odds()
 """
@@ -507,6 +532,7 @@ def cubes_of_odds(iterable):
 
 print(*cubes_of_odds([1, 2, 3, 4, 5]))
 """
+
 
 # Функция is_prime()
 """
@@ -518,6 +544,7 @@ def is_prime(number):
 
 print(is_prime(1))
 """
+
 
 # Функция interleave()
 """
@@ -531,7 +558,10 @@ qubes = [1, 8, 27]
 print(*interleave(numbers, squares, qubes))
 """
 
-########################## Конвейеры генераторов ########################
+
+########################################################################
+                        # Конвейеры генераторов
+########################################################################
 
 # 
 """
@@ -599,6 +629,7 @@ def parse_ranges(ranges):
 print(*parse_ranges('1-2,4-4,8-10'))
 """
 
+
 # Функция filter_names()
 """
 def filter_names(names, ignore_char, max_names):
@@ -613,15 +644,17 @@ data = ['Dima', 'Timur', 'Arthur', 'Anri20', 'Arina', 'German', 'Ruslan']
 print(*filter_names(data, 'D', 3))    
 """
 
+
 # Инвестиции
 """
-with open('D:\py_learning\py_programs\data.csv', 'r', encoding='utf-8') as data_file:
+with open('D:\py_learning\py_programs\iterators\data.csv', 'r', encoding='utf-8') as data_file:
     file_lines = (line.strip('\n').split(',') for line in data_file)
     values = next(file_lines)
     dict_lines = (dict(zip(values, el)) for el in file_lines)
     res = sum(int(el.get('raisedAmt')) for el in dict_lines if el.get('round') == 'a')
     print(res)
 """
+
 
 # Функция years_days()
 """
@@ -643,11 +676,12 @@ print(next(dates))
 print(next(dates))
 """
 
+
 # Функция txt_to_dict()  
 """
 def txt_to_dict():
     temp_dict = {}
-    with open('D:\py_learning\py_programs\planets.txt', 'r', encoding='utf-8') as data_file:
+    with open('D:\py_learning\py_programs\iterators\planets.txt', 'r', encoding='utf-8') as data_file:
         lines = (line for line in data_file)
         for line in lines:
             line = line.strip('\n')
@@ -658,10 +692,10 @@ def txt_to_dict():
                 temp_dict = dict()
         yield temp_dict
 
-
 planets = txt_to_dict()
 print(*planets)
 """
+
 
 # Функция unique()
 """
@@ -683,6 +717,7 @@ print(*unique(numbers))
 #print(next(uniques)) 
 """
 
+
 # Функция stop_on()
 """
 def stop_on(iterable, obj):
@@ -702,6 +737,7 @@ print(*stop_on(numbers, 4))
 #print(*stop_on(iterator, 'a'))            
 """
 
+
 # Функция with_previous()
 """
 def with_previous(iterable):
@@ -713,6 +749,7 @@ def with_previous(iterable):
 numbers = [1, 2, 3, 4, 5]
 print(*with_previous(numbers))
 """
+
 
 # Функция pairwise()
 """
@@ -738,6 +775,7 @@ print(*pairwise(numbers))
 
 #print(list(pairwise([])))
 """
+
 
 # Функция around()
 """
