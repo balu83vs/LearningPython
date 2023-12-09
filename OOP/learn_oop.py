@@ -4759,18 +4759,21 @@ class Game:
         self.mines_count = mines
         self.board = []
 
-        temp_list = []    
-        index_list = []
-        neighbours = 0
 
-        # заполнение игрового поля экземплярами ячейки
+################################ заполнение игрового поля экземплярами ячейки ######################
+        temp_list = []
+
         for row in range(self.rows):
             for col in range(self.cols):
                 temp_list.append(Cell(row, col))
             self.board.append(temp_list)
-            temp_list =[]
+            temp_list = []
 
-        # минируем поле в произвольном порядке    
+
+################################ минируем поле в произвольном порядке ###############################
+        index_list = [] 
+
+        # пока не закончатся мины
         while self.mines_count > 0:
             row = random.randint(0,self.rows-1) 
             col = random.randint(0,self.cols-1) 
@@ -4779,21 +4782,38 @@ class Game:
             if (row,col) not in index_list:
                 index_list.append((row,col)) 
                 current_cell = self.board[row][col]
-                current_cell.__dict__['mine'] = True 
+                current_cell.mine = True 
                 self.board[row][col] = current_cell
                 self.mines_count -= 1
 
-        # подсчет мин у соседей
+
+################################ подсчет мин у соседей ###############################################
+        neighbours = 0
+
+        # перебираем все ячейки поля
         for row in range(self.rows):
             for col in range(self.cols):
+                current_cell = self.board[row][col] # текущая ячейка
+
+                # перебираем всех соседей
                 for i in range(-1,2):
                     for j in range(-1,2):
-                        if row+i in range(0,self.rows) and col+j in range(0,self.cols):
-                            if self.board[row+i][col+j].mine == True:
+                        neighbour_row, neighbour_col = row+i, col+j
+
+                        # проверяем границы поля
+                        if neighbour_row in range(0,self.rows) and neighbour_col in range(0,self.cols):
+                            neighbour_cell = self.board[neighbour_row][neighbour_col] # соседняя ячейка
+                            
+                            # проверяем статус мины соседа
+                            if neighbour_cell.mine == True:
                                 neighbours +=1
-                if self.board[row][col].__dict__['mine'] == True and neighbours > 0:                
+
+                # отбрасываем собственную мину текущей ячейки                
+                if current_cell.mine == True and neighbours > 0:                
                     neighbours -= 1
-                self.board[row][col].__dict__['neighbours'] = neighbours
+                current_cell.neighbours = neighbours
+                neighbours = 0        
+
 
 
 # ячейка
@@ -4806,22 +4826,16 @@ class Cell(Game):
         self.neighbours = 0
         
 
+
 # проверочная зона
-game = Game(3, 5, 4)    # 14 строк, 18 столбцов и 40 мин
+game = Game(14, 18, 40)    # 14 строк, 18 столбцов и 40 мин
 print(game.rows)           
 print(game.cols)           
-print(game.mines) 
+print(game.mines)          
 
-for i in range(game.rows):
-    for j in range(game.cols):
-        print(('*' if game.board[i][j].mine == True else '-', game.board[i][j].neighbours), end = ' ')
-    print()           
-
-"""
 cell = game.board[0][0]
 print(cell.row)            # 0; строка ячейки
 print(cell.col)            # 0; столбец ячейки
 print(cell.mine)           # True или False в зависимости от того, содержит ячейка мину или нет
 print(cell.open)           # True или False в зависимости от того, открыта ячейка или нет, по умолчанию закрыта
 print(cell.neighbours)     # число от 0 до 8, количество мин в соседних ячейках
-"""
