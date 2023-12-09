@@ -4773,7 +4773,8 @@ class Game:
         # минируем поле в произвольном порядке    
         while self.mines_count > 0:
             row = random.randint(0,self.rows-1) 
-            col = random.randint(0,self.cols-1)  
+            col = random.randint(0,self.cols-1) 
+             
             # проверка уникальности координат минирования
             if (row,col) not in index_list:
                 index_list.append((row,col)) 
@@ -4793,6 +4794,30 @@ class Game:
                 if self.board[row][col].__dict__['mine'] == True and neighbours > 0:                
                     neighbours -= 1
                 self.board[row][col].__dict__['neighbours'] = neighbours
+        
+        # подсчет мин у соседей
+
+        # перебираем ячейки поля
+        for row in range(self.rows):
+            for col in range(self.cols):
+                current_cell = self.board[row][col]
+
+                # перебираем соседей current_cell
+                for i in range(-1,2):
+                    for j in range(-1,2):
+                        neighbour_row, neighbour_col = row+i, col+j
+
+                        # проверяем, что сосед в переделах доски
+                        if neighbour_row in range(0,self.rows) and neighbour_col in range(0,self.rows):
+                            neighbour_cell = self.board[neighbour_row][neighbour_col]
+                            print(neighbour_row,neighbour_col)
+                            if neighbour_cell.mine == True:
+                                neighbours +=1
+
+                # не учитываем мину в current_cell              
+                if current_cell.mine == True and neighbours > 0:                
+                    neighbours -= 1
+                current_cell.neighbours = neighbours
                 neighbours = 0
 
 
