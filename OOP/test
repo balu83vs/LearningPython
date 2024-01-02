@@ -1,4 +1,0 @@
-figure = 0.00000001
-
-
-print('%.10f' % figure)
