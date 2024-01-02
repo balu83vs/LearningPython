@@ -4600,131 +4600,47 @@ tictactoe.mark(2, 2)
 """
 
 
-## Не доделал!!
-"""
-import random
-import itertools
-import time
+######################################### Класс Currency ######################################################
 
-class Game:
-
-    def __init__(self, rows: int, cols: int, mines: int) -> None:
-        self.rows = rows
-        self.cols = cols
-        self.mines = mines
-    
-    @property
-    def board(self) -> list:
-        res_place = []
-        temp_list = []
-        try:
-            for row in range(self.rows):
-                for col in range(self.cols):
-                    cell = Cell(row, col)
-                    temp_list.append(cell)        
-                res_place.append(temp_list)
-                temp_list = []
-            for row in itertools.cycle(range(self.rows)):
-                for col in range(self.cols):
-                    if res_place[row][col].mine != 1:
-                        res_place[row][col].mine = random.randint(0,1)
-                        if res_place[row][col].mine == 1:
-                            self.mines -= 1
-                    if self.mines == 0:
-                        raise StopIteration
-        except StopIteration:      
-            for row in range(self.rows):
-                for col in range(self.cols):
-                    if col-1 >= 0 or col+1<= self.cols:
-                        print(row, col)
-                        if res_place[row][col-1].mine == 1:
-                            print('test1')
-                            res_place[row][col].neighbours += 1
-                        if res_place[row][col+1].mine == 1:   
-                            print('test2')
-                            res_place[row][col].neighbours += 1
-
-        finally:
-            return res_place                          
-
-            
-class Cell:
-    def __init__(self, row: int, col: int) -> None:
-        self.row = row
-        self.col = col
-        self.mine = 0       #через random 1 или 0 устанавливаем мину или нет
-        self.open = False      #по умолчанию ячейка закрыта
-        self.neighbours = 0 #?
-
-game = Game(2, 2, 2)    # 14 строк, 18 столбцов и 40 мин
-#print(game.rows)           # 14
-#print(game.cols)           # 18
-#print(game.mines)          # 40
-
-#cell = game.board[0][0]
-
-#print(cell.row)            # 0; строка ячейки
-#print(cell.col)            # 0; столбец ячейки
-#print(cell.mine)           # True или False в зависимости от того, содержит ячейка мину или нет
-#print(cell.open)           # True или False в зависимости от того, открыта ячейка или нет, по умолчанию закрыта
-#print(cell.neighbours)     # число от 0 до 8, количество мин в соседних ячейках
-
-
-for line in game.board:
-    for cell in line:
-        print(cell.row, cell.col, cell.mine, cell.neighbours)
-"""
-
-
-## Не доделал!
+# Реализуйте класс Currency для работы со значениями в различных валютах. 
+# Экземпляр класса Currency должен создаваться на основе числового значения и валюты
 """
 class Currency:
+    exchange_rates = {
+        'EUR': {'EUR': 1, 'USD': 1.1, 'RUB': 90},
+        'USD': {'EUR': 1 / 1.1, 'USD': 1,  'RUB': 1 / 1.1 * 90},
+        'RUB': {'EUR': 1 / 90, 'USD': 1 / 90 * 1.1, 'RUB': 1}
+    }
 
-    def __init__(self, value: int, money: str):
+    def __init__(self, value, currency):
         self.value = value
-        self.money = money
+        self.currency = currency
 
-    def __str__(self) -> str:
-        return f'{self.value} {self.money}'
+    def __str__(self):
+        return f"{round(self.value, 2)} {self.currency}"
 
-    def change_to(self, money):
-        if self.money == 'RUB':
-            if money == 'USD':
-                self.value = round(self.value / 81.81818, 2)
-            elif money == 'EUR':
-                self.value = round(self.value / 90, 2) 
-        elif self.money == 'USD':
-            if money == 'RUB':
-                self.value = round(self.value * 81.81818, 2)
-            elif money == 'EUR':
-                self.value = round(self.value / 1.1, 2)
-        elif self.money == 'EUR':
-            if money == 'RUB':
-                self.value = round(self.value * 90, 2)
-            elif money == 'USD':
-                self.value = round(self.value * 1.1, 2)
-        self.money = money 
+    def change_to(self, new_currency):
+        exchange_rate = Currency.exchange_rates[self.currency][new_currency]
+        self.value = self.value * exchange_rate
+        self.currency = new_currency
 
     def __add__(self, other):
-        other.change_to(self.money)
-        self.value = round(self.value + other.value, 2)
-        return self   
+        other.change_to(self.currency)
+        return Currency(self.value + other.value, self.currency)
 
     def __sub__(self, other):
-        other.change_to(self.money)
-        self.value = round(self.value - other.value, 2)
-        return self 
+        other.change_to(self.currency)
+        return Currency(self.value - other.value, self.currency)
 
     def __mul__(self, other):
-        other.change_to(self.money)
-        self.value = round(self.value * other.value, 2)
-        return self  
+        other.change_to(self.currency)
+        return Currency(self.value * other.value, self.currency)
 
     def __truediv__(self, other):
-        other.change_to(self.money)
-        self.value = round(self.value / other.value, 2)
-        return self        
-         
+        other.change_to(self.currency)
+        return Currency(self.value / other.value, self.currency)
+    
+
 money = Currency(2000, 'RUB')
 currencies = ['EUR', 'USD', 'RUB']
 operation_funcs = ['__sub__', '__mul__', '__add__', '__truediv__']
@@ -4744,10 +4660,12 @@ for value in values:
     print(f'{money} {operation_signs[current_operation]} {value} {currencies[current_currency]} = ', end='')
     print(Currency.__dict__[operation_funcs[current_operation]](money, Currency(value, currencies[current_currency])))
     currency += 1
-    operation += 1
-"""
+    operation += 1   
+""" 
+
 
 ############################################## Классы Game и Cell ######################################################
+"""
 import random
 
 # игровое поле
@@ -4839,3 +4757,4 @@ print(cell.col)            # 0; столбец ячейки
 print(cell.mine)           # True или False в зависимости от того, содержит ячейка мину или нет
 print(cell.open)           # True или False в зависимости от того, открыта ячейка или нет, по умолчанию закрыта
 print(cell.neighbours)     # число от 0 до 8, количество мин в соседних ячейках
+"""
