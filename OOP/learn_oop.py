@@ -4762,3 +4762,29 @@ for value in values:
 
 
 ######################################### Класс Selfie ######################################################
+class Selfie:
+
+    def __init__(self):
+        self.states = {}
+        self.num_states = 0
+
+    def n_states(self):
+        return self.num_states    
+
+    def save_state(self):
+        keys = filter(lambda key: key not in ['states', 'n_states'], self.__dict__.keys())
+        current_state = {key: self.__dict__.get(key) for key in keys}
+        self.states.setdefault(self.num_states, current_state)
+        self.num_states += 1                        
+
+    def recover_state(self, state):
+        new_obj = Selfie()
+        new_obj = self
+        load_state = self.states.get(state)
+        if load_state:
+            new_obj.__dict__.update(load_state)
+        return new_obj
+    
+
+#################################### Класс MultiKeyDict ##################################################
+    
