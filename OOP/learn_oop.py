@@ -4787,4 +4787,74 @@ class Selfie:
     
 
 #################################### Класс MultiKeyDict ##################################################
+from typing import Any
+from collections import UserDict
+
+class MultiKeyDict(UserDict):
+    keys_alies_dict = {}
+
+    # возвращает базовый ключ 
+    def keys_search(self, key):
+        result_key = key
+        for key_alies in MultiKeyDict.keys_alies_dict.keys():
+            alies_list = MultiKeyDict.keys_alies_dict.get(key_alies)
+            if key in alies_list:
+                result_key = key_alies
+        return result_key        
+
+
+    def __getitem__(self, key: Any) -> Any:
+        #return self.data[self.keys_search(key)]
+        return self.data
+                
+
+    def __setitem__(self, key: Any, item: Any) -> None:
+        self.data[self.keys_search(key)] = item
     
+    
+    def alias(self, key: Any, new_key: Any) -> None:
+        #print(self.keys_search(new_key))
+        #alies_list = MultiKeyDict.keys_alies_dict.get(self.keys_search(new_key))
+        #alies_list.remove(new_key)
+
+
+        # удаление повторяющегося псевдонима у другого ключа
+        #for current_key in MultiKeyDict.keys_alies_dict.keys():
+        #    alies_list = MultiKeyDict.keys_alies_dict.get(current_key)
+        #    try:
+        #        alies_list.remove(new_key)
+        #    except ValueError:
+        #        pass    
+
+        # создание или дополнение списка псевдонимов ключа        
+        new_keys_list = MultiKeyDict.keys_alies_dict.get(key)
+        if new_keys_list:
+            new_keys_list.append(new_key)
+        else:
+            new_keys_list = [new_key]        
+        MultiKeyDict.keys_alies_dict[key] = new_keys_list
+
+"""        
+# тест1
+multikeydict1 = MultiKeyDict(x=1, y=2, z=3)
+multikeydict2 = MultiKeyDict([('x', 1), ('y', 2), ('z', 3)])
+print(multikeydict1['x'])        # 1
+print(multikeydict2['z'])        # 3
+
+# тест2
+multikeydict = MultiKeyDict(x=100, y=[10, 20])
+multikeydict.alias('x', 'z')     # добавление ключу 'x' псевдонима 'z'
+multikeydict.alias('x', 't')     # добавление ключу 'x' псевдонима 't'
+print(multikeydict['z'])         # 100
+multikeydict['t'] += 1
+print(multikeydict['x'])         # 101
+multikeydict.alias('y', 'z')     # теперь 'z' становится псевдонимом ключа 'y'
+multikeydict['z'] += [30]
+print(multikeydict['y'])         # [10, 20, 30]
+"""
+
+# тест3
+multikeydict = MultiKeyDict(x=100)
+multikeydict.alias('x', 'z')
+del multikeydict['x']
+print(multikeydict['z'])         # 100
