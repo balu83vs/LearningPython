@@ -4195,53 +4195,11 @@ print(type(vector4))
 
 
 # 3 Не доделана!!!!!
-"""
+
 class CaesarCipher:
+    pass
     
-    def __init__(self, step):
-        self.step = step
-
-    def encode(self, text):
-        res_string = ''
-        for el in text:
-            figure = ord(el)+self.step
-            if type(self).check_abc(self, el):
-                if figure > 122:
-                    figure = (figure - 122) + 97
-                if figure < 97:
-                    figure = 122 - (97 - figure)  
-                res_string += chr(figure)    
-            elif type(self).check_ABC(self, el):
-                if figure > 90:
-                    figure = (figure - 90) + 65
-                if figure < 65:
-                    figure = 90 - (65 - figure)
-                res_string += chr(figure)       
-            else:
-                res_string += el      
-        return res_string    
-        
-    def decode(self, text):
-        self.step = -self.step
-        res = type(self).encode(self, text)
-        self.step = -self.step
-        return res
-
-    def check_abc(self, el):
-        if el in [chr(i) for i in range(ord('a'), ord('z')+1)]:
-            return True
-        return False
     
-    def check_ABC(self, el):
-        if el in [chr(i) for i in range(ord('A'), ord('Z')+1)]:
-            return True
-        return False
-
-cipher = CaesarCipher(10)
-
-print(cipher.encode('G'))
-print(cipher.decode('G'))
-"""
 
 
 # 4
@@ -4789,3 +4747,9 @@ class Selfie:
 
 #################################### Класс MultiKeyDict ##################################################
 # не доделано! 
+
+
+
+#################################### Декоратор @predicate ##################################################
+
+
