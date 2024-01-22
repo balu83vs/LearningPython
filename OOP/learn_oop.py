@@ -4791,8 +4791,43 @@ from typing import Any
 from collections import UserDict
 
 class MultiKeyDict(UserDict):
-    keys_alies_dict = {}
+    def __init__(self, *args, **kwargs):
+        UserDict.__init__(self, *args, **kwargs)
+        self.keys_alies_dict = {}
 
+    def alias(self, key: Any, new_key: Any) -> None:
+        if self.keys_alies_dict.get(key):
+            self.keys_alies_dict.get(key).append(new_key)
+        else:    
+            self.keys_alies_dict[key] = [new_key]    
+
+    
+"""
+# тест1
+multikeydict1 = MultiKeyDict(x=1, y=2, z=3)
+multikeydict2 = MultiKeyDict([('x', 1), ('y', 2), ('z', 3)])
+print(multikeydict1['x'])        # 1
+print(multikeydict2['z'])        # 3    
+"""
+    
+# тест2
+multikeydict = MultiKeyDict(x=100, y=[10, 20])
+multikeydict.alias('x', 'z')     # добавление ключу 'x' псевдонима 'z'
+print(multikeydict.keys_alies_dict)
+multikeydict.alias('x', 't')     # добавление ключу 'x' псевдонима 't'
+print(multikeydict.keys_alies_dict)
+#print(multikeydict['z'])         # 100
+#multikeydict['t'] += 1
+#print(multikeydict['x'])         # 101
+#multikeydict.alias('y', 'z')     # теперь 'z' становится псевдонимом ключа 'y'
+#multikeydict['z'] += [30]
+#print(multikeydict['y'])         # [10, 20, 30]    
+"""    
+    
+    
+    
+    
+    
     # возвращает базовый ключ 
     def keys_search(self, key):
         result_key = key
@@ -4832,9 +4867,9 @@ class MultiKeyDict(UserDict):
             new_keys_list.append(new_key)
         else:
             new_keys_list = [new_key]        
-        MultiKeyDict.keys_alies_dict[key] = new_keys_list
+        MultiKeyDict.keys_alies_dict[key] = new_keys_list        
 
-"""        
+        
 # тест1
 multikeydict1 = MultiKeyDict(x=1, y=2, z=3)
 multikeydict2 = MultiKeyDict([('x', 1), ('y', 2), ('z', 3)])
@@ -4851,10 +4886,10 @@ print(multikeydict['x'])         # 101
 multikeydict.alias('y', 'z')     # теперь 'z' становится псевдонимом ключа 'y'
 multikeydict['z'] += [30]
 print(multikeydict['y'])         # [10, 20, 30]
-"""
 
 # тест3
 multikeydict = MultiKeyDict(x=100)
 multikeydict.alias('x', 'z')
 del multikeydict['x']
 print(multikeydict['z'])         # 100
+"""
