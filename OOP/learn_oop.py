@@ -4758,7 +4758,7 @@ for value in values:
     print(Currency.__dict__[operation_funcs[current_operation]](money, Currency(value, currencies[current_currency])))
     currency += 1
     operation += 1   
-""" 
+ 
 
 
 ######################################### Класс Selfie ######################################################
@@ -4784,7 +4784,8 @@ class Selfie:
         if load_state:
             new_obj.__dict__.update(load_state)
         return new_obj
-    
+"""
+            
 
 #################################### Класс MultiKeyDict ##################################################
-    
+# не доделано! 
