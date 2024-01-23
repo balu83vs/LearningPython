@@ -4196,10 +4196,76 @@ print(type(vector4))
 
 # 3 Не доделана!!!!!
 
+import itertools
+
 class CaesarCipher:
-    pass
     
-    
+    def __init__(self, step: int) -> None:
+        self.step = step
+        self.eng = range(ord('a'), ord('z')+1)
+        self.ENG = range(ord('A'), ord('Z')+1)
+
+    # метод для кодирования
+    def encode(self, text_to_code: str) -> str:
+        res_list = []
+        # перебор символов исходного слова
+        for el in text_to_code:
+            eng_iter = itertools.cycle(self.eng)
+            ENG_iter = itertools.cycle(self.ENG)
+            # проверка принадлежности английскому алфавиту
+            if ord(el) in self.eng:
+                for _ in range(ord(el) - ord('a') + (self.step)):
+                    next(eng_iter)        
+                ord_new_el = next(eng_iter)
+            elif ord(el) in self.ENG:
+                for _ in range(ord(el) - ord('A') + (self.step)):
+                    next(ENG_iter)        
+                ord_new_el = next(ENG_iter)
+            else:
+                ord_new_el = ord(el) 
+            # заполнение результирующего списка 
+            res_list.append(chr(ord_new_el))
+        return ''.join(res_list)    # вывод закодированной строки
+                
+
+    # метод для декодирования    
+    def decode(self, code_to_text: str) -> str:
+        res_list = []
+        # перебор символов исходного слова
+        for el in code_to_text:
+            eng_iter = itertools.cycle(self.eng)
+            ENG_iter = itertools.cycle(self.ENG)
+            # проверка принадлежности английскому алфавиту
+            if ord(el) in self.eng:
+                for _ in range(27 + (ord(el) - ord('a') + (self.step)*(-1))-1):
+                    next(eng_iter)        
+                ord_new_el = next(eng_iter)
+            elif ord(el) in self.ENG:
+                for _ in range(27 + (ord(el) - ord('A') + (self.step)*(-1))-1):
+                    next(ENG_iter)        
+                ord_new_el = next(ENG_iter)
+            else:
+                ord_new_el = ord(el) 
+            # заполнение результирующего списка 
+            res_list.append(chr(ord_new_el))
+        return ''.join(res_list)    # вывод закодированной строки
+
+
+# блок проверки
+#1 
+cipher = CaesarCipher(10)
+print(cipher.encode('Beegeek'))
+print(cipher.decode('Gjjljjp'))   
+
+#2
+cipher = CaesarCipher(5)
+print(cipher.encode('Биgeek123'))
+print(cipher.decode('Биljjp123'))
+
+#3
+cipher = CaesarCipher(1)
+print(cipher.encode('ZzzZzz'))
+print(cipher.decode('AaaAaa'))
 
 
 # 4
