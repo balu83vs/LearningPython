@@ -4194,8 +4194,7 @@ print(type(vector4))
 """
 
 
-# 3 Не доделана!!!!!
-
+###################################### Класс CaesarCipher ##########################################
 import itertools
 
 class CaesarCipher:
@@ -4205,50 +4204,39 @@ class CaesarCipher:
         self.eng = range(ord('a'), ord('z')+1)
         self.ENG = range(ord('A'), ord('Z')+1)
 
-    # метод для кодирования
-    def encode(self, text_to_code: str) -> str:
+    # универсальный метод кодирования/декодирования
+    def code_decode(self, string: str, start_coef: int, step_coef: int) -> str:
         res_list = []
         # перебор символов исходного слова
-        for el in text_to_code:
+        for el in string:
             eng_iter = itertools.cycle(self.eng)
             ENG_iter = itertools.cycle(self.ENG)
             # проверка принадлежности английскому алфавиту
             if ord(el) in self.eng:
-                for _ in range(ord(el) - ord('a') + (self.step)):
+                for _ in range(start_coef + (ord(el) - ord('a') + (self.step)*step_coef)):
                     next(eng_iter)        
                 ord_new_el = next(eng_iter)
             elif ord(el) in self.ENG:
-                for _ in range(ord(el) - ord('A') + (self.step)):
+                for _ in range(start_coef + (ord(el) - ord('A') + (self.step)*step_coef)):
                     next(ENG_iter)        
                 ord_new_el = next(ENG_iter)
             else:
                 ord_new_el = ord(el) 
             # заполнение результирующего списка 
             res_list.append(chr(ord_new_el))
-        return ''.join(res_list)    # вывод закодированной строки
-                
+        return ''.join(res_list)    # вывод закодированной строки    
+
+    # метод для кодирования
+    def encode(self, text_to_code: str) -> str:
+        start_coef = 0
+        step_coef = 1
+        return self.code_decode(text_to_code, start_coef, step_coef) # вывод закодированной строки                
 
     # метод для декодирования    
     def decode(self, code_to_text: str) -> str:
-        res_list = []
-        # перебор символов исходного слова
-        for el in code_to_text:
-            eng_iter = itertools.cycle(self.eng)
-            ENG_iter = itertools.cycle(self.ENG)
-            # проверка принадлежности английскому алфавиту
-            if ord(el) in self.eng:
-                for _ in range(27 + (ord(el) - ord('a') + (self.step)*(-1))-1):
-                    next(eng_iter)        
-                ord_new_el = next(eng_iter)
-            elif ord(el) in self.ENG:
-                for _ in range(27 + (ord(el) - ord('A') + (self.step)*(-1))-1):
-                    next(ENG_iter)        
-                ord_new_el = next(ENG_iter)
-            else:
-                ord_new_el = ord(el) 
-            # заполнение результирующего списка 
-            res_list.append(chr(ord_new_el))
-        return ''.join(res_list)    # вывод закодированной строки
+        start_coef = 26
+        step_coef = -1
+        return self.code_decode(code_to_text, start_coef, step_coef) # вывод закодированной строки
 
 
 # блок проверки
@@ -4266,6 +4254,7 @@ print(cipher.decode('Биljjp123'))
 cipher = CaesarCipher(1)
 print(cipher.encode('ZzzZzz'))
 print(cipher.decode('AaaAaa'))
+
 
 
 # 4
